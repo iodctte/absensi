@@ -98,20 +98,10 @@
             <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200/50 pb-4">📍 Pengaturan Lokasi Absensi (GPS)</h2>
             <form onsubmit="simpanPengaturan(event)" class="space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label class="text-xs text-gray-500 font-bold uppercase ml-1">Latitude (Lintang)</label>
-                  <input type="text" id="setLat" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800" placeholder="Contoh: 0.7893">
-                </div>
-                <div>
-                  <label class="text-xs text-gray-500 font-bold uppercase ml-1">Longitude (Bujur)</label>
-                  <input type="text" id="setLng" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800" placeholder="Contoh: 127.3633">
-                </div>
+                <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Latitude (Lintang)</label><input type="text" id="setLat" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800" placeholder="0.7893"></div>
+                <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Longitude (Bujur)</label><input type="text" id="setLng" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800" placeholder="127.3633"></div>
               </div>
-              <div>
-                <label class="text-xs text-gray-500 font-bold uppercase ml-1">Radius Toleransi Jarak (Meter)</label>
-                <input type="number" id="setRadius" required class="w-full mt-1 p-4 rounded-xl glass-input font-bold text-teal-800 text-xl" placeholder="50">
-                <p class="text-xs text-gray-500 mt-2 ml-1">Karyawan tidak bisa absen jika jarak mereka dari klinik melebihi angka meter di atas.</p>
-              </div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Radius Toleransi Jarak (Meter)</label><input type="number" id="setRadius" required class="w-full mt-1 p-4 rounded-xl glass-input font-bold text-teal-800 text-xl" placeholder="50"><p class="text-xs text-gray-500 mt-2 ml-1">Karyawan tidak bisa absen jika jarak mereka dari klinik melebihi angka meter di atas.</p></div>
               <button type="submit" id="btnSimpanPengaturan" class="w-full bg-teal-600 text-white p-4 rounded-xl font-bold text-lg hover:bg-teal-700 shadow-lg active:scale-95 transition-all mt-4">Simpan Pengaturan</button>
             </form>
           </div>
@@ -124,14 +114,39 @@
   <div id="modalEdit" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity">
     <div class="glass-panel p-6 rounded-3xl shadow-2xl w-full max-w-sm">
       <h3 class="text-xl font-bold text-gray-800 mb-4" id="judulModalEdit">Edit Data</h3>
-      <div id="formEditKar" class="hidden space-y-4"><input type="hidden" id="editIdKar"><div><label class="text-xs text-gray-500 font-bold">Nama</label><input type="text" id="editNamaKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold">Username</label><input type="text" id="editUserKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold">Password</label><input type="text" id="editPassKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div></div>
-      <div id="formEditJad" class="hidden space-y-4"><input type="hidden" id="editIdJad"><p class="text-sm font-bold text-teal-700 mb-2" id="infoEditJad"></p><div class="grid grid-cols-2 gap-3"><div><label class="text-xs text-gray-500 font-bold">Jam Masuk</label><input type="time" id="editJamMsk" class="w-full mt-1 p-2 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold">Jam Pulang</label><input type="time" id="editJamPlg" class="w-full mt-1 p-2 rounded-xl glass-input"></div></div><div><label class="text-xs text-gray-500 font-bold">Toleransi (Menit)</label><input type="number" id="editToleransi" class="w-full mt-1 p-2 rounded-xl glass-input"></div></div>
-      <div class="flex gap-3 mt-6"><button onclick="tutupModalEdit()" class="w-1/2 bg-white text-gray-600 p-3 rounded-xl font-bold border border-gray-200 hover:bg-gray-50">Batal</button><button onclick="simpanEdit()" id="btnSimpanEdit" class="w-1/2 bg-teal-600 text-white p-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg">Update</button></div>
+      
+      <div id="formEditKar" class="hidden space-y-4">
+        <input type="hidden" id="editIdKar">
+        <div><label class="text-xs text-gray-500 font-bold">Nama</label><input type="text" id="editNamaKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div>
+        <div><label class="text-xs text-gray-500 font-bold">Username</label><input type="text" id="editUserKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div>
+        <div><label class="text-xs text-gray-500 font-bold">Password</label><input type="text" id="editPassKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div>
+      </div>
+      
+      <div id="formEditJad" class="hidden space-y-4">
+        <input type="hidden" id="editIdJad">
+        <p class="text-sm font-bold text-teal-700 mb-2" id="infoEditJad"></p>
+        <div>
+          <label class="text-xs text-gray-500 font-bold">Target Karyawan</label>
+          <select id="editTargetKar" class="w-full mt-1 p-2 rounded-xl glass-input font-bold text-teal-700">
+            </select>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div><label class="text-xs text-gray-500 font-bold">Jam Masuk</label><input type="time" id="editJamMsk" class="w-full mt-1 p-2 rounded-xl glass-input"></div>
+          <div><label class="text-xs text-gray-500 font-bold">Jam Pulang</label><input type="time" id="editJamPlg" class="w-full mt-1 p-2 rounded-xl glass-input"></div>
+        </div>
+        <div><label class="text-xs text-gray-500 font-bold">Toleransi (Menit)</label><input type="number" id="editToleransi" class="w-full mt-1 p-2 rounded-xl glass-input"></div>
+      </div>
+      
+      <div class="flex gap-3 mt-6">
+        <button onclick="tutupModalEdit()" class="w-1/2 bg-white text-gray-600 p-3 rounded-xl font-bold border border-gray-200 hover:bg-gray-50">Batal</button>
+        <button onclick="simpanEdit()" id="btnSimpanEdit" class="w-1/2 bg-teal-600 text-white p-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg">Update</button>
+      </div>
     </div>
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbx9XwhDjYmI9FBU49p715VdzZ_RhNa5lMsxj3NKl3mjXc5WdeK6fQME2anA7XwmfMqN/exec"; // JANGAN LUPA ISI INI
+    // ⚠️ PASTIKAN MENGGANTI URL DI BAWAH INI
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx9XwhDjYmI9FBU49p715VdzZ_RhNa5lMsxj3NKl3mjXc5WdeK6fQME2anA7XwmfMqN/exec"; 
     const PIN_ADMIN = "123456";
     let tipeEditAktif = "";
 
@@ -156,17 +171,21 @@
       try {
         let response = await fetch(GAS_URL + "?action=get_data"); let result = await response.json();
         
-        // Render Pengaturan Lokasi
+        // Render Pengaturan
         if(result.pengaturan) {
-          document.getElementById('setLat').value = result.pengaturan.klinik_lat || '';
-          document.getElementById('setLng').value = result.pengaturan.klinik_lng || '';
-          document.getElementById('setRadius').value = result.pengaturan.radius || '50';
+          document.getElementById('setLat').value = result.pengaturan.klinik_lat || ''; document.getElementById('setLng').value = result.pengaturan.klinik_lng || ''; document.getElementById('setRadius').value = result.pengaturan.radius || '50';
         }
 
+        // Render Karyawan & Isi Dropdown
         let htmlKar = ""; let dropdown = `<option value="Semua">Semua Karyawan (Umum)</option>`;
         if(result.karyawan) result.karyawan.forEach(row => { htmlKar += `<tr class="hover:bg-white/50 transition-colors"><td class="p-4 flex items-center gap-3"><div class="h-9 w-9 rounded-full bg-gradient-to-br from-teal-400 to-teal-500 text-white shadow-sm flex items-center justify-center font-bold text-sm">${row[0].charAt(0)}</div><span class="font-bold">${row[0]}</span></td><td class="p-4 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded-md text-sm border border-gray-200">@${row[1]}</span></td><td class="p-4 text-right space-x-2"><button onclick="bukaEditKar('${row[5]}', '${row[0]}', '${row[1]}', '${row[2]}')" class="text-blue-500 bg-blue-50 px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-sm">Edit</button><button onclick="hapusKaryawan('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-sm">Hapus</button></td></tr>`; dropdown += `<option value="${row[0]}">Khusus: ${row[0]}</option>`; });
-        document.getElementById('tabelKaryawan').innerHTML = htmlKar || '<tr><td colspan="3" class="p-6 text-center text-gray-400">Belum ada data</td></tr>'; document.getElementById('inputTargetKar').innerHTML = dropdown;
+        document.getElementById('tabelKaryawan').innerHTML = htmlKar || '<tr><td colspan="3" class="p-6 text-center text-gray-400">Belum ada data</td></tr>'; 
+        
+        // PENTING: Masukkan opsi target karyawan ke form Buat DAN Edit Jadwal
+        document.getElementById('inputTargetKar').innerHTML = dropdown;
+        document.getElementById('editTargetKar').innerHTML = dropdown;
 
+        // Render Jadwal
         let htmlJad = "";
         if(result.jadwal) result.jadwal.forEach(row => { let badge = row[4] === 'Semua' ? `<span class="bg-teal-50 text-teal-700 border border-teal-200 text-xs px-2 py-1 rounded-md font-bold">Umum (Semua)</span>` : `<span class="bg-orange-50 text-orange-700 border border-orange-200 text-xs px-2 py-1 rounded-md font-bold">Khusus: ${row[4]}</span>`; htmlJad += `<tr class="hover:bg-white/50 transition-colors"><td class="p-4 font-bold text-gray-800">${row[0]}</td><td class="p-4">${badge}</td><td class="p-4 text-gray-600"><span class="font-bold text-gray-800">${row[1]} - ${row[3]}</span> <br><span class="text-xs text-red-400">Telat > ${row[2]}m</span></td><td class="p-4 text-right space-x-2"><button onclick="bukaEditJad('${row[5]}', '${row[0]}', '${row[4]}', '${row[1]}', '${row[3]}', '${row[2]}')" class="text-blue-500 bg-blue-50 px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-sm">Edit</button><button onclick="hapusJadwal('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-sm">Hapus</button></td></tr>`; });
         document.getElementById('tabelJadwal').innerHTML = htmlJad || '<tr><td colspan="4" class="p-6 text-center text-gray-400">Belum ada jadwal</td></tr>';
@@ -178,22 +197,43 @@
     }
     function tampilNotif() { let n = document.getElementById('notifAksi'); n.classList.remove('hidden'); setTimeout(() => { n.classList.add('hidden'); }, 3000); }
 
-    function simpanPengaturan(e) {
-      e.preventDefault();
-      let btn = document.getElementById('btnSimpanPengaturan'); btn.innerText = "Menyimpan...";
-      kirimDataPOST({ action: "simpan_pengaturan", lat: document.getElementById('setLat').value, lng: document.getElementById('setLng').value, radius: document.getElementById('setRadius').value });
-      setTimeout(() => { btn.innerText = "Simpan Pengaturan"; }, 1500);
-    }
+    function simpanPengaturan(e) { e.preventDefault(); let btn = document.getElementById('btnSimpanPengaturan'); btn.innerText = "Menyimpan..."; kirimDataPOST({ action: "simpan_pengaturan", lat: document.getElementById('setLat').value, lng: document.getElementById('setLng').value, radius: document.getElementById('setRadius').value }); setTimeout(() => { btn.innerText = "Simpan Pengaturan"; }, 1500); }
 
     function tambahKaryawan(e) { e.preventDefault(); kirimDataPOST({ action: "tambah_karyawan", nama: document.getElementById('inputNama').value, username: document.getElementById('inputUser').value, password: document.getElementById('inputPass').value }); e.target.reset(); }
     function tambahJadwalBulk(e) { e.preventDefault(); let hr = Array.from(document.querySelectorAll('.hari-chk:checked')).map(cb => cb.value); let ts = document.getElementById('inputTglSpesifik').value; if(ts) hr.push(ts); if(hr.length===0) return alert("Pilih hari!"); let m=document.getElementById('inputJamMasuk').value; if(m.length>5) m=m.substring(0,5); let p=document.getElementById('inputJamPulang').value; if(p.length>5) p=p.substring(0,5); kirimDataPOST({ action: "tambah_jadwal_bulk", hariArray: hr, jamMasuk: m, toleransi: document.getElementById('inputToleransi').value, jamPulang: p, targetKaryawan: document.getElementById('inputTargetKar').value }); document.querySelectorAll('.hari-chk').forEach(cb=>cb.checked=false); document.getElementById('inputTglSpesifik').value=""; }
+    
     function hapusKaryawan(id, nm) { if(confirm(`Hapus ${nm}?`)) kirimDataPOST({ action: 'hapus_karyawan', id: id }); }
     function hapusJadwal(id, hr) { if(confirm(`Hapus jadwal ${hr}?`)) kirimDataPOST({ action: 'hapus_jadwal', idJadwal: id }); }
 
     function bukaEditKar(id, nm, us, ps) { tipeEditAktif = "karyawan"; document.getElementById('judulModalEdit').innerText = "Update Karyawan"; document.getElementById('formEditKar').classList.remove('hidden'); document.getElementById('formEditJad').classList.add('hidden'); document.getElementById('editIdKar').value = id; document.getElementById('editNamaKar').value = nm; document.getElementById('editUserKar').value = us; document.getElementById('editPassKar').value = ps; document.getElementById('modalEdit').classList.remove('hidden'); }
-    function bukaEditJad(id, hr, tg, ms, pl, to) { tipeEditAktif = "jadwal"; document.getElementById('judulModalEdit').innerText = "Update Shift"; document.getElementById('formEditKar').classList.add('hidden'); document.getElementById('formEditJad').classList.remove('hidden'); document.getElementById('infoEditJad').innerText = `${hr} (${tg})`; document.getElementById('editIdJad').value = id; document.getElementById('editJamMsk').value = ms; document.getElementById('editJamPlg').value = pl; document.getElementById('editToleransi').value = to; document.getElementById('modalEdit').classList.remove('hidden'); }
+    
+    // FUNGSI EDIT JADWAL (DIPERBARUI DENGAN TARGET)
+    function bukaEditJad(id, hr, tg, ms, pl, to) { 
+      tipeEditAktif = "jadwal"; 
+      document.getElementById('judulModalEdit').innerText = "Update Shift"; 
+      document.getElementById('formEditKar').classList.add('hidden'); 
+      document.getElementById('formEditJad').classList.remove('hidden'); 
+      document.getElementById('infoEditJad').innerText = `Hari/Tgl: ${hr}`; // Info disederhanakan
+      document.getElementById('editIdJad').value = id; 
+      document.getElementById('editTargetKar').value = tg; // Set value dropdown
+      document.getElementById('editJamMsk').value = ms; 
+      document.getElementById('editJamPlg').value = pl; 
+      document.getElementById('editToleransi').value = to; 
+      document.getElementById('modalEdit').classList.remove('hidden'); 
+    }
+
     function tutupModalEdit() { document.getElementById('modalEdit').classList.add('hidden'); }
-    function simpanEdit() { let btn = document.getElementById('btnSimpanEdit'); btn.innerText = "Memproses..."; btn.disabled = true; if (tipeEditAktif === "karyawan") kirimDataPOST({ action: "edit_karyawan", id: document.getElementById('editIdKar').value, nama: document.getElementById('editNamaKar').value, username: document.getElementById('editUserKar').value, password: document.getElementById('editPassKar').value }); else kirimDataPOST({ action: "edit_jadwal", id: document.getElementById('editIdJad').value, jamMasuk: document.getElementById('editJamMsk').value, jamPulang: document.getElementById('editJamPlg').value, toleransi: document.getElementById('editToleransi').value }); setTimeout(() => { tutupModalEdit(); btn.innerText = "Update"; btn.disabled = false; }, 1000); }
+    
+    function simpanEdit() { 
+      let btn = document.getElementById('btnSimpanEdit'); btn.innerText = "Memproses..."; btn.disabled = true; 
+      if (tipeEditAktif === "karyawan") {
+        kirimDataPOST({ action: "edit_karyawan", id: document.getElementById('editIdKar').value, nama: document.getElementById('editNamaKar').value, username: document.getElementById('editUserKar').value, password: document.getElementById('editPassKar').value }); 
+      } else {
+        // Kirim targetKaryawan yang baru
+        kirimDataPOST({ action: "edit_jadwal", id: document.getElementById('editIdJad').value, targetKaryawan: document.getElementById('editTargetKar').value, jamMasuk: document.getElementById('editJamMsk').value, jamPulang: document.getElementById('editJamPlg').value, toleransi: document.getElementById('editToleransi').value }); 
+      }
+      setTimeout(() => { tutupModalEdit(); btn.innerText = "Update"; btn.disabled = false; }, 1000); 
+    }
 
     async function tarikRekap(e) { e.preventDefault(); let btn = document.getElementById('btnTarik'); btn.innerText = "Memuat..."; btn.disabled = true; let payload = { action: "get_rekap", tglAwal: document.getElementById('tglAwal').value, tglAkhir: document.getElementById('tglAkhir').value }; try { let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); let hasil = JSON.parse(await respon.text()); let html = ""; if(hasil.data && hasil.data.length > 0) { hasil.data.forEach(r => { html += `<tr class="hover:bg-white/50"><td class="p-4 font-bold text-gray-800">${r.nama}</td><td class="p-4 text-center"><span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-lg font-bold border border-teal-100">${r.hadir} Hari</span></td><td class="p-4 text-center"><span class="bg-red-50 text-red-500 px-3 py-1 rounded-lg font-bold border border-red-100">${r.telat} Kali</span></td><td class="p-4 text-right"><span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-lg font-bold border border-orange-100">${r.lembur}</span></td></tr>`; }); } document.getElementById('tabelRekap').innerHTML = html || '<tr><td colspan="4" class="p-8 text-center text-gray-500">Tidak ada kehadiran di rentang tanggal tersebut.</td></tr>'; } catch(err) { alert("Gagal mengambil data rekap."); } btn.innerText = "Generate Laporan"; btn.disabled = false; }
   </script>
