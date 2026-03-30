@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>IODC Absensi</title>
+  <link rel="manifest" href="manifest.json">
   
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -155,7 +156,7 @@
       if (!user || !pass) return bukaModal("Perhatian", "Isi Username dan Password!", false);
       btn.innerHTML = `Memeriksa...`; btn.disabled = true;
       try {
-        let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "login", username: user, password: pass }) });
+        let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "login", username: user, password: pass, deviceID: deviceID }) });
         let hasil = JSON.parse(await respon.text());
         if (hasil.status === "success") { localStorage.setItem('ikra_name', hasil.nama); location.reload(); } 
         else { bukaModal("Login Gagal", hasil.pesan, false); btn.innerHTML = "Masuk"; btn.disabled = false; }
