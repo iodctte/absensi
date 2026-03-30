@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style> body { font-family: 'Inter', sans-serif; } .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); } .glass-input { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.8); } .glass-input:focus { background: rgba(255, 255, 255, 0.9); outline: none; box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.3); } </style>
 </head>
-<body class="bg-gradient-to-br from-teal-500 to-blue-700 min-h-screen text-gray-800">
+<body class="bg-gradient-to-br from-teal-500 to-blue-700 min-h-screen text-gray-800 relative">
 
   <div id="layarLogin" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-teal-500 to-blue-700 transition-opacity duration-500">
     <div class="glass-panel p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center">
@@ -63,9 +63,7 @@
               <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Untuk Siapa?</label><select id="inputTargetKar" class="w-full mt-1 p-3 rounded-xl glass-input font-bold text-teal-700"><option value="Semua">Semua (Umum)</option></select></div>
               <div>
                 <label class="text-xs text-gray-500 font-bold uppercase ml-1">Hari</label>
-                <div class="grid grid-cols-2 gap-2 text-sm mt-1">
-                  <label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Senin" class="hari-chk w-4 h-4 text-teal-600">Senin</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Selasa" class="hari-chk w-4 h-4 text-teal-600">Selasa</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Rabu" class="hari-chk w-4 h-4 text-teal-600">Rabu</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Kamis" class="hari-chk w-4 h-4 text-teal-600">Kamis</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Jumat" class="hari-chk w-4 h-4 text-teal-600">Jumat</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Sabtu" class="hari-chk w-4 h-4 text-teal-600">Sabtu</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Minggu" class="hari-chk w-4 h-4 text-teal-600">Minggu</label>
-                </div>
+                <div class="grid grid-cols-2 gap-2 text-sm mt-1"><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Senin" class="hari-chk w-4 h-4 text-teal-600">Senin</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Selasa" class="hari-chk w-4 h-4 text-teal-600">Selasa</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Rabu" class="hari-chk w-4 h-4 text-teal-600">Rabu</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Kamis" class="hari-chk w-4 h-4 text-teal-600">Kamis</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Jumat" class="hari-chk w-4 h-4 text-teal-600">Jumat</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Sabtu" class="hari-chk w-4 h-4 text-teal-600">Sabtu</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Minggu" class="hari-chk w-4 h-4 text-teal-600">Minggu</label></div>
               </div>
               <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Tgl Spesifik (Opsional)</label><input type="text" id="inputTglSpesifik" placeholder="DD/MM/YYYY" class="w-full mt-1 p-3 rounded-xl glass-input"></div>
               <div class="grid grid-cols-2 gap-3"><div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Masuk</label><input type="time" id="inputJamMasuk" required class="w-full mt-1 p-2 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Pulang</label><input type="time" id="inputJamPulang" required class="w-full mt-1 p-2 rounded-xl glass-input"></div></div>
@@ -75,17 +73,15 @@
           </div>
           <div class="md:col-span-2 glass-panel p-0 rounded-3xl shadow-xl overflow-hidden border-t border-white/80">
             <div class="p-6 border-b border-gray-200/50"><h2 class="text-lg font-bold text-gray-800">Daftar Jadwal Aktif</h2></div>
-            <div class="overflow-x-auto p-2">
-              <table class="w-full text-left whitespace-nowrap"><thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Hari/Tgl</th><th class="p-4">Target Karyawan</th><th class="p-4">Shift & Toleransi</th><th class="p-4 text-right">Aksi</th></tr></thead><tbody id="tabelJadwal" class="divide-y divide-gray-200/50 font-medium"></tbody></table>
-            </div>
+            <div class="overflow-x-auto p-2"><table class="w-full text-left whitespace-nowrap"><thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Hari/Tgl</th><th class="p-4">Target Karyawan</th><th class="p-4">Shift & Toleransi</th><th class="p-4 text-right">Aksi</th></tr></thead><tbody id="tabelJadwal" class="divide-y divide-gray-200/50 font-medium"></tbody></table></div>
           </div>
         </div>
 
-        <div id="tabRekap" class="hidden">
-          <div class="glass-panel p-6 rounded-3xl shadow-xl border-t border-white/80 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div id="tabRekap" class="hidden flex flex-col gap-6">
+          <div class="glass-panel p-6 rounded-3xl shadow-xl border-t border-white/80 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-              <h2 class="text-lg font-bold text-gray-800">📸 Live Monitor Absensi</h2>
-              <p class="text-xs text-gray-500 mt-1">Laporan harian beserta foto bukti kehadiran.</p>
+              <h2 class="text-lg font-bold text-gray-800">📋 Laporan & Monitor Absensi</h2>
+              <p class="text-xs text-gray-500 mt-1">Rekap performa dan bukti foto harian.</p>
             </div>
             <form onsubmit="tarikRekap(event)" class="flex flex-col md:flex-row gap-3 items-end w-full md:w-auto">
               <div><label class="text-[10px] text-gray-500 font-bold uppercase ml-1">Dari Tgl</label><input type="date" id="tglAwal" required class="w-full p-2 rounded-xl glass-input text-sm font-bold text-teal-700"></div>
@@ -95,20 +91,24 @@
           </div>
           
           <div class="glass-panel p-0 rounded-3xl shadow-xl overflow-hidden border-t border-white/80">
+            <div class="p-4 border-b border-gray-200/50 bg-white/40"><h3 class="font-bold text-gray-700">📊 Rekap Total (Summary)</h3></div>
             <div class="overflow-x-auto p-2">
               <table class="w-full text-left whitespace-nowrap">
-                <thead class="text-gray-400 text-xs uppercase tracking-wider">
-                  <tr>
-                    <th class="p-4">Tanggal</th>
-                    <th class="p-4">Nama</th>
-                    <th class="p-4 text-center">Masuk & Foto</th>
-                    <th class="p-4 text-center">Pulang & Foto</th>
-                    <th class="p-4 text-center">Status Masuk</th>
-                    <th class="p-4 text-right">Lembur</th>
-                  </tr>
-                </thead>
-                <tbody id="tabelRekap" class="divide-y divide-gray-200/50 font-medium">
-                  <tr><td colspan="6" class="p-8 text-center text-gray-500">Memuat data hari ini...</td></tr>
+                <thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Nama Karyawan</th><th class="p-4 text-center">Total Hadir</th><th class="p-4 text-center">Total Terlambat</th><th class="p-4 text-right">Total Lembur</th></tr></thead>
+                <tbody id="tabelSummary" class="divide-y divide-gray-200/50 font-medium">
+                  <tr><td colspan="4" class="p-6 text-center text-gray-500">Memuat data...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="glass-panel p-0 rounded-3xl shadow-xl overflow-hidden border-t border-white/80">
+            <div class="p-4 border-b border-gray-200/50 bg-white/40"><h3 class="font-bold text-gray-700">📅 Rincian Harian (Detail)</h3></div>
+            <div class="overflow-x-auto p-2">
+              <table class="w-full text-left whitespace-nowrap">
+                <thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Tanggal</th><th class="p-4">Nama</th><th class="p-4 text-center">Masuk & Foto</th><th class="p-4 text-center">Pulang & Foto</th><th class="p-4 text-center">Status</th><th class="p-4 text-right">Lembur</th></tr></thead>
+                <tbody id="tabelDetail" class="divide-y divide-gray-200/50 font-medium">
+                  <tr><td colspan="6" class="p-6 text-center text-gray-500">Memuat data...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -119,11 +119,8 @@
           <div class="glass-panel p-8 rounded-3xl shadow-xl border-t border-white/80 max-w-2xl mx-auto">
             <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200/50 pb-4">📍 Pengaturan Lokasi Absensi (GPS)</h2>
             <form onsubmit="simpanPengaturan(event)" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Latitude (Lintang)</label><input type="text" id="setLat" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800" placeholder="0.7893"></div>
-                <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Longitude (Bujur)</label><input type="text" id="setLng" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800" placeholder="127.3633"></div>
-              </div>
-              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Radius Toleransi Jarak (Meter)</label><input type="number" id="setRadius" required class="w-full mt-1 p-4 rounded-xl glass-input font-bold text-teal-800 text-xl" placeholder="50"></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Latitude (Lintang)</label><input type="text" id="setLat" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800"></div><div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Longitude (Bujur)</label><input type="text" id="setLng" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800"></div></div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Radius Toleransi Jarak (Meter)</label><input type="number" id="setRadius" required class="w-full mt-1 p-4 rounded-xl glass-input font-bold text-teal-800 text-xl"></div>
               <button type="submit" id="btnSimpanPengaturan" class="w-full bg-teal-600 text-white p-4 rounded-xl font-bold text-lg hover:bg-teal-700 shadow-lg active:scale-95 transition-all mt-4">Simpan Pengaturan</button>
             </form>
           </div>
@@ -142,18 +139,22 @@
     </div>
   </div>
 
+  <div id="modalFoto" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity">
+    <div class="relative w-full max-w-sm flex flex-col items-center">
+      <button onclick="tutupFoto()" class="absolute -top-12 right-0 bg-white/20 hover:bg-white/40 text-white rounded-full p-2 backdrop-blur-sm transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+      <img id="imgFotoView" src="" class="w-full rounded-2xl shadow-2xl bg-gray-800 object-cover min-h-[300px]">
+      <p id="teksLoadingFoto" class="absolute top-1/2 text-white font-bold animate-pulse">Memuat foto...</p>
+    </div>
+  </div>
+
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbx9XwhDjYmI9FBU49p715VdzZ_RhNa5lMsxj3NKl3mjXc5WdeK6fQME2anA7XwmfMqN/exec"; // ⚠️ WAJIB DIISI
     const PIN_ADMIN = "123456";
     let tipeEditAktif = "";
 
-    async function prosesLoginAdmin() {
-      if (document.getElementById('adminPin').value !== PIN_ADMIN) return alert("PIN Salah!");
-      document.getElementById('btnLogin').innerHTML = `Memuat Database...`; document.getElementById('btnLogin').disabled = true;
-      await loadData();
-      document.getElementById('layarLogin').style.opacity = '0';
-      setTimeout(() => { document.getElementById('layarLogin').classList.add('hidden'); document.getElementById('layarDashboard').classList.remove('hidden'); }, 500);
-    }
+    async function prosesLoginAdmin() { if (document.getElementById('adminPin').value !== PIN_ADMIN) return alert("PIN Salah!"); document.getElementById('btnLogin').innerHTML = `Memuat Database...`; document.getElementById('btnLogin').disabled = true; await loadData(); document.getElementById('layarLogin').style.opacity = '0'; setTimeout(() => { document.getElementById('layarLogin').classList.add('hidden'); document.getElementById('layarDashboard').classList.remove('hidden'); }, 500); }
 
     function switchTab(tab) {
       document.getElementById('tabKaryawan').classList.add('hidden'); document.getElementById('tabJadwal').classList.add('hidden'); document.getElementById('tabRekap').classList.add('hidden'); document.getElementById('tabPengaturan').classList.add('hidden');
@@ -167,30 +168,20 @@
     async function loadData() {
       try {
         let response = await fetch(GAS_URL + "?action=get_data"); let result = await response.json();
-        
         if(result.pengaturan) { document.getElementById('setLat').value = result.pengaturan.klinik_lat || ''; document.getElementById('setLng').value = result.pengaturan.klinik_lng || ''; document.getElementById('setRadius').value = result.pengaturan.radius || '50'; }
-
         let htmlKar = ""; let dropdown = `<option value="Semua">Semua Karyawan (Umum)</option>`;
         if(result.karyawan) result.karyawan.forEach(row => { htmlKar += `<tr class="hover:bg-white/50 transition-colors"><td class="p-4 flex items-center gap-3"><div class="h-9 w-9 rounded-full bg-gradient-to-br from-teal-400 to-teal-500 text-white shadow-sm flex items-center justify-center font-bold text-sm">${row[0].charAt(0)}</div><span class="font-bold">${row[0]}</span></td><td class="p-4 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded-md text-sm border border-gray-200">@${row[1]}</span></td><td class="p-4 text-right space-x-2"><button onclick="resetHP('${row[5]}', '${row[0]}')" class="text-orange-500 bg-orange-50 px-3 py-1.5 rounded-lg font-bold hover:bg-orange-100 transition-colors text-sm" title="Buka Kunci HP">📱 Reset HP</button><button onclick="bukaEditKar('${row[5]}', '${row[0]}', '${row[1]}', '${row[2]}')" class="text-blue-500 bg-blue-50 px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-sm">Edit</button><button onclick="hapusKaryawan('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-sm">Hapus</button></td></tr>`; dropdown += `<option value="${row[0]}">Khusus: ${row[0]}</option>`; });
         document.getElementById('tabelKaryawan').innerHTML = htmlKar || '<tr><td colspan="3" class="p-6 text-center text-gray-400">Belum ada data</td></tr>'; document.getElementById('inputTargetKar').innerHTML = dropdown; document.getElementById('editTargetKar').innerHTML = dropdown;
-
         let htmlJad = "";
         if(result.jadwal) result.jadwal.forEach(row => { let badge = row[4] === 'Semua' ? `<span class="bg-teal-50 text-teal-700 border border-teal-200 text-xs px-2 py-1 rounded-md font-bold">Umum (Semua)</span>` : `<span class="bg-orange-50 text-orange-700 border border-orange-200 text-xs px-2 py-1 rounded-md font-bold">Khusus: ${row[4]}</span>`; htmlJad += `<tr class="hover:bg-white/50 transition-colors"><td class="p-4 font-bold text-gray-800">${row[0]}</td><td class="p-4">${badge}</td><td class="p-4 text-gray-600"><span class="font-bold text-gray-800">${row[1]} - ${row[3]}</span> <br><span class="text-xs text-red-400">Telat > ${row[2]}m</span></td><td class="p-4 text-right space-x-2"><button onclick="bukaEditJad('${row[5]}', '${row[0]}', '${row[4]}', '${row[1]}', '${row[3]}', '${row[2]}')" class="text-blue-500 bg-blue-50 px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-sm">Edit</button><button onclick="hapusJadwal('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-sm">Hapus</button></td></tr>`; });
         document.getElementById('tabelJadwal').innerHTML = htmlJad || '<tr><td colspan="4" class="p-6 text-center text-gray-400">Belum ada jadwal</td></tr>';
-
-        // 🚀 OTO-SET TANGGAL KE HARI INI LALU TARIK DATA LIVE
-        let now = new Date(); let yyyy = now.getFullYear(); let mm = String(now.getMonth() + 1).padStart(2, '0'); let dd = String(now.getDate()).padStart(2, '0');
-        let todayStr = `${yyyy}-${mm}-${dd}`;
-        document.getElementById('tglAwal').value = todayStr;
-        document.getElementById('tglAkhir').value = todayStr;
-        tarikRekap(); // Panggil fungsi rekap secara otomatis!
-
+        
+        let now = new Date(); let yyyy = now.getFullYear(); let mm = String(now.getMonth() + 1).padStart(2, '0'); let dd = String(now.getDate()).padStart(2, '0'); let todayStr = `${yyyy}-${mm}-${dd}`;
+        document.getElementById('tglAwal').value = todayStr; document.getElementById('tglAkhir').value = todayStr; tarikRekap();
       } catch (error) { alert("Gagal memuat data utama."); }
     }
 
-    async function kirimDataPOST(payload) {
-      try { let response = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); let result = JSON.parse(await response.text()); if (result.status === "success") { tampilNotif(); loadData(); } else alert("Error: " + result.pesan); } catch (error) { alert("Gagal server."); }
-    }
+    async function kirimDataPOST(payload) { try { let response = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); let result = JSON.parse(await response.text()); if (result.status === "success") { tampilNotif(); loadData(); } else alert("Error: " + result.pesan); } catch (error) { alert("Gagal server."); } }
     function tampilNotif() { let n = document.getElementById('notifAksi'); n.classList.remove('hidden'); setTimeout(() => { n.classList.add('hidden'); }, 3000); }
 
     function simpanPengaturan(e) { e.preventDefault(); let btn = document.getElementById('btnSimpanPengaturan'); btn.innerText = "Menyimpan..."; kirimDataPOST({ action: "simpan_pengaturan", lat: document.getElementById('setLat').value, lng: document.getElementById('setLng').value, radius: document.getElementById('setRadius').value }); setTimeout(() => { btn.innerText = "Simpan Pengaturan"; }, 1500); }
@@ -205,7 +196,28 @@
     function tutupModalEdit() { document.getElementById('modalEdit').classList.add('hidden'); }
     function simpanEdit() { let btn = document.getElementById('btnSimpanEdit'); btn.innerText = "Memproses..."; btn.disabled = true; if (tipeEditAktif === "karyawan") kirimDataPOST({ action: "edit_karyawan", id: document.getElementById('editIdKar').value, nama: document.getElementById('editNamaKar').value, username: document.getElementById('editUserKar').value, password: document.getElementById('editPassKar').value }); else kirimDataPOST({ action: "edit_jadwal", id: document.getElementById('editIdJad').value, targetKaryawan: document.getElementById('editTargetKar').value, jamMasuk: document.getElementById('editJamMsk').value, jamPulang: document.getElementById('editJamPlg').value, toleransi: document.getElementById('editToleransi').value }); setTimeout(() => { tutupModalEdit(); btn.innerText = "Update"; btn.disabled = false; }, 1000); }
 
-    // 🚀 FUNGSI TARIK REKAP (MENAMPILKAN RINCIAN HARIAN & FOTO)
+    // 🚀 FUNGSI BUKA FOTO DI MODAL
+    function lihatFoto(url) {
+      if(!url) return;
+      document.getElementById('teksLoadingFoto').style.display = 'block';
+      let img = document.getElementById('imgFotoView');
+      // Ekstrak ID File dari URL GDrive untuk direct view image
+      let fileId = url.match(/[-\w]{25,}/);
+      if (fileId && fileId[0]) {
+        img.src = "https://drive.google.com/uc?id=" + fileId[0];
+      } else {
+        img.src = url; // Fallback jika regex gagal
+      }
+      
+      img.onload = () => { document.getElementById('teksLoadingFoto').style.display = 'none'; };
+      document.getElementById('modalFoto').classList.remove('hidden');
+    }
+    
+    function tutupFoto() {
+      document.getElementById('modalFoto').classList.add('hidden');
+      document.getElementById('imgFotoView').src = ""; // Bersihkan gambar
+    }
+
     async function tarikRekap(e) { 
       if(e) e.preventDefault(); 
       let btn = document.getElementById('btnTarik'); 
@@ -216,14 +228,26 @@
       try { 
         let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); 
         let hasil = JSON.parse(await respon.text()); 
-        let html = ""; 
-        if(hasil.data && hasil.data.length > 0) { 
-          hasil.data.forEach(r => { 
-            let linkMsk = r.foto_masuk ? `<br><a href="${r.foto_masuk}" target="_blank" class="text-blue-500 hover:text-blue-700 text-[11px] underline">📸 Lihat Foto</a>` : '';
-            let linkPlg = r.foto_pulang ? `<br><a href="${r.foto_pulang}" target="_blank" class="text-blue-500 hover:text-blue-700 text-[11px] underline">📸 Lihat Foto</a>` : '';
+        
+        // 1. Render Tabel Summary
+        let htmlSummary = "";
+        if(hasil.rekap && hasil.rekap.length > 0) {
+          hasil.rekap.forEach(r => {
+            htmlSummary += `<tr class="hover:bg-white/50"><td class="p-4 font-bold text-gray-800">${r.nama}</td><td class="p-4 text-center"><span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-lg font-bold border border-teal-100">${r.hadir} Hari</span></td><td class="p-4 text-center"><span class="bg-red-50 text-red-500 px-3 py-1 rounded-lg font-bold border border-red-100">${r.telat} Kali</span></td><td class="p-4 text-right"><span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-lg font-bold border border-orange-100">${r.lembur}</span></td></tr>`;
+          });
+        }
+        document.getElementById('tabelSummary').innerHTML = htmlSummary || '<tr><td colspan="4" class="p-6 text-center text-gray-500">Tidak ada kehadiran di rentang tanggal tersebut.</td></tr>';
+
+        // 2. Render Tabel Detail Harian
+        let htmlDetail = ""; 
+        if(hasil.detail && hasil.detail.length > 0) { 
+          hasil.detail.forEach(r => { 
+            // Ubah link jadi tombol klik modal
+            let linkMsk = r.foto_masuk ? `<br><button onclick="lihatFoto('${r.foto_masuk}')" class="text-blue-500 hover:text-blue-700 text-[11px] underline bg-blue-50 px-2 py-0.5 mt-1 rounded">📸 Lihat Foto</button>` : '';
+            let linkPlg = r.foto_pulang ? `<br><button onclick="lihatFoto('${r.foto_pulang}')" class="text-blue-500 hover:text-blue-700 text-[11px] underline bg-blue-50 px-2 py-0.5 mt-1 rounded">📸 Lihat Foto</button>` : '';
             let badgeStatus = r.status.includes("Terlambat") ? `<span class="bg-red-50 text-red-500 px-2 py-1 rounded text-xs font-bold border border-red-100">${r.status}</span>` : `<span class="bg-teal-50 text-teal-700 px-2 py-1 rounded text-xs font-bold border border-teal-100">${r.status}</span>`;
             
-            html += `<tr class="hover:bg-white/50">
+            htmlDetail += `<tr class="hover:bg-white/50">
               <td class="p-4 text-sm text-gray-600 font-medium">${r.tanggal}</td>
               <td class="p-4 font-bold text-gray-800">${r.nama}</td>
               <td class="p-4 text-center font-bold text-gray-700">${r.jam_masuk} ${linkMsk}</td>
@@ -233,7 +257,8 @@
             </tr>`; 
           }); 
         } 
-        document.getElementById('tabelRekap').innerHTML = html || '<tr><td colspan="6" class="p-8 text-center text-gray-500">Tidak ada kehadiran di rentang tanggal tersebut.</td></tr>'; 
+        document.getElementById('tabelDetail').innerHTML = htmlDetail || '<tr><td colspan="6" class="p-6 text-center text-gray-500">Tidak ada kehadiran di rentang tanggal tersebut.</td></tr>'; 
+
       } catch(err) { alert("Gagal mengambil data rekap."); } 
       btn.innerText = "Filter"; btn.disabled = false; 
     }
