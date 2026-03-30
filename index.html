@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Absensi IODC</title>
+  <title>Absensi Klinik Sakala</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
   
-  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm text-center">
+  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm text-center relative">
     <h2 class="text-2xl font-bold text-teal-600 mb-4">Klinik Sakala</h2>
     
-    <select id="namaKaryawan" class="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+    <select id="namaKaryawan" class="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 font-medium">
       <option value="">-- Pilih Nama Anda --</option>
       <option value="Anya">Anya</option>
       <option value="Budi">Budi</option>
@@ -27,18 +27,35 @@
     <canvas id="canvas" class="hidden"></canvas>
 
     <div class="flex space-x-2">
-      <button id="btnMasuk" onclick="kirimAbsen('Masuk')" class="w-1/2 bg-teal-500 text-white p-3 rounded-lg font-semibold hover:bg-teal-600 active:bg-teal-700">Clock In</button>
-      <button id="btnPulang" onclick="kirimAbsen('Pulang')" class="w-1/2 bg-red-500 text-white p-3 rounded-lg font-semibold hover:bg-red-600 active:bg-red-700">Clock Out</button>
+      <button id="btnMasuk" onclick="kirimAbsen('Masuk')" class="w-1/2 bg-teal-500 text-white p-3 rounded-lg font-semibold hover:bg-teal-600 active:bg-teal-700 transition-all">Clock In</button>
+      <button id="btnPulang" onclick="kirimAbsen('Pulang')" class="w-1/2 bg-red-500 text-white p-3 rounded-lg font-semibold hover:bg-red-600 active:bg-red-700 transition-all">Clock Out</button>
     </div>
 
-    <p id="status" class="mt-4 text-sm font-medium text-gray-600"></p>
+    <p id="statusSync" class="mt-4 text-xs font-medium text-gray-400"></p>
+  </div>
+
+  <div id="modalKu" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-xl p-6 w-full max-w-xs text-center transform transition-all shadow-2xl">
+      <div id="ikonModal" class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+        <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+      </div>
+      <h3 class="text-lg leading-6 font-bold text-gray-900" id="judulModal">Absen Tersimpan!</h3>
+      <div class="mt-2">
+        <p class="text-sm text-gray-500" id="pesanModal">Data sedang dikirim di latar belakang.</p>
+      </div>
+      <div class="mt-5">
+        <button type="button" onclick="tutupModal()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-teal-600 text-base font-medium text-white hover:bg-teal-700 focus:outline-none sm:text-sm">
+          Tutup
+        </button>
+      </div>
+    </div>
   </div>
 
   <script>
-    // MASUKKAN URL WEB APP GAS ANDA DI SINI (Pastikan diakhiri dengan /exec)
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwmKy7XBr6_w9axtnoxoTb9qP27wP1SK7gC4_ixDfxRlmgkgcwa4QJuSBpYEEWr8XdB/exec"; 
+    // MASUKKAN URL WEB APP GAS ANDA DI SINI
+    const GAS_URL = "MASUKKAN_URL_GAS_DI_SINI"; 
 
-    // Generate & Cek Device Binding via LocalStorage
+    // Device Binding
     let deviceID = localStorage.getItem('sakala_deviceID');
     if (!deviceID) {
       deviceID = 'DEV-' + Math.random().toString(36).substr(2, 9);
@@ -47,85 +64,143 @@
 
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
-    const statusEl = document.getElementById('status');
-    const loadingTeks = document.getElementById('kameraLoading');
+    const ctx = canvas.getContext('2d');
+    const statusSync = document.getElementById('statusSync');
     let streamAktif = null;
 
-    // Akses Kamera Depan
+    // Akses Kamera
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
       .then(stream => { 
         streamAktif = stream;
         video.srcObject = stream; 
-        loadingTeks.style.display = "none";
+        document.getElementById('kameraLoading').style.display = "none";
       })
       .catch(err => { 
-        statusEl.innerText = "Izinkan akses kamera di pengaturan Safari Anda!"; 
-        statusEl.classList.add("text-red-500");
-        loadingTeks.innerText = "Kamera diblokir";
+        bukaModal("Error", "Gagal akses kamera. Periksa izin Safari Anda.", false);
       });
 
-    // Proses Kirim Data
+    // Jalankan pengecekan background sync saat aplikasi dibuka
+    window.onload = prosesAntrian;
+    window.addEventListener('online', prosesAntrian);
+
     function kirimAbsen(tipe) {
       const nama = document.getElementById('namaKaryawan').value;
 
       if (!nama) {
-        statusEl.innerText = "Pilih nama Anda dulu!";
-        statusEl.className = "mt-4 text-sm font-bold text-red-500";
+        bukaModal("Perhatian", "Silakan pilih nama Anda terlebih dahulu!", false);
         return;
       }
-
       if (!streamAktif) {
-        statusEl.innerText = "Kamera tidak menyala, tidak bisa absen.";
-        statusEl.className = "mt-4 text-sm font-bold text-red-500";
+        bukaModal("Perhatian", "Kamera belum siap.", false);
         return;
       }
 
-      // Ubah teks tombol jadi loading
-      const btn = tipe === 'Masuk' ? document.getElementById('btnMasuk') : document.getElementById('btnPulang');
-      const teksAsli = btn.innerText;
-      btn.innerText = "Loading...";
-      btn.disabled = true;
-      statusEl.innerText = "Mengirim foto & data...";
-      statusEl.className = "mt-4 text-sm font-medium text-gray-600";
-      
-      // Ambil foto
+      // Ambil dimensi video
       canvas.width = video.videoWidth || 480;
       canvas.height = video.videoHeight || 640;
-      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      // 1. Gambar Video ke Canvas
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // 2. Tambahkan Watermark
+      let waktuLokal = new Date().toLocaleString("id-ID", {timeZone: "Asia/Jayapura"}); // Format WIT
+      
+      // Blok Background Hitam Transparan untuk teks
+      ctx.fillStyle = "rgba(0, 0, 0, 0.6)"; 
+      ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+      
+      // Teks Watermark
+      ctx.fillStyle = "white";
+      ctx.font = "bold 16px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(`Klinik Sakala | ${nama} | ${tipe}`, canvas.width / 2, canvas.height - 30);
+      ctx.font = "14px Arial";
+      ctx.fillText(waktuLokal + " WIT", canvas.width / 2, canvas.height - 12);
+
+      // Konversi ke Base64
       const fotoBase64 = canvas.toDataURL('image/png');
 
       const payload = {
+        idUnik: Date.now().toString(), // ID unik untuk antrian
         nama: nama,
         tipe: tipe,
         foto: fotoBase64,
         deviceID: deviceID
       };
 
-      // Kirim via Fetch API ke Google Apps Script
-      fetch(GAS_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      })
-      .then(response => response.json())
-      .then(result => {
-        btn.innerText = teksAsli;
-        btn.disabled = false;
+      // 3. Simpan ke LocalStorage (Offline Queue)
+      let antrian = JSON.parse(localStorage.getItem('antrianSakala')) || [];
+      antrian.push(payload);
+      localStorage.setItem('antrianSakala', JSON.stringify(antrian));
+
+      // 4. Langsung Tampilkan Sukses (UI Instan)
+      bukaModal("Absen Terekam!", `Terima kasih ${nama}, data ${tipe} sudah disimpan di perangkat.`, true);
+
+      // 5. Picu proses pengiriman di latar belakang
+      prosesAntrian();
+    }
+
+    // Fungsi Background Sync
+    async function prosesAntrian() {
+      if (!navigator.onLine) {
+        statusSync.innerText = "Offline: Menunggu koneksi internet...";
+        return;
+      }
+
+      let antrian = JSON.parse(localStorage.getItem('antrianSakala')) || [];
+      if (antrian.length === 0) {
+        statusSync.innerText = "Semua data sudah tersinkronisasi.";
+        return;
+      }
+
+      statusSync.innerText = `Menyinkronkan ${antrian.length} data ke server...`;
+      
+      let payload = antrian[0]; // Proses yang paling lama ngantri dulu
+
+      try {
+        let respon = await fetch(GAS_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
         
-        if(result.status === "success") {
-          statusEl.innerText = result.pesan;
-          statusEl.className = "mt-4 text-sm font-bold text-green-600";
-        } else {
-          statusEl.innerText = result.pesan;
-          statusEl.className = "mt-4 text-sm font-bold text-red-500";
+        let hasil = await respon.json();
+        
+        if (hasil.status === "success" || hasil.status === "error") {
+          // Hapus dari antrian jika berhasil atau error dari server (misal: belum clock in)
+          antrian.shift(); 
+          localStorage.setItem('antrianSakala', JSON.stringify(antrian));
+          
+          if(antrian.length > 0) {
+             prosesAntrian(); // Lanjut kirim sisa antrian
+          } else {
+             statusSync.innerText = "Sinkronisasi selesai ✅";
+             setTimeout(() => { statusSync.innerText = ""; }, 3000);
+          }
         }
-        setTimeout(() => { statusEl.innerText = ""; }, 5000);
-      })
-      .catch(error => {
-        btn.innerText = teksAsli;
-        btn.disabled = false;
-        statusEl.innerText = "Gagal koneksi ke server.";
-        statusEl.className = "mt-4 text-sm font-bold text-red-500";
-      });
+      } catch (error) {
+        statusSync.innerText = "Koneksi lambat, akan mencoba lagi nanti...";
+      }
+    }
+
+    // Fungsi Kontrol Modal Pop-up
+    function bukaModal(judul, pesan, sukses) {
+      document.getElementById('judulModal').innerText = judul;
+      document.getElementById('pesanModal').innerText = pesan;
+      
+      const ikonBox = document.getElementById('ikonModal');
+      if (sukses) {
+        ikonBox.className = "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4 text-green-600";
+        ikonBox.innerHTML = '<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+      } else {
+        ikonBox.className = "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4 text-red-600";
+        ikonBox.innerHTML = '<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+      }
+      
+      document.getElementById('modalKu').classList.remove('hidden');
+    }
+
+    function tutupModal() {
+      document.getElementById('modalKu').classList.add('hidden');
     }
   </script>
 </body>
