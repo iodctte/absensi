@@ -236,7 +236,33 @@
       setTimeout(() => { tutupModalEdit(); btn.innerText = "Update"; btn.disabled = false; }, 1000); 
     }
 
-    async function tarikRekap(e) { e.preventDefault(); let btn = document.getElementById('btnTarik'); btn.innerText = "Memuat..."; btn.disabled = true; let payload = { action: "get_rekap", tglAwal: document.getElementById('tglAwal').value, tglAkhir: document.getElementById('tglAkhir').value }; try { let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); let hasil = JSON.parse(await respon.text()); let html = ""; if(hasil.data && hasil.data.length > 0) { hasil.data.forEach(r => { html += `<tr class="hover:bg-white/50"><td class="p-4 font-bold text-gray-800">${r.nama}</td><td class="p-4 text-center"><span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-lg font-bold border border-teal-100">${r.hadir} Hari</span></td><td class="p-4 text-center"><span class="bg-red-50 text-red-500 px-3 py-1 rounded-lg font-bold border border-red-100">${r.telat} Kali</span></td><td class="p-4 text-right"><span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-lg font-bold border border-orange-100">${r.lembur}</span></td></tr>`; }); } document.getElementById('tabelRekap').innerHTML = html || '<tr><td colspan="4" class="p-8 text-center text-gray-500">Tidak ada kehadiran di rentang tanggal tersebut.</td></tr>'; } catch(err) { alert("Gagal mengambil data rekap."); } btn.innerText = "Generate Laporan"; btn.disabled = false; }
+   async function tarikRekap(e) { 
+      e.preventDefault(); 
+      let btn = document.getElementById('btnTarik'); 
+      
+      // Tambahkan efek loading spinner berputar agar terasa lebih interaktif
+      btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memproses...`; 
+      btn.disabled = true; 
+      
+      let payload = { action: "get_rekap", tglAwal: document.getElementById('tglAwal').value, tglAkhir: document.getElementById('tglAkhir').value }; 
+      
+      try { 
+        let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); 
+        let hasil = JSON.parse(await respon.text()); 
+        let html = ""; 
+        if(hasil.data && hasil.data.length > 0) { 
+          hasil.data.forEach(r => { 
+            html += `<tr class="hover:bg-white/50"><td class="p-4 font-bold text-gray-800">${r.nama}</td><td class="p-4 text-center"><span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-lg font-bold border border-teal-100">${r.hadir} Hari</span></td><td class="p-4 text-center"><span class="bg-red-50 text-red-500 px-3 py-1 rounded-lg font-bold border border-red-100">${r.telat} Kali</span></td><td class="p-4 text-right"><span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-lg font-bold border border-orange-100">${r.lembur}</span></td></tr>`; 
+          }); 
+        } 
+        document.getElementById('tabelRekap').innerHTML = html || '<tr><td colspan="4" class="p-8 text-center text-gray-500">Tidak ada kehadiran di rentang tanggal tersebut.</td></tr>'; 
+      } catch(err) { 
+        alert("Gagal mengambil data rekap."); 
+      } 
+      
+      btn.innerText = "Generate Laporan"; 
+      btn.disabled = false; 
+    }
   </script>
 </body>
 </html>
