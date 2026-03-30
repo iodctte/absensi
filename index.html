@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Absensi IODC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+  
+  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm text-center">
+    <h2 class="text-2xl font-bold text-teal-600 mb-4">Klinik Sakala</h2>
+    
+    <select id="namaKaryawan" class="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+      <option value="">-- Pilih Nama Anda --</option>
+      <option value="Anya">Anya</option>
+      <option value="Budi">Budi</option>
+      <option value="Citra">Citra</option>
+      <option value="Deni">Deni</option>
+      <option value="Eka">Eka</option>
+    </select>
+
+    <div class="relative w-full h-64 bg-black rounded-lg overflow-hidden mb-4 flex items-center justify-center">
+      <p id="kameraLoading" class="text-white text-sm absolute">Menyiapkan kamera...</p>
+      <video id="video" class="w-full h-full object-cover relative z-10" autoplay playsinline muted></video>
+    </div>
+    <canvas id="canvas" class="hidden"></canvas>
+
+    <div class="flex space-x-2">
+      <button id="btnMasuk" onclick="kirimAbsen('Masuk')" class="w-1/2 bg-teal-500 text-white p-3 rounded-lg font-semibold hover:bg-teal-600 active:bg-teal-700">Clock In</button>
+      <button id="btnPulang" onclick="kirimAbsen('Pulang')" class="w-1/2 bg-red-500 text-white p-3 rounded-lg font-semibold hover:bg-red-600 active:bg-red-700">Clock Out</button>
+    </div>
+
+    <p id="status" class="mt-4 text-sm font-medium text-gray-600"></p>
+  </div>
+
+  <script>
+    // MASUKKAN URL WEB APP GAS ANDA DI SINI (Pastikan diakhiri dengan /exec)
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwmKy7XBr6_w9axtnoxoTb9qP27wP1SK7gC4_ixDfxRlmgkgcwa4QJuSBpYEEWr8XdB/exec"; 
+
+    // Generate & Cek Device Binding via LocalStorage
+    let deviceID = localStorage.getItem('sakala_deviceID');
+    if (!deviceID) {
+      deviceID = 'DEV-' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('sakala_deviceID', deviceID);
+    }
+
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const statusEl = document.getElementById('status');
+    const loadingTeks = document.getElementById('kameraLoading');
+    let streamAktif = null;
+
+    // Akses Kamera Depan
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
+      .then(stream => { 
+        streamAktif = stream;
+        video.srcObject = stream; 
+        loadingTeks.style.display = "none";
+      })
+      .catch(err => { 
+        statusEl.innerText = "Izinkan akses kamera di pengaturan Safari Anda!"; 
+        statusEl.classList.add("text-red-500");
+        loadingTeks.innerText = "Kamera diblokir";
+      });
+
+    // Proses Kirim Data
+    function kirimAbsen(tipe) {
+      const nama = document.getElementById('namaKaryawan').value;
+
+      if (!nama) {
+        statusEl.innerText = "Pilih nama Anda dulu!";
+        statusEl.className = "mt-4 text-sm font-bold text-red-500";
+        return;
+      }
+
+      if (!streamAktif) {
+        statusEl.innerText = "Kamera tidak menyala, tidak bisa absen.";
+        statusEl.className = "mt-4 text-sm font-bold text-red-500";
+        return;
+      }
+
+      // Ubah teks tombol jadi loading
+      const btn = tipe === 'Masuk' ? document.getElementById('btnMasuk') : document.getElementById('btnPulang');
+      const teksAsli = btn.innerText;
+      btn.innerText = "Loading...";
+      btn.disabled = true;
+      statusEl.innerText = "Mengirim foto & data...";
+      statusEl.className = "mt-4 text-sm font-medium text-gray-600";
+      
+      // Ambil foto
+      canvas.width = video.videoWidth || 480;
+      canvas.height = video.videoHeight || 640;
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      const fotoBase64 = canvas.toDataURL('image/png');
+
+      const payload = {
+        nama: nama,
+        tipe: tipe,
+        foto: fotoBase64,
+        deviceID: deviceID
+      };
+
+      // Kirim via Fetch API ke Google Apps Script
+      fetch(GAS_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(result => {
+        btn.innerText = teksAsli;
+        btn.disabled = false;
+        
+        if(result.status === "success") {
+          statusEl.innerText = result.pesan;
+          statusEl.className = "mt-4 text-sm font-bold text-green-600";
+        } else {
+          statusEl.innerText = result.pesan;
+          statusEl.className = "mt-4 text-sm font-bold text-red-500";
+        }
+        setTimeout(() => { statusEl.innerText = ""; }, 5000);
+      })
+      .catch(error => {
+        btn.innerText = teksAsli;
+        btn.disabled = false;
+        statusEl.innerText = "Gagal koneksi ke server.";
+        statusEl.className = "mt-4 text-sm font-bold text-red-500";
+      });
+    }
+  </script>
+</body>
+</html>
