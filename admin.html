@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Klinik Sakala</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen hidden" id="bodyAdmin">
+
+  <nav class="bg-teal-600 shadow-md p-4 flex justify-between items-center text-white">
+    <h1 class="text-xl font-bold">HR Admin Sakala</h1>
+    <div class="space-x-4">
+      <button onclick="switchTab('karyawan')" class="hover:text-teal-200 font-medium">Data Karyawan</button>
+      <button onclick="switchTab('jadwal')" class="hover:text-teal-200 font-medium">Pengaturan Jadwal</button>
+    </div>
+  </nav>
+
+  <div class="container mx-auto p-6">
+    <div id="loadingStatus" class="text-center text-gray-500 font-bold mb-4">Memuat data dari server...</div>
+
+    <div id="tabKaryawan" class="hidden">
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-bold mb-4">Tambah Karyawan Baru</h2>
+        <form onsubmit="tambahKaryawan(event)" class="flex gap-4">
+          <input type="text" id="inputNama" placeholder="Nama Karyawan" required class="border p-2 rounded w-full">
+          <input type="email" id="inputEmail" placeholder="Email (Opsional)" class="border p-2 rounded w-full">
+          <button type="submit" class="bg-teal-500 text-white px-6 py-2 rounded hover:bg-teal-600 font-bold">Simpan</button>
+        </form>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold mb-4">Daftar Karyawan</h2>
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="p-3 border-b">Nama</th>
+              <th class="p-3 border-b">Email</th>
+              <th class="p-3 border-b">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabelKaryawan"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tabJadwal" class="hidden">
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-bold mb-4">Tambah / Ubah Jadwal</h2>
+        <form onsubmit="tambahJadwal(event)" class="grid grid-cols-2 gap-4">
+          <input type="text" id="inputHariTgl" placeholder="Hari (Senin) ATAU Tgl (30/03/2026)" required class="border p-2 rounded">
+          <input type="time" id="inputJamMasuk" required class="border p-2 rounded">
+          <input type="number" id="inputToleransi" placeholder="Toleransi Telat (Menit)" required class="border p-2 rounded">
+          <input type="time" id="inputJamPulang" required class="border p-2 rounded">
+          <button type="submit" class="bg-teal-500 text-white px-6 py-2 rounded hover:bg-teal-600 font-bold col-span-2">Simpan Jadwal</button>
+        </form>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold mb-4">Daftar Jadwal</h2>
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="p-3 border-b">Hari/Tanggal</th>
+              <th class="p-3 border-b">Jam Masuk</th>
+              <th class="p-3 border-b">Toleransi</th>
+              <th class="p-3 border-b">Jam Pulang</th>
+              <th class="p-3 border-b">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabelJadwal"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwmKy7XBr6_w9axtnoxoTb9qP27wP1SK7gC4_ixDfxRlmgkgcwa4QJuSBpYEEWr8XdB/exec"; // <-- ISI DENGAN URL WEB APP ANDA
+    const PIN_ADMIN = "123456";
+
+    // Proteksi PIN Sederhana
+    let userPin = prompt("Masukkan PIN Admin:");
+    if (userPin === PIN_ADMIN) {
+      document.getElementById('bodyAdmin').classList.remove('hidden');
+      loadData();
+    } else {
+      document.body.innerHTML = "<h2 class='text-center text-red-500 mt-20 text-2xl font-bold'>Akses Ditolak. PIN Salah.</h2>";
+      document.body.classList.remove('hidden');
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tabKaryawan').classList.add('hidden');
+      document.getElementById('tabJadwal').classList.add('hidden');
+      if (tab === 'karyawan') document.getElementById('tabKaryawan').classList.remove('hidden');
+      if (tab === 'jadwal') document.getElementById('tabJadwal').classList.remove('hidden');
+    }
+
+    async function loadData() {
+      document.getElementById('loadingStatus').innerText = "Memuat data...";
+      try {
+        let response = await fetch(GAS_URL + "?action=get_data");
+        let result = await response.json();
+        
+        // Render Tabel Karyawan
+        let htmlKaryawan = "";
+        result.karyawan.forEach(row => {
+          if(row[0]) { // Pastikan nama tidak kosong
+            htmlKaryawan += `<tr class="border-b hover:bg-gray-50">
+              <td class="p-3">${row[0]}</td>
+              <td class="p-3">${row[1]}</td>
+              <td class="p-3"><button onclick="hapusData('hapus_karyawan', '${row[0]}')" class="text-red-500 font-bold">Hapus</button></td>
+            </tr>`;
+          }
+        });
+        document.getElementById('tabelKaryawan').innerHTML = htmlKaryawan;
+
+        // Render Tabel Jadwal
+        let htmlJadwal = "";
+        result.jadwal.forEach(row => {
+          if(row[0]) {
+            htmlJadwal += `<tr class="border-b hover:bg-gray-50">
+              <td class="p-3">${row[0]}</td>
+              <td class="p-3">${row[1]}</td>
+              <td class="p-3">${row[2]} Menit</td>
+              <td class="p-3">${row[3]}</td>
+              <td class="p-3"><button onclick="hapusData('hapus_jadwal', '${row[0]}')" class="text-red-500 font-bold">Hapus</button></td>
+            </tr>`;
+          }
+        });
+        document.getElementById('tabelJadwal').innerHTML = htmlJadwal;
+        
+        document.getElementById('loadingStatus').innerText = "";
+        switchTab('karyawan'); // Buka tab karyawan secara default
+      } catch (error) {
+        document.getElementById('loadingStatus').innerText = "Gagal memuat data. Coba refresh halaman.";
+      }
+    }
+
+    async function kirimDataPOST(payload) {
+      document.getElementById('loadingStatus').innerText = "Menyimpan perubahan...";
+      try {
+        let response = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
+        let result = await response.json();
+        if (result.status === "success") {
+          alert(result.pesan);
+          loadData(); // Refresh tabel
+        } else {
+          alert("Error: " + result.pesan);
+        }
+      } catch (error) { alert("Gagal koneksi ke server."); }
+    }
+
+    function tambahKaryawan(e) {
+      e.preventDefault();
+      kirimDataPOST({ action: "tambah_karyawan", nama: document.getElementById('inputNama').value, email: document.getElementById('inputEmail').value });
+      e.target.reset();
+    }
+
+    function tambahJadwal(e) {
+      e.preventDefault();
+      let jamMasuk = document.getElementById('inputJamMasuk').value;
+      let jamPulang = document.getElementById('inputJamPulang').value;
+      
+      // Pastikan format jam selalu 5 karakter (HH:mm) agar dibaca benar oleh Backend
+      if(jamMasuk.length === 8) jamMasuk = jamMasuk.substring(0, 5);
+      if(jamPulang.length === 8) jamPulang = jamPulang.substring(0, 5);
+
+      kirimDataPOST({
+        action: "tambah_jadwal",
+        hariTanggal: document.getElementById('inputHariTgl').value,
+        jamMasuk: jamMasuk,
+        toleransi: document.getElementById('inputToleransi').value,
+        jamPulang: jamPulang
+      });
+      e.target.reset();
+    }
+
+    function hapusData(actionType, idBenda) {
+      if(confirm(`Yakin ingin menghapus data: ${idBenda}?`)) {
+        let payload = { action: actionType };
+        if (actionType === 'hapus_karyawan') payload.nama = idBenda;
+        if (actionType === 'hapus_jadwal') payload.hariTanggal = idBenda;
+        kirimDataPOST(payload);
+      }
+    }
+  </script>
+</body>
+</html>
