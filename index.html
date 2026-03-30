@@ -152,15 +152,41 @@
     }
 
     async function prosesLogin() {
-      let user = document.getElementById('inUsername').value; let pass = document.getElementById('inPassword').value; let btn = document.getElementById('btnLogin');
+      let user = document.getElementById('inUsername').value; 
+      let pass = document.getElementById('inPassword').value; 
+      let btn = document.getElementById('btnLogin');
+      
       if (!user || !pass) return bukaModal("Perhatian", "Isi Username dan Password!", false);
       btn.innerHTML = `Memeriksa...`; btn.disabled = true;
+      
       try {
-        let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "login", username: user, password: pass, deviceID: deviceID }) });
+        // PERBAIKAN: Memastikan deviceID dikirim ke server!
+        let payloadLogin = { 
+          action: "login", 
+          username: user, 
+          password: pass, 
+          deviceID: deviceID // <--- INI YANG HILANG SEBELUMNYA
+        };
+
+        let respon = await fetch(GAS_URL, { 
+          redirect: "follow", 
+          method: 'POST', 
+          headers: { "Content-Type": "text/plain;charset=utf-8" }, 
+          body: JSON.stringify(payloadLogin) 
+        });
+        
         let hasil = JSON.parse(await respon.text());
-        if (hasil.status === "success") { localStorage.setItem('ikra_name', hasil.nama); location.reload(); } 
-        else { bukaModal("Login Gagal", hasil.pesan, false); btn.innerHTML = "Masuk"; btn.disabled = false; }
-      } catch (error) { bukaModal("Error Jaringan", "Gagal terhubung. Cek koneksi internet Anda.", false); btn.innerHTML = "Masuk"; btn.disabled = false; }
+        if (hasil.status === "success") { 
+          localStorage.setItem('ikra_name', hasil.nama); 
+          location.reload(); 
+        } else { 
+          bukaModal("Login Gagal", hasil.pesan, false); 
+          btn.innerHTML = "Masuk"; btn.disabled = false; 
+        }
+      } catch (error) { 
+        bukaModal("Error Jaringan", "Gagal terhubung. Cek koneksi internet Anda.", false); 
+        btn.innerHTML = "Masuk"; btn.disabled = false; 
+      }
     }
     function prosesLogout() { if(confirm("Yakin ingin keluar akun?")) { localStorage.removeItem('ikra_name'); location.reload(); } }
 
