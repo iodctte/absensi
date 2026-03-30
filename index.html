@@ -3,13 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Ikra Orthodontic & Dental Care</title>
+  <title>Dashboard - Ikra Orthodontic & Dental Care</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); }
-  </style>
+  <style> body { font-family: 'Inter', sans-serif; } .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); } </style>
 </head>
 <body class="bg-gradient-to-br from-teal-500 to-blue-700 min-h-screen flex items-center justify-center p-4">
 
@@ -21,15 +18,11 @@
       <h2 class="text-2xl font-bold text-gray-800 leading-tight">Ikra Orthodontic & <br>Dental Care</h2>
       <p class="text-sm text-gray-600 mt-2 font-medium">Silakan masuk ke akun Anda</p>
     </div>
-    
     <div class="space-y-4 mb-8">
-      <input type="text" id="inUsername" placeholder="Username" class="w-full p-4 border-0 rounded-2xl bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-500 font-medium text-gray-700 placeholder-gray-400">
-      <input type="password" id="inPassword" placeholder="Password" class="w-full p-4 border-0 rounded-2xl bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-500 font-medium text-gray-700 placeholder-gray-400">
+      <input type="text" id="inUsername" placeholder="Username" class="w-full p-4 border-0 rounded-2xl bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-500 font-medium text-gray-700">
+      <input type="password" id="inPassword" placeholder="Password" class="w-full p-4 border-0 rounded-2xl bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-500 font-medium text-gray-700">
     </div>
-
-    <button id="btnLogin" onclick="prosesLogin()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold text-lg hover:bg-teal-700 active:transform active:scale-95 transition-all shadow-lg flex justify-center items-center gap-2">
-      Masuk
-    </button>
+    <button id="btnLogin" onclick="prosesLogin()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold text-lg hover:bg-teal-700 active:transform active:scale-95 transition-all shadow-lg">Masuk</button>
   </div>
 
   <div id="layarDashboard" class="hidden w-full max-w-sm flex flex-col gap-4">
@@ -44,21 +37,14 @@
     </div>
 
     <div class="glass-card p-6 rounded-3xl shadow-xl flex flex-col items-center">
-      <div id="badgeStatus" class="px-4 py-1 rounded-full text-sm font-bold bg-gray-200 text-gray-600 mb-6 shadow-inner">
-        Status: Belum Absen
-      </div>
+      <div id="badgeStatus" class="px-4 py-1 rounded-full text-sm font-bold bg-gray-200 text-gray-600 mb-6 shadow-inner">Status: Belum Absen</div>
 
-      <button id="btnClockIn" onclick="bukaKamera('Masuk')" class="w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white p-4 rounded-2xl font-bold text-lg active:scale-95 transition-all mb-3 shadow-md flex justify-center items-center gap-2">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg> Clock In
-      </button>
+      <button id="btnClockIn" onclick="cekLokasi('Masuk')" class="w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white p-4 rounded-2xl font-bold text-lg active:scale-95 transition-all mb-3 shadow-md flex justify-center items-center gap-2">Clock In</button>
+      <button id="btnClockOut" onclick="cekLokasi('Pulang')" class="w-full hidden bg-gradient-to-r from-red-500 to-orange-400 text-white p-4 rounded-2xl font-bold text-lg active:scale-95 transition-all mb-3 shadow-md flex justify-center items-center gap-2">Clock Out</button>
+      
+      <div id="loadingGps" class="hidden w-full p-3 bg-blue-50 text-blue-600 rounded-xl text-center text-sm font-bold mb-3 animate-pulse">🛰️ Mendeteksi Lokasi Anda...</div>
 
-      <button id="btnClockOut" onclick="bukaKamera('Pulang')" class="w-full hidden bg-gradient-to-r from-red-500 to-orange-400 text-white p-4 rounded-2xl font-bold text-lg active:scale-95 transition-all mb-3 shadow-md flex justify-center items-center gap-2">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg> Clock Out
-      </button>
-
-      <div id="pesanSelesai" class="hidden w-full p-4 bg-green-100 text-green-700 rounded-2xl font-bold text-center border border-green-200">
-        🎉 Shift hari ini selesai. Selamat beristirahat!
-      </div>
+      <div id="pesanSelesai" class="hidden w-full p-4 bg-green-100 text-green-700 rounded-2xl font-bold text-center border border-green-200">🎉 Shift hari ini selesai!</div>
 
       <div class="w-full mt-4 border-t border-gray-300/50 pt-4">
         <p class="text-[11px] text-gray-500 font-semibold mb-2 uppercase tracking-widest text-center">Performa Bulan Ini</p>
@@ -70,7 +56,6 @@
       </div>
       
       <p id="statusSync" class="mt-4 text-xs font-medium text-gray-700 opacity-80 text-center"></p>
-
       <button onclick="prosesLogout()" class="mt-6 text-xs font-bold text-red-500 hover:text-red-700 underline">Keluar Akun (Logout)</button>
     </div>
   </div>
@@ -100,90 +85,84 @@
   </div>
 
   <script>
-    // MASUKKAN URL WEB APP GAS ANDA DI SINI (Tetap gunakan GAS sebagai Bridge ke Supabase/GDrive)
+    // ================= PENGATURAN UTAMA =================
     const GAS_URL = "https://script.google.com/macros/s/AKfycbx9XwhDjYmI9FBU49p715VdzZ_RhNa5lMsxj3NKl3mjXc5WdeK6fQME2anA7XwmfMqN/exec"; 
+    
+    // GANTI KOORDINAT INI DENGAN KOORDINAT IKRA DENTAL DI TERNATE
+    const KLINIK_LAT = 0.7893; 
+    const KLINIK_LNG = 127.3633; 
+    const MAX_JARAK_METER = 50; // Radius maksimal yang diizinkan (50 Meter)
 
+    // --- State & Variabel ---
     // --- State & Variabel ---
     let myName = localStorage.getItem('ikra_name');
     let deviceID = localStorage.getItem('ikra_deviceID');
     if (!deviceID) { deviceID = 'DEV-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('ikra_deviceID', deviceID); }
     
-    let tipeAbsenAktif = "";
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    let streamAktif = null;
+    // BARU: Ambil nilai terakhir dari memori HP (atau gunakan 0 sebagai default sebelum sinkron)
+    let KLINIK_LAT = parseFloat(localStorage.getItem('ikra_lat')) || 0;
+    let KLINIK_LNG = parseFloat(localStorage.getItem('ikra_lng')) || 0;
+    let MAX_JARAK_METER = parseInt(localStorage.getItem('ikra_radius')) || 50;
 
-    window.onload = () => {
-      if (myName) {
-        document.getElementById('layarDashboard').classList.remove('hidden');
-        document.getElementById('teksSapaan').innerText = `Halo, ${myName.split(' ')[0]}!`;
-        jalankanJam();
-        cekLogikaHarian();
-        prosesAntrian();
-        muatStatistik();
-      } else {
-        document.getElementById('layarLogin').classList.remove('hidden');
-      }
-    };
+    // ... (kode video, canvas biarkan sama) ...
 
-    // --- FUNGSI LOGIN & LOGOUT ---
-    async function prosesLogin() {
-      let user = document.getElementById('inUsername').value; let pass = document.getElementById('inPassword').value; let btn = document.getElementById('btnLogin');
-      if (!user || !pass) return bukaModal("Perhatian", "Isi Username dan Password!", false);
-
-      btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memeriksa...`;
-      btn.disabled = true;
-
-      try {
-        let respon = await fetch(GAS_URL, { method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "login", username: user, password: pass }) });
-        let hasil = JSON.parse(await respon.text());
-        if (hasil.status === "success") { localStorage.setItem('ikra_name', hasil.nama); location.reload(); } 
-        else { bukaModal("Login Gagal", hasil.pesan, false); btn.innerHTML = "Masuk"; btn.disabled = false; }
-      } catch (error) { bukaModal("Error Jaringan", "Gagal terhubung ke server.", false); btn.innerHTML = "Masuk"; btn.disabled = false; }
-    }
-
-    function prosesLogout() {
-      if(confirm("Yakin ingin keluar akun?")) { localStorage.removeItem('ikra_name'); location.reload(); }
-    }
-
+    // UPDATE PADA FUNGSI MUAT STATISTIK (Karena Server Mengirim Balik Data Pengaturan)
     function muatStatistik() {
       fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName))
         .then(res => res.json())
         .then(data => {
           if(data.status === "success") {
-            document.getElementById('statHadir').innerText = data.hadir;
-            document.getElementById('statTelat').innerText = data.telat;
+            document.getElementById('statHadir').innerText = data.hadir; 
+            document.getElementById('statTelat').innerText = data.telat; 
             document.getElementById('statLembur').innerText = data.lembur;
+
+            // Update GPS Otomatis dari Server (Tanpa perlu karyawan melakukan apapun)
+            if(data.pengaturan) {
+              KLINIK_LAT = parseFloat(data.pengaturan.klinik_lat);
+              KLINIK_LNG = parseFloat(data.pengaturan.klinik_lng);
+              MAX_JARAK_METER = parseInt(data.pengaturan.radius);
+              
+              // Simpan ke memori HP agar kalau besok HP offline, absen tetap ingat lokasinya
+              localStorage.setItem('ikra_lat', KLINIK_LAT);
+              localStorage.setItem('ikra_lng', KLINIK_LNG);
+              localStorage.setItem('ikra_radius', MAX_JARAK_METER);
+            }
           }
         }).catch(e => console.log("Gagal muat statistik"));
     }
 
-    // --- JAM & TANGGAL (Zona WIT) ---
-    function jalankanJam() {
-      setInterval(() => {
-        let now = new Date();
-        document.getElementById('teksJam').innerText = now.toLocaleTimeString("id-ID", { timeZone: "Asia/Jayapura", hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/\./g, ':');
-        document.getElementById('teksTanggal').innerText = now.toLocaleDateString("id-ID", { timeZone: "Asia/Jayapura", weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
-      }, 1000);
+    // UPDATE PADA FUNGSI CEK LOKASI (Menghapus pesan error kalau lokasi belum tersinkron)
+    function cekLokasi(tipe) {
+      if (KLINIK_LAT === 0) {
+        bukaModal("Sinkronisasi GPS", "Aplikasi sedang menarik data lokasi klinik dari server. Tunggu sebentar lalu coba lagi.", false);
+        muatStatistik(); // Paksa tarik data dari server
+        return;
+      }
+      
+      document.getElementById('loadingGps').classList.remove('hidden');
+      
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            let latHP = position.coords.latitude; let lngHP = position.coords.longitude;
+            let jarak = hitungJarakMeter(latHP, lngHP, KLINIK_LAT, KLINIK_LNG);
+            document.getElementById('loadingGps').classList.add('hidden');
+            
+            if (jarak <= MAX_JARAK_METER) {
+              bukaKamera(tipe);
+            } else {
+              bukaModal("Lokasi Ditolak", `Anda berada di luar area klinik.\nJarak Anda: ${Math.round(jarak)} Meter.\nBatas Maksimal: ${MAX_JARAK_METER} Meter.`, false);
+            }
+          },
+          (error) => { document.getElementById('loadingGps').classList.add('hidden'); bukaModal("GPS Mati", "Mohon izinkan akses Lokasi (GPS) pada browser Safari Anda.", false); },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      } else {
+        document.getElementById('loadingGps').classList.add('hidden'); bukaModal("Error", "Browser HP Anda tidak mendukung GPS.", false);
+      }
     }
 
-    // --- LOGIKA TOMBOL HARIAN ---
-    function cekLogikaHarian() {
-      let now = new Date().toLocaleDateString("id-ID", {timeZone: "Asia/Jayapura"}); 
-      let lastDate = localStorage.getItem('ikra_last_date'); let statusHarian = localStorage.getItem('ikra_status_harian'); 
-
-      if (lastDate !== now) { localStorage.setItem('ikra_last_date', now); localStorage.removeItem('ikra_status_harian'); statusHarian = null; }
-
-      const btnIn = document.getElementById('btnClockIn'), btnOut = document.getElementById('btnClockOut'), msgSelesai = document.getElementById('pesanSelesai'), badge = document.getElementById('badgeStatus');
-      btnIn.classList.add('hidden'); btnOut.classList.add('hidden'); msgSelesai.classList.add('hidden');
-
-      if (!statusHarian) { btnIn.classList.remove('hidden'); badge.innerText = "Status: Belum Absen"; badge.className = "px-4 py-1 rounded-full text-sm font-bold bg-gray-200 text-gray-600 mb-6"; } 
-      else if (statusHarian === "masuk") { btnOut.classList.remove('hidden'); badge.innerText = "Status: Sedang Shift"; badge.className = "px-4 py-1 rounded-full text-sm font-bold bg-teal-100 text-teal-700 mb-6 border border-teal-300"; } 
-      else if (statusHarian === "pulang") { msgSelesai.classList.remove('hidden'); badge.innerText = "Status: Selesai Shift"; badge.className = "px-4 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700 mb-6 border border-green-300"; }
-    }
-
-    // --- KAMERA & FOTO ---
+    // --- KAMERA & EKSEKUSI ---
     function bukaKamera(tipe) {
       tipeAbsenAktif = tipe; document.getElementById('judulKamera').innerText = `Clock ${tipe === 'Masuk' ? 'In' : 'Out'} - Selfie`;
       document.getElementById('overlayKamera').classList.remove('hidden'); document.getElementById('kameraLoading').style.display = "block";
@@ -191,29 +170,19 @@
         .then(stream => { streamAktif = stream; video.srcObject = stream; document.getElementById('kameraLoading').style.display = "none"; })
         .catch(err => { tutupKamera(); bukaModal("Kamera Gagal", "Izinkan akses kamera di Safari Anda.", false); });
     }
+    
     function tutupKamera() { if (streamAktif) { streamAktif.getTracks().forEach(track => track.stop()); streamAktif = null; } document.getElementById('overlayKamera').classList.add('hidden'); }
 
-    // --- EKSEKUSI & KOMPRESI GAMBAR ---
     function eksekusiAbsen() {
-      // Set dimensi kanvas (Bisa dikecilkan agar ukuran foto makin kecil)
-      canvas.width = 480; 
-      canvas.height = 640; 
-      
-      // Menggambar frame video ke kanvas sambil mengubah ukurannya
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      
-      // Menambahkan Watermark
+      canvas.width = 480; canvas.height = 640; ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       let wktLokal = new Date().toLocaleString("id-ID", {timeZone: "Asia/Jayapura"}); 
       ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
       ctx.fillStyle = "white"; ctx.font = "bold 16px Inter, sans-serif"; ctx.textAlign = "center";
       ctx.fillText(`Ikra Dental Care | ${myName} | ${tipeAbsenAktif}`, canvas.width / 2, canvas.height - 30);
       ctx.font = "14px Inter, sans-serif"; ctx.fillText(wktLokal + " WIT", canvas.width / 2, canvas.height - 12);
 
-      // KOMPRESI TINGGI: Ubah ke JPEG dan turunkan kualitas jadi 40% (0.4)
-      // Ini akan membuat ukuran file Base64 turun drastis (sangat ringan untuk server)
-      const fotoBase64Compress = canvas.toDataURL('image/jpeg', 0.4);
-
-      const payload = { action: "absen", idUnik: Date.now().toString(), nama: myName, tipe: tipeAbsenAktif, foto: fotoBase64Compress, deviceID: deviceID };
+      const fotoCompress = canvas.toDataURL('image/jpeg', 0.4);
+      const payload = { action: "absen", idUnik: Date.now().toString(), nama: myName, tipe: tipeAbsenAktif, foto: fotoCompress, deviceID: deviceID };
 
       let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || [];
       antrian.push(payload); localStorage.setItem('antrianIkra', JSON.stringify(antrian));
@@ -224,7 +193,7 @@
       prosesAntrian();
     }
 
-    // --- BACKGROUND SYNC ---
+    // --- BACKGROUND SYNC (DIPERBAIKI) ---
     window.addEventListener('online', prosesAntrian);
     async function prosesAntrian() {
       const syncTeks = document.getElementById('statusSync');
@@ -234,7 +203,8 @@
 
       syncTeks.innerText = `⏳ Menyinkronkan data ke cloud...`;
       try {
-        let respon = await fetch(GAS_URL, { method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(antrian[0]) });
+        // PERBAIKAN: Menambahkan 'redirect: "follow"'
+        let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(antrian[0]) });
         let hasil = JSON.parse(await respon.text());
         if (hasil.status === "success" || hasil.status === "error") {
           antrian.shift(); localStorage.setItem('antrianIkra', JSON.stringify(antrian));
