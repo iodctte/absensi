@@ -163,16 +163,37 @@
     }
     function prosesLogout() { if(confirm("Yakin ingin keluar akun?")) { localStorage.removeItem('ikra_name'); location.reload(); } }
 
+    // --- FUNGSI TARIK DATA (STATISTIK + GPS + STATUS TOMBOL) ---
     function muatStatistik() {
-      fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName)).then(res => res.json()).then(data => {
+      fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName))
+        .then(res => res.json())
+        .then(data => {
           if(data.status === "success") {
-            document.getElementById('statHadir').innerText = data.hadir; document.getElementById('statTelat').innerText = data.telat; document.getElementById('statLembur').innerText = data.lembur;
+            // Update Angka Statistik
+            document.getElementById('statHadir').innerText = data.hadir; 
+            document.getElementById('statTelat').innerText = data.telat; 
+            document.getElementById('statLembur').innerText = data.lembur;
+
+            // Update GPS Otomatis
             if(data.pengaturan && data.pengaturan.klinik_lat) {
-              KLINIK_LAT = parseFloat(data.pengaturan.klinik_lat); KLINIK_LNG = parseFloat(data.pengaturan.klinik_lng); MAX_JARAK_METER = parseInt(data.pengaturan.radius);
-              localStorage.setItem('ikra_lat', KLINIK_LAT); localStorage.setItem('ikra_lng', KLINIK_LNG); localStorage.setItem('ikra_radius', MAX_JARAK_METER);
+              KLINIK_LAT = parseFloat(data.pengaturan.klinik_lat);
+              KLINIK_LNG = parseFloat(data.pengaturan.klinik_lng);
+              MAX_JARAK_METER = parseInt(data.pengaturan.radius);
+              
+              localStorage.setItem('ikra_lat', KLINIK_LAT);
+              localStorage.setItem('ikra_lng', KLINIK_LNG);
+              localStorage.setItem('ikra_radius', MAX_JARAK_METER);
             }
+
+            // BARU: SINKRONISASI STATUS TOMBOL HARIAN (Mencegah nyangkut kalau dihapus dari database)
+            if (data.statusHariIni === null) {
+              localStorage.removeItem('ikra_status_harian'); // Reset ke "Belum Absen"
+            } else {
+              localStorage.setItem('ikra_status_harian', data.statusHariIni); // "masuk" atau "pulang"
+            }
+            cekLogikaHarian(); // Segarkan tampilan tombol
           }
-        }).catch(e => console.log("Gagal muat data"));
+        }).catch(e => console.log("Gagal muat statistik"));
     }
 
     function jalankanJam() { setInterval(() => { let now = new Date(); document.getElementById('teksJam').innerText = now.toLocaleTimeString("id-ID", { timeZone: "Asia/Jayapura", hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/\./g, ':'); document.getElementById('teksTanggal').innerText = now.toLocaleDateString("id-ID", { timeZone: "Asia/Jayapura", weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }); }, 1000); }
