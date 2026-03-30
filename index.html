@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Dashboard IODC</title>
+  <title>Dashboard - Ikra Orthodontic & Dental Care</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
-    .glass-card { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
+    .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); }
   </style>
 </head>
-<body class="bg-gradient-to-br from-teal-500 to-blue-600 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gradient-to-br from-teal-500 to-blue-700 min-h-screen flex items-center justify-center p-4">
 
   <div id="layarLogin" class="hidden glass-card p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center transform transition-all">
     <div class="mb-8">
-      <div class="h-20 w-20 bg-white text-teal-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+      <div class="h-20 w-20 bg-white text-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg rotate-3">
         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path></svg>
       </div>
-      <h2 class="text-3xl font-bold text-gray-800">Klinik Sakala</h2>
+      <h2 class="text-2xl font-bold text-gray-800 leading-tight">Ikra Orthodontic & <br>Dental Care</h2>
       <p class="text-sm text-gray-600 mt-2 font-medium">Silakan masuk ke akun Anda</p>
     </div>
     
@@ -34,8 +34,9 @@
 
   <div id="layarDashboard" class="hidden w-full max-w-sm flex flex-col gap-4">
     <div class="glass-card p-6 rounded-3xl shadow-xl text-center">
-      <h1 class="text-2xl font-bold text-gray-800 mt-1" id="teksSapaan">Halo, Nama!</h1>
-      <div class="mt-4 p-4 bg-white/60 rounded-2xl border border-white/60">
+      <p class="text-xs font-bold text-teal-600 uppercase tracking-widest mb-1">Ikra Dental Care</p>
+      <h1 class="text-2xl font-bold text-gray-800" id="teksSapaan">Halo, Nama!</h1>
+      <div class="mt-4 p-4 bg-white/70 rounded-2xl border border-white">
         <p id="teksTanggal" class="text-sm font-bold text-teal-700 uppercase tracking-wide">Hari, Tgl Bulan Tahun</p>
         <div id="teksJam" class="text-5xl font-bold text-gray-800 tracking-tighter mt-1 drop-shadow-sm">00:00</div>
         <p class="text-xs text-gray-500 mt-1 font-medium">Waktu Indonesia Timur</p>
@@ -58,15 +59,24 @@
       <div id="pesanSelesai" class="hidden w-full p-4 bg-green-100 text-green-700 rounded-2xl font-bold text-center border border-green-200">
         🎉 Shift hari ini selesai. Selamat beristirahat!
       </div>
+
+      <div class="w-full mt-4 border-t border-gray-300/50 pt-4">
+        <p class="text-[11px] text-gray-500 font-semibold mb-2 uppercase tracking-widest text-center">Performa Bulan Ini</p>
+        <div class="grid grid-cols-3 gap-2 text-center bg-white/60 rounded-xl p-3 border border-white/60">
+          <div><p class="text-xs text-gray-500 font-medium">Hadir</p><p id="statHadir" class="font-bold text-teal-600 text-lg">⏳</p></div>
+          <div><p class="text-xs text-gray-500 font-medium">Telat</p><p id="statTelat" class="font-bold text-red-500 text-lg">⏳</p></div>
+          <div><p class="text-xs text-gray-500 font-medium">Lembur</p><p id="statLembur" class="font-bold text-orange-500 text-sm mt-1">⏳</p></div>
+        </div>
+      </div>
       
-      <p id="statusSync" class="mt-4 text-xs font-medium text-gray-700 opacity-80"></p>
+      <p id="statusSync" class="mt-4 text-xs font-medium text-gray-700 opacity-80 text-center"></p>
 
       <button onclick="prosesLogout()" class="mt-6 text-xs font-bold text-red-500 hover:text-red-700 underline">Keluar Akun (Logout)</button>
     </div>
   </div>
 
   <div id="overlayKamera" class="hidden fixed inset-0 bg-black z-40 flex flex-col">
-    <div class="p-4 flex justify-between items-center bg-black/50 absolute top-0 w-full z-50">
+    <div class="p-4 flex justify-between items-center bg-black/50 absolute top-0 w-full z-50 backdrop-blur-sm">
       <h3 class="text-white font-bold text-lg" id="judulKamera">Ambil Foto</h3>
       <button onclick="tutupKamera()" class="text-white bg-white/20 p-2 rounded-full"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </div>
@@ -90,13 +100,13 @@
   </div>
 
   <script>
-    // MASUKKAN URL WEB APP GAS ANDA DI SINI
+    // MASUKKAN URL WEB APP GAS ANDA DI SINI (Tetap gunakan GAS sebagai Bridge ke Supabase/GDrive)
     const GAS_URL = "https://script.google.com/macros/s/AKfycbwmKy7XBr6_w9axtnoxoTb9qP27wP1SK7gC4_ixDfxRlmgkgcwa4QJuSBpYEEWr8XdB/exec"; 
 
     // --- State & Variabel ---
-    let myName = localStorage.getItem('sakala_name');
-    let deviceID = localStorage.getItem('sakala_deviceID');
-    if (!deviceID) { deviceID = 'DEV-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('sakala_deviceID', deviceID); }
+    let myName = localStorage.getItem('ikra_name');
+    let deviceID = localStorage.getItem('ikra_deviceID');
+    if (!deviceID) { deviceID = 'DEV-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('ikra_deviceID', deviceID); }
     
     let tipeAbsenAktif = "";
     const video = document.getElementById('video');
@@ -111,6 +121,7 @@
         jalankanJam();
         cekLogikaHarian();
         prosesAntrian();
+        muatStatistik();
       } else {
         document.getElementById('layarLogin').classList.remove('hidden');
       }
@@ -118,42 +129,34 @@
 
     // --- FUNGSI LOGIN & LOGOUT ---
     async function prosesLogin() {
-      let user = document.getElementById('inUsername').value;
-      let pass = document.getElementById('inPassword').value;
-      let btn = document.getElementById('btnLogin');
-
+      let user = document.getElementById('inUsername').value; let pass = document.getElementById('inPassword').value; let btn = document.getElementById('btnLogin');
       if (!user || !pass) return bukaModal("Perhatian", "Isi Username dan Password!", false);
 
       btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memeriksa...`;
       btn.disabled = true;
 
       try {
-        let respon = await fetch(GAS_URL, {
-          method: 'POST',
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "login", username: user, password: pass })
-        });
-        
+        let respon = await fetch(GAS_URL, { method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "login", username: user, password: pass }) });
         let hasil = JSON.parse(await respon.text());
-        
-        if (hasil.status === "success") {
-          localStorage.setItem('sakala_name', hasil.nama);
-          location.reload(); // Otomatis masuk dashboard
-        } else {
-          bukaModal("Login Gagal", hasil.pesan, false);
-          btn.innerHTML = "Masuk"; btn.disabled = false;
-        }
-      } catch (error) {
-        bukaModal("Error Jaringan", "Gagal terhubung ke server Google.", false);
-        btn.innerHTML = "Masuk"; btn.disabled = false;
-      }
+        if (hasil.status === "success") { localStorage.setItem('ikra_name', hasil.nama); location.reload(); } 
+        else { bukaModal("Login Gagal", hasil.pesan, false); btn.innerHTML = "Masuk"; btn.disabled = false; }
+      } catch (error) { bukaModal("Error Jaringan", "Gagal terhubung ke server.", false); btn.innerHTML = "Masuk"; btn.disabled = false; }
     }
 
     function prosesLogout() {
-      if(confirm("Yakin ingin keluar akun?")) {
-        localStorage.removeItem('sakala_name');
-        location.reload();
-      }
+      if(confirm("Yakin ingin keluar akun?")) { localStorage.removeItem('ikra_name'); location.reload(); }
+    }
+
+    function muatStatistik() {
+      fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName))
+        .then(res => res.json())
+        .then(data => {
+          if(data.status === "success") {
+            document.getElementById('statHadir').innerText = data.hadir;
+            document.getElementById('statTelat').innerText = data.telat;
+            document.getElementById('statLembur').innerText = data.lembur;
+          }
+        }).catch(e => console.log("Gagal muat statistik"));
     }
 
     // --- JAM & TANGGAL (Zona WIT) ---
@@ -168,10 +171,9 @@
     // --- LOGIKA TOMBOL HARIAN ---
     function cekLogikaHarian() {
       let now = new Date().toLocaleDateString("id-ID", {timeZone: "Asia/Jayapura"}); 
-      let lastDate = localStorage.getItem('sakala_last_date');
-      let statusHarian = localStorage.getItem('sakala_status_harian'); 
+      let lastDate = localStorage.getItem('ikra_last_date'); let statusHarian = localStorage.getItem('ikra_status_harian'); 
 
-      if (lastDate !== now) { localStorage.setItem('sakala_last_date', now); localStorage.removeItem('sakala_status_harian'); statusHarian = null; }
+      if (lastDate !== now) { localStorage.setItem('ikra_last_date', now); localStorage.removeItem('ikra_status_harian'); statusHarian = null; }
 
       const btnIn = document.getElementById('btnClockIn'), btnOut = document.getElementById('btnClockOut'), msgSelesai = document.getElementById('pesanSelesai'), badge = document.getElementById('badgeStatus');
       btnIn.classList.add('hidden'); btnOut.classList.add('hidden'); msgSelesai.classList.add('hidden');
@@ -191,22 +193,31 @@
     }
     function tutupKamera() { if (streamAktif) { streamAktif.getTracks().forEach(track => track.stop()); streamAktif = null; } document.getElementById('overlayKamera').classList.add('hidden'); }
 
-    // --- KIRIM DATA ABSEN ---
+    // --- EKSEKUSI & KOMPRESI GAMBAR ---
     function eksekusiAbsen() {
-      canvas.width = video.videoWidth || 480; canvas.height = video.videoHeight || 640;
+      // Set dimensi kanvas (Bisa dikecilkan agar ukuran foto makin kecil)
+      canvas.width = 480; 
+      canvas.height = 640; 
+      
+      // Menggambar frame video ke kanvas sambil mengubah ukurannya
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       
+      // Menambahkan Watermark
       let wktLokal = new Date().toLocaleString("id-ID", {timeZone: "Asia/Jayapura"}); 
       ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
       ctx.fillStyle = "white"; ctx.font = "bold 16px Inter, sans-serif"; ctx.textAlign = "center";
-      ctx.fillText(`Klinik Sakala | ${myName} | ${tipeAbsenAktif}`, canvas.width / 2, canvas.height - 30);
+      ctx.fillText(`Ikra Dental Care | ${myName} | ${tipeAbsenAktif}`, canvas.width / 2, canvas.height - 30);
       ctx.font = "14px Inter, sans-serif"; ctx.fillText(wktLokal + " WIT", canvas.width / 2, canvas.height - 12);
 
-      const payload = { action: "absen", idUnik: Date.now().toString(), nama: myName, tipe: tipeAbsenAktif, foto: canvas.toDataURL('image/jpeg', 0.8), deviceID: deviceID };
+      // KOMPRESI TINGGI: Ubah ke JPEG dan turunkan kualitas jadi 40% (0.4)
+      // Ini akan membuat ukuran file Base64 turun drastis (sangat ringan untuk server)
+      const fotoBase64Compress = canvas.toDataURL('image/jpeg', 0.4);
 
-      let antrian = JSON.parse(localStorage.getItem('antrianSakala')) || [];
-      antrian.push(payload); localStorage.setItem('antrianSakala', JSON.stringify(antrian));
-      localStorage.setItem('sakala_status_harian', tipeAbsenAktif === 'Masuk' ? 'masuk' : 'pulang');
+      const payload = { action: "absen", idUnik: Date.now().toString(), nama: myName, tipe: tipeAbsenAktif, foto: fotoBase64Compress, deviceID: deviceID };
+
+      let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || [];
+      antrian.push(payload); localStorage.setItem('antrianIkra', JSON.stringify(antrian));
+      localStorage.setItem('ikra_status_harian', tipeAbsenAktif === 'Masuk' ? 'masuk' : 'pulang');
 
       tutupKamera(); cekLogikaHarian(); 
       bukaModal("Berhasil!", `Data ${tipeAbsenAktif} tersimpan di HP. Mengirim ke server...`, true);
@@ -218,17 +229,18 @@
     async function prosesAntrian() {
       const syncTeks = document.getElementById('statusSync');
       if (!navigator.onLine) { syncTeks.innerText = "Sinyal offline. Data aman di HP."; return; }
-      let antrian = JSON.parse(localStorage.getItem('antrianSakala')) || [];
-      if (antrian.length === 0) { syncTeks.innerText = "☁️ Terhubung & Sinkron"; return; }
+      let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || [];
+      if (antrian.length === 0) { syncTeks.innerText = "☁️ Terhubung & Tersinkronisasi"; return; }
 
       syncTeks.innerText = `⏳ Menyinkronkan data ke cloud...`;
       try {
         let respon = await fetch(GAS_URL, { method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(antrian[0]) });
         let hasil = JSON.parse(await respon.text());
         if (hasil.status === "success" || hasil.status === "error") {
-          antrian.shift(); localStorage.setItem('antrianSakala', JSON.stringify(antrian));
+          antrian.shift(); localStorage.setItem('antrianIkra', JSON.stringify(antrian));
           syncTeks.innerText = `✅ Laporan: ${hasil.pesan}`; 
           if(antrian.length > 0) prosesAntrian(); 
+          else { muatStatistik(); setTimeout(() => { syncTeks.innerText = "☁️ Terhubung & Tersinkronisasi"; }, 5000); }
         }
       } catch (error) { syncTeks.innerText = "⚠️ Gangguan koneksi. Akan diulang otomatis."; }
     }
