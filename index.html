@@ -6,18 +6,13 @@
   <title>Dashboard - Ikra Dental Care</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style> 
-    body { font-family: 'Inter', sans-serif; } 
-    .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); } 
-  </style>
+  <style> body { font-family: 'Inter', sans-serif; } .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); } </style>
 </head>
 <body class="bg-gradient-to-br from-teal-500 to-blue-700 min-h-screen flex items-center justify-center p-4">
 
   <div id="layarLogin" class="hidden glass-card p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center transform transition-all">
     <div class="mb-8">
-      <div class="h-20 w-20 bg-white text-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg rotate-3">
-        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path></svg>
-      </div>
+      <div class="h-20 w-20 bg-white text-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg rotate-3"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path></svg></div>
       <h2 class="text-2xl font-bold text-gray-800 leading-tight">Ikra Orthodontic & <br>Dental Care</h2>
       <p class="text-sm text-gray-600 mt-2 font-medium">Silakan masuk ke akun Anda</p>
     </div>
@@ -40,13 +35,12 @@
     </div>
 
     <div class="glass-card p-6 rounded-3xl shadow-xl flex flex-col items-center">
-      <div id="badgeStatus" class="px-4 py-1 rounded-full text-sm font-bold bg-gray-200 text-gray-600 mb-6 shadow-inner">Status: Belum Absen</div>
+      <div id="badgeStatus" class="px-4 py-1 rounded-full text-sm font-bold bg-gray-200 text-gray-600 mb-6 shadow-inner border border-gray-300">Status: Belum Absen</div>
 
       <button id="btnClockIn" onclick="cekLokasi('Masuk')" class="w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white p-4 rounded-2xl font-bold text-lg active:scale-95 transition-all mb-3 shadow-md flex justify-center items-center gap-2">Clock In</button>
       <button id="btnClockOut" onclick="cekLokasi('Pulang')" class="w-full hidden bg-gradient-to-r from-red-500 to-orange-400 text-white p-4 rounded-2xl font-bold text-lg active:scale-95 transition-all mb-3 shadow-md flex justify-center items-center gap-2">Clock Out</button>
       
-      <div id="loadingGps" class="hidden w-full p-3 bg-blue-50 text-blue-600 rounded-xl text-center text-sm font-bold mb-3 animate-pulse">🛰️ Mendeteksi Lokasi Anda...</div>
-
+      <div id="loadingGps" class="hidden w-full p-3 bg-blue-50 text-blue-600 rounded-xl text-center text-sm font-bold mb-3 animate-pulse border border-blue-200">🛰️ Mendeteksi Lokasi & Akurasi...</div>
       <div id="pesanSelesai" class="hidden w-full p-4 bg-green-100 text-green-700 rounded-2xl font-bold text-center border border-green-200">🎉 Shift hari ini selesai!</div>
 
       <div class="w-full mt-4 border-t border-gray-300/50 pt-4">
@@ -59,7 +53,12 @@
       </div>
       
       <p id="statusSync" class="mt-4 text-xs font-medium text-gray-700 opacity-80 text-center"></p>
-      <button onclick="prosesLogout()" class="mt-6 text-xs font-bold text-red-500 hover:text-red-700 underline">Keluar Akun (Logout)</button>
+
+      <div class="flex gap-4 mt-6">
+        <button onclick="bukaModalPass()" class="text-xs font-bold text-gray-500 hover:text-gray-800 underline">Ubah Password</button>
+        <span class="text-gray-300">|</span>
+        <button onclick="prosesLogout()" class="text-xs font-bold text-red-500 hover:text-red-700 underline">Keluar Akun</button>
+      </div>
     </div>
   </div>
 
@@ -80,135 +79,126 @@
 
   <div id="modalKu" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4">
     <div class="bg-white rounded-3xl p-6 w-full max-w-xs text-center shadow-2xl">
-      <div id="ikonModal" class="mx-auto flex items-center justify-center h-16 w-16 rounded-full mb-4"></div>
+      <div id="ikonModal" class="mx-auto flex items-center justify-center h-16 w-16 rounded-full mb-4 shadow-inner"></div>
       <h3 class="text-xl font-bold text-gray-900" id="judulModal">Status</h3>
-      <p class="mt-2 text-sm text-gray-500" id="pesanModal">Pesan</p>
-      <button onclick="tutupModal()" class="mt-6 w-full rounded-xl bg-teal-600 px-4 py-3 text-white font-bold active:scale-95 transition-all">Tutup</button>
+      <p class="mt-2 text-sm text-gray-600" id="pesanModal">Pesan</p>
+      <button onclick="tutupModal()" class="mt-6 w-full rounded-xl bg-teal-600 px-4 py-3 text-white font-bold active:scale-95 transition-all shadow-md">Tutup</button>
+    </div>
+  </div>
+
+  <div id="modalPass" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-xs shadow-2xl">
+      <h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Ubah Password</h3>
+      <div class="space-y-4">
+        <input type="password" id="passLama" placeholder="Password Lama" class="w-full p-3 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-teal-500 text-gray-800 font-medium">
+        <input type="password" id="passBaru" placeholder="Password Baru" class="w-full p-3 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-teal-500 text-gray-800 font-medium">
+      </div>
+      <div class="flex gap-3 mt-6">
+        <button onclick="tutupModalPass()" class="w-1/2 bg-white border text-gray-600 p-3 rounded-xl font-bold active:scale-95 transition-all">Batal</button>
+        <button onclick="simpanPassword()" id="btnSimpanPass" class="w-1/2 bg-teal-600 text-white p-3 rounded-xl font-bold shadow-md active:scale-95 transition-all">Simpan</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // ================= PENGATURAN UTAMA =================
-    // ⚠️ PASTIKAN URL DI BAWAH INI ADALAH URL WEB APP GAS ANDA YANG ASLI
+    // ⚠️ MASUKKAN URL WEB APP GAS ANDA DI SINI
     const GAS_URL = "https://script.google.com/macros/s/AKfycbx9XwhDjYmI9FBU49p715VdzZ_RhNa5lMsxj3NKl3mjXc5WdeK6fQME2anA7XwmfMqN/exec"; 
 
-    // --- State & Variabel ---
     let myName = localStorage.getItem('ikra_name');
     let deviceID = localStorage.getItem('ikra_deviceID');
     if (!deviceID) { deviceID = 'DEV-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('ikra_deviceID', deviceID); }
     
-    // Default GPS (Akan ditimpa otomatis oleh server saat muatStatistik jalan)
     let KLINIK_LAT = parseFloat(localStorage.getItem('ikra_lat')) || 0;
     let KLINIK_LNG = parseFloat(localStorage.getItem('ikra_lng')) || 0;
     let MAX_JARAK_METER = parseInt(localStorage.getItem('ikra_radius')) || 50;
 
     let tipeAbsenAktif = "";
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const video = document.getElementById('video'); const canvas = document.getElementById('canvas'); const ctx = canvas.getContext('2d');
     let streamAktif = null;
 
-    // --- INISIALISASI SAAT HALAMAN DIBUKA ---
     window.onload = () => {
       if (myName) {
         document.getElementById('layarDashboard').classList.remove('hidden');
         document.getElementById('teksSapaan').innerText = `Halo, ${myName.split(' ')[0]}!`;
-        jalankanJam(); 
-        cekLogikaHarian(); 
-        prosesAntrian(); 
-        muatStatistik(); // Ini akan menarik rekap + GPS terbaru dari server Admin
-      } else { 
-        document.getElementById('layarLogin').classList.remove('hidden'); 
-      }
+        jalankanJam(); cekLogikaHarian(); prosesAntrian(); muatStatistik();
+      } else { document.getElementById('layarLogin').classList.remove('hidden'); }
     };
 
-    // --- FUNGSI LOGIN & LOGOUT ---
+    // --- FITUR UBAH PASSWORD ---
+    function bukaModalPass() { document.getElementById('modalPass').classList.remove('hidden'); }
+    function tutupModalPass() { document.getElementById('modalPass').classList.add('hidden'); document.getElementById('passLama').value = ""; document.getElementById('passBaru').value = ""; }
+    
+    async function simpanPassword() {
+      let pLama = document.getElementById('passLama').value; let pBaru = document.getElementById('passBaru').value; let btn = document.getElementById('btnSimpanPass');
+      if(!pLama || !pBaru) return alert("Isi semua kolom password!");
+      btn.innerText = "Memproses..."; btn.disabled = true;
+      try {
+        let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain"}, body: JSON.stringify({ action: "ubah_password", nama: myName, passLama: pLama, passBaru: pBaru }) });
+        let hasil = await respon.json();
+        if(hasil.status === "success") { tutupModalPass(); bukaModal("Sukses", hasil.pesan, true); } else { alert(hasil.pesan); }
+      } catch(err) { alert("Gagal koneksi ke server."); }
+      btn.innerText = "Simpan"; btn.disabled = false;
+    }
+
     async function prosesLogin() {
       let user = document.getElementById('inUsername').value; let pass = document.getElementById('inPassword').value; let btn = document.getElementById('btnLogin');
       if (!user || !pass) return bukaModal("Perhatian", "Isi Username dan Password!", false);
-
       btn.innerHTML = `Memeriksa...`; btn.disabled = true;
-
       try {
         let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "login", username: user, password: pass }) });
         let hasil = JSON.parse(await respon.text());
         if (hasil.status === "success") { localStorage.setItem('ikra_name', hasil.nama); location.reload(); } 
         else { bukaModal("Login Gagal", hasil.pesan, false); btn.innerHTML = "Masuk"; btn.disabled = false; }
-      } catch (error) { 
-        bukaModal("Error Jaringan", "Gagal terhubung. Cek koneksi internet Anda.", false); 
-        btn.innerHTML = "Masuk"; btn.disabled = false; 
-      }
+      } catch (error) { bukaModal("Error Jaringan", "Gagal terhubung. Cek koneksi internet Anda.", false); btn.innerHTML = "Masuk"; btn.disabled = false; }
     }
-
     function prosesLogout() { if(confirm("Yakin ingin keluar akun?")) { localStorage.removeItem('ikra_name'); location.reload(); } }
 
-    // --- FUNGSI TARIK DATA (STATISTIK + GPS DARI ADMIN) ---
     function muatStatistik() {
-      fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName))
-        .then(res => res.json())
-        .then(data => {
+      fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName)).then(res => res.json()).then(data => {
           if(data.status === "success") {
-            document.getElementById('statHadir').innerText = data.hadir; 
-            document.getElementById('statTelat').innerText = data.telat; 
-            document.getElementById('statLembur').innerText = data.lembur;
-
-            // Update memori GPS HP ini dengan data terbaru dari Admin
+            document.getElementById('statHadir').innerText = data.hadir; document.getElementById('statTelat').innerText = data.telat; document.getElementById('statLembur').innerText = data.lembur;
             if(data.pengaturan && data.pengaturan.klinik_lat) {
-              KLINIK_LAT = parseFloat(data.pengaturan.klinik_lat);
-              KLINIK_LNG = parseFloat(data.pengaturan.klinik_lng);
-              MAX_JARAK_METER = parseInt(data.pengaturan.radius);
-              
-              localStorage.setItem('ikra_lat', KLINIK_LAT);
-              localStorage.setItem('ikra_lng', KLINIK_LNG);
-              localStorage.setItem('ikra_radius', MAX_JARAK_METER);
+              KLINIK_LAT = parseFloat(data.pengaturan.klinik_lat); KLINIK_LNG = parseFloat(data.pengaturan.klinik_lng); MAX_JARAK_METER = parseInt(data.pengaturan.radius);
+              localStorage.setItem('ikra_lat', KLINIK_LAT); localStorage.setItem('ikra_lng', KLINIK_LNG); localStorage.setItem('ikra_radius', MAX_JARAK_METER);
             }
           }
-        }).catch(e => console.log("Gagal muat statistik"));
+        }).catch(e => console.log("Gagal muat data"));
     }
 
-    // --- JAM & TANGGAL (Zona WIT) ---
-    function jalankanJam() {
-      setInterval(() => {
-        let now = new Date();
-        document.getElementById('teksJam').innerText = now.toLocaleTimeString("id-ID", { timeZone: "Asia/Jayapura", hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/\./g, ':');
-        document.getElementById('teksTanggal').innerText = now.toLocaleDateString("id-ID", { timeZone: "Asia/Jayapura", weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
-      }, 1000);
-    }
+    function jalankanJam() { setInterval(() => { let now = new Date(); document.getElementById('teksJam').innerText = now.toLocaleTimeString("id-ID", { timeZone: "Asia/Jayapura", hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/\./g, ':'); document.getElementById('teksTanggal').innerText = now.toLocaleDateString("id-ID", { timeZone: "Asia/Jayapura", weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }); }, 1000); }
 
-    // --- LOGIKA TOMBOL HARIAN ---
     function cekLogikaHarian() {
-      let now = new Date().toLocaleDateString("id-ID", {timeZone: "Asia/Jayapura"}); 
-      let lastDate = localStorage.getItem('ikra_last_date'); let statusHarian = localStorage.getItem('ikra_status_harian'); 
+      let now = new Date().toLocaleDateString("id-ID", {timeZone: "Asia/Jayapura"}); let lastDate = localStorage.getItem('ikra_last_date'); let statusHarian = localStorage.getItem('ikra_status_harian'); 
       if (lastDate !== now) { localStorage.setItem('ikra_last_date', now); localStorage.removeItem('ikra_status_harian'); statusHarian = null; }
-      
       const btnIn = document.getElementById('btnClockIn'), btnOut = document.getElementById('btnClockOut'), msgSelesai = document.getElementById('pesanSelesai'), badge = document.getElementById('badgeStatus');
       btnIn.classList.add('hidden'); btnOut.classList.add('hidden'); msgSelesai.classList.add('hidden');
-      
       if (!statusHarian) { btnIn.classList.remove('hidden'); badge.innerText = "Status: Belum Absen"; badge.className = "px-4 py-1 rounded-full text-sm font-bold bg-gray-200 text-gray-600 mb-6 shadow-inner border border-gray-300"; } 
       else if (statusHarian === "masuk") { btnOut.classList.remove('hidden'); badge.innerText = "Status: Sedang Shift"; badge.className = "px-4 py-1 rounded-full text-sm font-bold bg-teal-100 text-teal-700 mb-6 shadow-inner border border-teal-300"; } 
       else if (statusHarian === "pulang") { msgSelesai.classList.remove('hidden'); badge.innerText = "Status: Selesai Shift"; badge.className = "px-4 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700 mb-6 shadow-inner border border-green-300"; }
     }
 
-    // ================= FUNGSI GEOFENCING (GPS RADIUS) =================
     function hitungJarakMeter(lat1, lon1, lat2, lon2) {
       let R = 6371e3; let f1 = lat1 * Math.PI/180; let f2 = lat2 * Math.PI/180; let df = (lat2-lat1) * Math.PI/180; let dl = (lon2-lon1) * Math.PI/180;
       let a = Math.sin(df/2) * Math.sin(df/2) + Math.cos(f1) * Math.cos(f2) * Math.sin(dl/2) * Math.sin(dl/2);
-      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); return R * c; 
+      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))); 
     }
 
+    // ================= FUNGSI GPS (ANTI RELOAD / FORCE REFRESH) =================
     function cekLokasi(tipe) {
       if (KLINIK_LAT === 0) {
-        bukaModal("Mempersiapkan GPS", "Sistem sedang mengunduh titik kordinat klinik dari server. Tunggu sebentar dan coba lagi.", false);
-        muatStatistik(); // Paksa server ngasih kordinat
-        return;
+        bukaModal("Mempersiapkan Sistem", "Mengunduh kordinat dari server. Silakan coba klik lagi dalam beberapa detik.", false);
+        muatStatistik(); return;
       }
-      
       document.getElementById('loadingGps').classList.remove('hidden');
       
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
+        // MENGGUNAKAN watchPosition: Memaksa Safari mengambil sinyal GPS TERBARU (bypass cache lama)
+        let gpsWatcher = navigator.geolocation.watchPosition(
           (position) => {
+            navigator.geolocation.clearWatch(gpsWatcher); // Langsung matikan watcher setelah dapat 1 sinyal kuat
+            
             let latHP = position.coords.latitude; let lngHP = position.coords.longitude;
+            let akurasi = position.coords.accuracy; // Tingkat meleset GPS HP (Meter)
             let jarak = hitungJarakMeter(latHP, lngHP, KLINIK_LAT, KLINIK_LNG);
             
             document.getElementById('loadingGps').classList.add('hidden');
@@ -216,30 +206,18 @@
             if (jarak <= MAX_JARAK_METER) {
               bukaKamera(tipe);
             } else {
-              bukaModal("Lokasi Ditolak", `Anda berada di luar area klinik.\nJarak Anda saat ini: ${Math.round(jarak)} Meter.\n(Batas maksimal ${MAX_JARAK_METER} Meter).`, false);
+              bukaModal("Di Luar Radius", `Jarak Anda saat ini: ${Math.round(jarak)} Meter.\nBatas Maksimal: ${MAX_JARAK_METER} Meter.\n\n(Akurasi GPS HP Anda sedang goyang sejauh ±${Math.round(akurasi)}m). Silakan bergeser sedikit dan klik tombol absen lagi.`, false);
             }
           },
-          (error) => {
-            document.getElementById('loadingGps').classList.add('hidden');
-            bukaModal("GPS Mati", "Mohon izinkan akses Lokasi (GPS) pada browser Safari Anda untuk melakukan absensi.", false);
-          },
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 } 
+          (error) => { navigator.geolocation.clearWatch(gpsWatcher); document.getElementById('loadingGps').classList.add('hidden'); bukaModal("GPS Bermasalah", "Sinyal GPS tidak ditemukan atau belum diizinkan.", false); },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 } 
         );
       } else {
-        document.getElementById('loadingGps').classList.add('hidden');
-        bukaModal("Error", "Browser HP Anda tidak mendukung fitur Lokasi/GPS.", false);
+        document.getElementById('loadingGps').classList.add('hidden'); bukaModal("Error", "HP Anda tidak memiliki fitur GPS.", false);
       }
     }
 
-    // --- KAMERA & EKSEKUSI ---
-    function bukaKamera(tipe) {
-      tipeAbsenAktif = tipe; document.getElementById('judulKamera').innerText = `Clock ${tipe === 'Masuk' ? 'In' : 'Out'} - Selfie`;
-      document.getElementById('overlayKamera').classList.remove('hidden'); document.getElementById('kameraLoading').style.display = "block";
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
-        .then(stream => { streamAktif = stream; video.srcObject = stream; document.getElementById('kameraLoading').style.display = "none"; })
-        .catch(err => { tutupKamera(); bukaModal("Kamera Gagal", "Izinkan akses kamera di pengaturan browser Anda.", false); });
-    }
-    
+    function bukaKamera(tipe) { tipeAbsenAktif = tipe; document.getElementById('judulKamera').innerText = `Clock ${tipe === 'Masuk' ? 'In' : 'Out'} - Selfie`; document.getElementById('overlayKamera').classList.remove('hidden'); document.getElementById('kameraLoading').style.display = "block"; navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false }).then(stream => { streamAktif = stream; video.srcObject = stream; document.getElementById('kameraLoading').style.display = "none"; }).catch(err => { tutupKamera(); bukaModal("Kamera Gagal", "Izinkan akses kamera di pengaturan browser.", false); }); }
     function tutupKamera() { if (streamAktif) { streamAktif.getTracks().forEach(track => track.stop()); streamAktif = null; } document.getElementById('overlayKamera').classList.add('hidden'); }
 
     function eksekusiAbsen() {
@@ -249,41 +227,32 @@
       ctx.fillStyle = "white"; ctx.font = "bold 16px Inter, sans-serif"; ctx.textAlign = "center";
       ctx.fillText(`Ikra Dental Care | ${myName} | ${tipeAbsenAktif}`, canvas.width / 2, canvas.height - 30);
       ctx.font = "14px Inter, sans-serif"; ctx.fillText(wktLokal + " WIT", canvas.width / 2, canvas.height - 12);
-
+      
       const fotoCompress = canvas.toDataURL('image/jpeg', 0.4);
       const payload = { action: "absen", idUnik: Date.now().toString(), nama: myName, tipe: tipeAbsenAktif, foto: fotoCompress, deviceID: deviceID };
 
-      let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || [];
-      antrian.push(payload); localStorage.setItem('antrianIkra', JSON.stringify(antrian));
-      localStorage.setItem('ikra_status_harian', tipeAbsenAktif === 'Masuk' ? 'masuk' : 'pulang');
+      let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || []; antrian.push(payload); localStorage.setItem('antrianIkra', JSON.stringify(antrian)); localStorage.setItem('ikra_status_harian', tipeAbsenAktif === 'Masuk' ? 'masuk' : 'pulang');
 
-      tutupKamera(); cekLogikaHarian(); 
-      bukaModal("Berhasil!", `Data ${tipeAbsenAktif} tersimpan di HP. Mengirim ke server...`, true);
-      prosesAntrian();
+      tutupKamera(); cekLogikaHarian(); bukaModal("Berhasil!", `Data ${tipeAbsenAktif} tersimpan di HP. Mengirim ke server...`, true); prosesAntrian();
     }
 
-    // --- BACKGROUND SYNC (OFFLINE-FIRST) ---
     window.addEventListener('online', prosesAntrian);
     async function prosesAntrian() {
       const syncTeks = document.getElementById('statusSync');
       if (!navigator.onLine) { syncTeks.innerText = "Sinyal offline. Data aman di HP."; return; }
       let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || [];
       if (antrian.length === 0) { syncTeks.innerText = "☁️ Terhubung & Tersinkronisasi"; return; }
-
       syncTeks.innerText = `⏳ Menyinkronkan data ke cloud...`;
       try {
         let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(antrian[0]) });
         let hasil = JSON.parse(await respon.text());
         if (hasil.status === "success" || hasil.status === "error") {
-          antrian.shift(); localStorage.setItem('antrianIkra', JSON.stringify(antrian));
-          syncTeks.innerText = `✅ Laporan: ${hasil.pesan}`; 
-          if(antrian.length > 0) prosesAntrian(); 
-          else { muatStatistik(); setTimeout(() => { syncTeks.innerText = "☁️ Terhubung & Tersinkronisasi"; }, 5000); }
+          antrian.shift(); localStorage.setItem('antrianIkra', JSON.stringify(antrian)); syncTeks.innerText = `✅ Laporan: ${hasil.pesan}`; 
+          if(antrian.length > 0) prosesAntrian(); else { muatStatistik(); setTimeout(() => { syncTeks.innerText = "☁️ Terhubung & Tersinkronisasi"; }, 5000); }
         }
       } catch (error) { syncTeks.innerText = "⚠️ Gangguan koneksi. Akan diulang otomatis."; }
     }
 
-    // --- MODAL ---
     function bukaModal(judul, pesan, sukses) {
       document.getElementById('judulModal').innerText = judul; document.getElementById('pesanModal').innerText = pesan;
       let ikon = document.getElementById('ikonModal');
