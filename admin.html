@@ -6,33 +6,21 @@
   <title>HR Panel - Ikra Dental Care</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); }
-    .glass-input { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.8); }
-    .glass-input:focus { background: rgba(255, 255, 255, 0.9); outline: none; box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.3); }
-  </style>
+  <style> body { font-family: 'Inter', sans-serif; } .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); } .glass-input { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.8); } .glass-input:focus { background: rgba(255, 255, 255, 0.9); outline: none; box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.3); } </style>
 </head>
 <body class="bg-gradient-to-br from-teal-500 to-blue-700 min-h-screen text-gray-800">
 
   <div id="layarLogin" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-teal-500 to-blue-700 transition-opacity duration-500">
     <div class="glass-panel p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center">
-      <div class="h-20 w-20 bg-gradient-to-tr from-teal-400 to-blue-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
-        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-      </div>
+      <div class="h-20 w-20 bg-gradient-to-tr from-teal-400 to-blue-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></div>
       <h2 class="text-2xl font-bold text-gray-800 mb-2">Admin HR Akses</h2>
       <p class="text-sm text-gray-600 mb-6 font-medium">Ikra Orthodontic & Dental Care</p>
-      
       <input type="password" id="adminPin" placeholder="Masukkan PIN Admin" class="w-full p-4 mb-6 rounded-xl glass-input text-center font-bold text-lg tracking-widest placeholder-gray-400">
-      
-      <button id="btnLogin" onclick="prosesLoginAdmin()" class="w-full bg-teal-600 text-white p-4 rounded-xl font-bold hover:bg-teal-700 active:scale-95 transition-all shadow-md">
-        Buka Dashboard
-      </button>
+      <button id="btnLogin" onclick="prosesLoginAdmin()" class="w-full bg-teal-600 text-white p-4 rounded-xl font-bold hover:bg-teal-700 active:scale-95 transition-all shadow-md">Buka Dashboard</button>
     </div>
   </div>
 
   <div id="layarDashboard" class="hidden flex flex-col h-screen overflow-hidden">
-    
     <nav class="glass-panel mx-4 mt-4 px-6 py-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4 z-10">
       <div class="flex items-center gap-3">
         <div class="h-10 w-10 bg-gradient-to-tr from-teal-400 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-inner">I</div>
@@ -40,33 +28,30 @@
       </div>
       <div class="space-x-1 bg-white/40 p-1 rounded-xl flex text-sm shadow-inner backdrop-blur-sm">
         <button onclick="switchTab('karyawan')" id="btnTabKar" class="px-5 py-2 rounded-lg bg-white shadow-sm font-bold text-teal-700 transition-all">Karyawan</button>
-        <button onclick="switchTab('jadwal')" id="btnTabJad" class="px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all">Jadwal Shift</button>
+        <button onclick="switchTab('jadwal')" id="btnTabJad" class="px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all">Shift</button>
         <button onclick="switchTab('rekap')" id="btnTabRekap" class="px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all">Laporan</button>
+        <button onclick="switchTab('pengaturan')" id="btnTabPeng" class="px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all">⚙️ Pengaturan</button>
       </div>
     </nav>
 
     <div class="flex-1 overflow-y-auto p-4">
       <div class="max-w-6xl mx-auto">
-        
         <div id="notifAksi" class="hidden bg-green-500/90 text-white p-3 rounded-xl mb-4 text-center font-bold backdrop-blur-sm shadow-lg transition-all">Tersimpan!</div>
 
         <div id="tabKaryawan" class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="md:col-span-1 glass-panel p-6 rounded-3xl h-fit shadow-xl border-t border-white/80">
             <h2 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-200/50 pb-2">➕ Karyawan Baru</h2>
             <form onsubmit="tambahKaryawan(event)" class="space-y-4">
-              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Nama Lengkap</label><input type="text" id="inputNama" required class="w-full mt-1 p-3 rounded-xl glass-input"></div>
-              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Username Login</label><input type="text" id="inputUser" required class="w-full mt-1 p-3 rounded-xl glass-input"></div>
-              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Password Login</label><input type="text" id="inputPass" required class="w-full mt-1 p-3 rounded-xl glass-input"></div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Nama</label><input type="text" id="inputNama" required class="w-full mt-1 p-3 rounded-xl glass-input"></div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Username</label><input type="text" id="inputUser" required class="w-full mt-1 p-3 rounded-xl glass-input"></div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Password</label><input type="text" id="inputPass" required class="w-full mt-1 p-3 rounded-xl glass-input"></div>
               <button type="submit" class="w-full bg-teal-600 text-white p-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg active:scale-95 transition-all">Simpan Akun</button>
             </form>
           </div>
           <div class="md:col-span-2 glass-panel p-0 rounded-3xl shadow-xl overflow-hidden border-t border-white/80">
             <div class="p-6 border-b border-gray-200/50"><h2 class="text-lg font-bold text-gray-800">Daftar Akun Karyawan</h2></div>
             <div class="overflow-x-auto p-2">
-              <table class="w-full text-left whitespace-nowrap">
-                <thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Karyawan</th><th class="p-4">Akses Login</th><th class="p-4 text-right">Aksi</th></tr></thead>
-                <tbody id="tabelKaryawan" class="divide-y divide-gray-200/50 font-medium"></tbody>
-              </table>
+              <table class="w-full text-left whitespace-nowrap"><thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Karyawan</th><th class="p-4">Akses Login</th><th class="p-4 text-right">Aksi</th></tr></thead><tbody id="tabelKaryawan" class="divide-y divide-gray-200/50 font-medium"></tbody></table>
             </div>
           </div>
         </div>
@@ -75,29 +60,15 @@
           <div class="md:col-span-1 glass-panel p-6 rounded-3xl h-fit shadow-xl border-t border-white/80">
             <h2 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-200/50 pb-2">⏳ Atur Shift</h2>
             <form onsubmit="tambahJadwalBulk(event)" class="space-y-4">
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Untuk Siapa?</label><select id="inputTargetKar" class="w-full mt-1 p-3 rounded-xl glass-input font-bold text-teal-700"><option value="Semua">Semua (Umum)</option></select></div>
               <div>
-                <label class="text-xs text-gray-500 font-bold uppercase ml-1">Untuk Siapa?</label>
-                <select id="inputTargetKar" class="w-full mt-1 p-3 rounded-xl glass-input font-bold text-teal-700">
-                  <option value="Semua">Semua Karyawan (Umum)</option>
-                </select>
-              </div>
-              <div>
-                <label class="text-xs text-gray-500 font-bold uppercase ml-1">Pilih Hari</label>
+                <label class="text-xs text-gray-500 font-bold uppercase ml-1">Hari</label>
                 <div class="grid grid-cols-2 gap-2 text-sm mt-1">
-                  <label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer hover:bg-white/80"><input type="checkbox" value="Senin" class="hari-chk w-4 h-4 text-teal-600">Senin</label>
-                  <label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer hover:bg-white/80"><input type="checkbox" value="Selasa" class="hari-chk w-4 h-4 text-teal-600">Selasa</label>
-                  <label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer hover:bg-white/80"><input type="checkbox" value="Rabu" class="hari-chk w-4 h-4 text-teal-600">Rabu</label>
-                  <label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer hover:bg-white/80"><input type="checkbox" value="Kamis" class="hari-chk w-4 h-4 text-teal-600">Kamis</label>
-                  <label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer hover:bg-white/80"><input type="checkbox" value="Jumat" class="hari-chk w-4 h-4 text-teal-600">Jumat</label>
-                  <label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer hover:bg-white/80"><input type="checkbox" value="Sabtu" class="hari-chk w-4 h-4 text-teal-600">Sabtu</label>
-                  <label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer hover:bg-white/80"><input type="checkbox" value="Minggu" class="hari-chk w-4 h-4 text-teal-600">Minggu</label>
+                  <label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Senin" class="hari-chk w-4 h-4 text-teal-600">Senin</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Selasa" class="hari-chk w-4 h-4 text-teal-600">Selasa</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Rabu" class="hari-chk w-4 h-4 text-teal-600">Rabu</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Kamis" class="hari-chk w-4 h-4 text-teal-600">Kamis</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Jumat" class="hari-chk w-4 h-4 text-teal-600">Jumat</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Sabtu" class="hari-chk w-4 h-4 text-teal-600">Sabtu</label><label class="flex items-center gap-2 glass-input p-2 rounded-lg cursor-pointer"><input type="checkbox" value="Minggu" class="hari-chk w-4 h-4 text-teal-600">Minggu</label>
                 </div>
               </div>
               <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Tgl Spesifik (Opsional)</label><input type="text" id="inputTglSpesifik" placeholder="DD/MM/YYYY" class="w-full mt-1 p-3 rounded-xl glass-input"></div>
-              <div class="grid grid-cols-2 gap-3">
-                <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Masuk</label><input type="time" id="inputJamMasuk" required class="w-full mt-1 p-2 rounded-xl glass-input"></div>
-                <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Pulang</label><input type="time" id="inputJamPulang" required class="w-full mt-1 p-2 rounded-xl glass-input"></div>
-              </div>
+              <div class="grid grid-cols-2 gap-3"><div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Masuk</label><input type="time" id="inputJamMasuk" required class="w-full mt-1 p-2 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Pulang</label><input type="time" id="inputJamPulang" required class="w-full mt-1 p-2 rounded-xl glass-input"></div></div>
               <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Toleransi Telat (Menit)</label><input type="number" id="inputToleransi" value="15" required class="w-full mt-1 p-2 rounded-xl glass-input"></div>
               <button type="submit" class="w-full bg-teal-600 text-white p-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg active:scale-95 transition-all">Terapkan Jadwal</button>
             </form>
@@ -105,10 +76,7 @@
           <div class="md:col-span-2 glass-panel p-0 rounded-3xl shadow-xl overflow-hidden border-t border-white/80">
             <div class="p-6 border-b border-gray-200/50"><h2 class="text-lg font-bold text-gray-800">Daftar Jadwal Aktif</h2></div>
             <div class="overflow-x-auto p-2">
-              <table class="w-full text-left whitespace-nowrap">
-                <thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Hari/Tgl</th><th class="p-4">Target Karyawan</th><th class="p-4">Shift & Toleransi</th><th class="p-4 text-right">Aksi</th></tr></thead>
-                <tbody id="tabelJadwal" class="divide-y divide-gray-200/50 font-medium"></tbody>
-              </table>
+              <table class="w-full text-left whitespace-nowrap"><thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Hari/Tgl</th><th class="p-4">Target Karyawan</th><th class="p-4">Shift & Toleransi</th><th class="p-4 text-right">Aksi</th></tr></thead><tbody id="tabelJadwal" class="divide-y divide-gray-200/50 font-medium"></tbody></table>
             </div>
           </div>
         </div>
@@ -122,13 +90,30 @@
               <div class="w-full md:w-1/3"><button type="submit" id="btnTarik" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold hover:bg-blue-700 shadow-lg active:scale-95 transition-all">Generate Laporan</button></div>
             </form>
           </div>
-          <div class="glass-panel p-0 rounded-3xl shadow-xl overflow-hidden border-t border-white/80">
-            <div class="overflow-x-auto p-2">
-              <table class="w-full text-left whitespace-nowrap">
-                <thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Nama</th><th class="p-4 text-center">Kehadiran</th><th class="p-4 text-center">Keterlambatan</th><th class="p-4 text-right">Total Lembur</th></tr></thead>
-                <tbody id="tabelRekap" class="divide-y divide-gray-200/50 font-medium"><tr><td colspan="4" class="p-8 text-center text-gray-500">Pilih rentang tanggal untuk menampilkan data.</td></tr></tbody>
-              </table>
-            </div>
+          <div class="glass-panel p-0 rounded-3xl shadow-xl overflow-hidden border-t border-white/80"><div class="overflow-x-auto p-2"><table class="w-full text-left whitespace-nowrap"><thead class="text-gray-400 text-xs uppercase tracking-wider"><tr><th class="p-4">Nama</th><th class="p-4 text-center">Kehadiran</th><th class="p-4 text-center">Keterlambatan</th><th class="p-4 text-right">Total Lembur</th></tr></thead><tbody id="tabelRekap" class="divide-y divide-gray-200/50 font-medium"><tr><td colspan="4" class="p-8 text-center text-gray-500">Pilih rentang tanggal untuk menampilkan data.</td></tr></tbody></table></div></div>
+        </div>
+
+        <div id="tabPengaturan" class="hidden">
+          <div class="glass-panel p-8 rounded-3xl shadow-xl border-t border-white/80 max-w-2xl mx-auto">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200/50 pb-4">📍 Pengaturan Lokasi Absensi (GPS)</h2>
+            <form onsubmit="simpanPengaturan(event)" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="text-xs text-gray-500 font-bold uppercase ml-1">Latitude (Lintang)</label>
+                  <input type="text" id="setLat" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800" placeholder="Contoh: 0.7893">
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500 font-bold uppercase ml-1">Longitude (Bujur)</label>
+                  <input type="text" id="setLng" required class="w-full mt-1 p-4 rounded-xl glass-input font-mono text-teal-800" placeholder="Contoh: 127.3633">
+                </div>
+              </div>
+              <div>
+                <label class="text-xs text-gray-500 font-bold uppercase ml-1">Radius Toleransi Jarak (Meter)</label>
+                <input type="number" id="setRadius" required class="w-full mt-1 p-4 rounded-xl glass-input font-bold text-teal-800 text-xl" placeholder="50">
+                <p class="text-xs text-gray-500 mt-2 ml-1">Karyawan tidak bisa absen jika jarak mereka dari klinik melebihi angka meter di atas.</p>
+              </div>
+              <button type="submit" id="btnSimpanPengaturan" class="w-full bg-teal-600 text-white p-4 rounded-xl font-bold text-lg hover:bg-teal-700 shadow-lg active:scale-95 transition-all mt-4">Simpan Pengaturan</button>
+            </form>
           </div>
         </div>
 
@@ -139,28 +124,9 @@
   <div id="modalEdit" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity">
     <div class="glass-panel p-6 rounded-3xl shadow-2xl w-full max-w-sm">
       <h3 class="text-xl font-bold text-gray-800 mb-4" id="judulModalEdit">Edit Data</h3>
-      
-      <div id="formEditKar" class="hidden space-y-4">
-        <input type="hidden" id="editIdKar">
-        <div><label class="text-xs text-gray-500 font-bold">Nama</label><input type="text" id="editNamaKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div>
-        <div><label class="text-xs text-gray-500 font-bold">Username</label><input type="text" id="editUserKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div>
-        <div><label class="text-xs text-gray-500 font-bold">Password</label><input type="text" id="editPassKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div>
-      </div>
-
-      <div id="formEditJad" class="hidden space-y-4">
-        <input type="hidden" id="editIdJad">
-        <p class="text-sm font-bold text-teal-700 mb-2" id="infoEditJad"></p>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="text-xs text-gray-500 font-bold">Jam Masuk</label><input type="time" id="editJamMsk" class="w-full mt-1 p-2 rounded-xl glass-input"></div>
-          <div><label class="text-xs text-gray-500 font-bold">Jam Pulang</label><input type="time" id="editJamPlg" class="w-full mt-1 p-2 rounded-xl glass-input"></div>
-        </div>
-        <div><label class="text-xs text-gray-500 font-bold">Toleransi (Menit)</label><input type="number" id="editToleransi" class="w-full mt-1 p-2 rounded-xl glass-input"></div>
-      </div>
-
-      <div class="flex gap-3 mt-6">
-        <button onclick="tutupModalEdit()" class="w-1/2 bg-white text-gray-600 p-3 rounded-xl font-bold border border-gray-200 hover:bg-gray-50">Batal</button>
-        <button onclick="simpanEdit()" id="btnSimpanEdit" class="w-1/2 bg-teal-600 text-white p-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg">Update</button>
-      </div>
+      <div id="formEditKar" class="hidden space-y-4"><input type="hidden" id="editIdKar"><div><label class="text-xs text-gray-500 font-bold">Nama</label><input type="text" id="editNamaKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold">Username</label><input type="text" id="editUserKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold">Password</label><input type="text" id="editPassKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div></div>
+      <div id="formEditJad" class="hidden space-y-4"><input type="hidden" id="editIdJad"><p class="text-sm font-bold text-teal-700 mb-2" id="infoEditJad"></p><div class="grid grid-cols-2 gap-3"><div><label class="text-xs text-gray-500 font-bold">Jam Masuk</label><input type="time" id="editJamMsk" class="w-full mt-1 p-2 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold">Jam Pulang</label><input type="time" id="editJamPlg" class="w-full mt-1 p-2 rounded-xl glass-input"></div></div><div><label class="text-xs text-gray-500 font-bold">Toleransi (Menit)</label><input type="number" id="editToleransi" class="w-full mt-1 p-2 rounded-xl glass-input"></div></div>
+      <div class="flex gap-3 mt-6"><button onclick="tutupModalEdit()" class="w-1/2 bg-white text-gray-600 p-3 rounded-xl font-bold border border-gray-200 hover:bg-gray-50">Batal</button><button onclick="simpanEdit()" id="btnSimpanEdit" class="w-1/2 bg-teal-600 text-white p-3 rounded-xl font-bold hover:bg-teal-700 shadow-lg">Update</button></div>
     </div>
   </div>
 
@@ -169,167 +135,67 @@
     const PIN_ADMIN = "123456";
     let tipeEditAktif = "";
 
-    // --- LOGIKA LOGIN & PRE-FETCH DATA ---
     async function prosesLoginAdmin() {
-      let pin = document.getElementById('adminPin').value;
-      let btn = document.getElementById('btnLogin');
-      if (pin !== PIN_ADMIN) { alert("PIN Akses Salah!"); return; }
-      
-      btn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memuat Database...`;
-      btn.disabled = true;
-
-      // Ambil data di belakang layar SEBELUM masuk dashboard
+      if (document.getElementById('adminPin').value !== PIN_ADMIN) return alert("PIN Salah!");
+      document.getElementById('btnLogin').innerHTML = `Memuat Database...`; document.getElementById('btnLogin').disabled = true;
       await loadData();
-      
-      // Animasi transisi masuk
       document.getElementById('layarLogin').style.opacity = '0';
-      setTimeout(() => {
-        document.getElementById('layarLogin').classList.add('hidden');
-        document.getElementById('layarDashboard').classList.remove('hidden');
-      }, 500);
+      setTimeout(() => { document.getElementById('layarLogin').classList.add('hidden'); document.getElementById('layarDashboard').classList.remove('hidden'); }, 500);
     }
 
-    // --- NAVIGASI TAB ---
     function switchTab(tab) {
-      document.getElementById('tabKaryawan').classList.add('hidden'); document.getElementById('tabJadwal').classList.add('hidden'); document.getElementById('tabRekap').classList.add('hidden');
-      document.getElementById('btnTabKar').className = "px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all";
-      document.getElementById('btnTabJad').className = "px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all";
-      document.getElementById('btnTabRekap').className = "px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all";
+      document.getElementById('tabKaryawan').classList.add('hidden'); document.getElementById('tabJadwal').classList.add('hidden'); document.getElementById('tabRekap').classList.add('hidden'); document.getElementById('tabPengaturan').classList.add('hidden');
+      document.getElementById('btnTabKar').className = "px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all"; document.getElementById('btnTabJad').className = "px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all"; document.getElementById('btnTabRekap').className = "px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all"; document.getElementById('btnTabPeng').className = "px-5 py-2 rounded-lg text-gray-600 hover:text-teal-700 font-bold transition-all";
       if (tab === 'karyawan') { document.getElementById('tabKaryawan').classList.remove('hidden'); document.getElementById('btnTabKar').classList.add('bg-white', 'text-teal-700', 'shadow-sm'); }
       if (tab === 'jadwal') { document.getElementById('tabJadwal').classList.remove('hidden'); document.getElementById('btnTabJad').classList.add('bg-white', 'text-teal-700', 'shadow-sm'); }
       if (tab === 'rekap') { document.getElementById('tabRekap').classList.remove('hidden'); document.getElementById('btnTabRekap').classList.add('bg-white', 'text-teal-700', 'shadow-sm'); }
+      if (tab === 'pengaturan') { document.getElementById('tabPengaturan').classList.remove('hidden'); document.getElementById('btnTabPeng').classList.add('bg-white', 'text-teal-700', 'shadow-sm'); }
     }
 
-    // --- FETCH DATA UTAMA ---
     async function loadData() {
       try {
         let response = await fetch(GAS_URL + "?action=get_data"); let result = await response.json();
         
-        // Render Karyawan
-        let htmlKaryawan = ""; let dropdownTarget = `<option value="Semua">Semua Karyawan (Umum)</option>`;
-        if(result.karyawan && result.karyawan.length > 0) {
-          result.karyawan.forEach(row => {
-            htmlKaryawan += `
-              <tr class="hover:bg-white/50 transition-colors">
-                <td class="p-4 flex items-center gap-3"><div class="h-9 w-9 rounded-full bg-gradient-to-br from-teal-400 to-teal-500 text-white shadow-sm flex items-center justify-center font-bold text-sm">${row[0].charAt(0)}</div><span class="font-bold">${row[0]}</span></td>
-                <td class="p-4 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded-md text-sm border border-gray-200">@${row[1]}</span><br><span class="text-xs text-gray-400 tracking-widest ml-1">Pwd: ${row[2]}</span></td>
-                <td class="p-4 text-right space-x-2">
-                  <button onclick="bukaEditKar('${row[5]}', '${row[0]}', '${row[1]}', '${row[2]}')" class="text-blue-500 bg-blue-50 px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-sm">Edit</button>
-                  <button onclick="hapusKaryawan('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-sm">Hapus</button>
-                </td>
-              </tr>`;
-            dropdownTarget += `<option value="${row[0]}">Khusus: ${row[0]}</option>`;
-          });
+        // Render Pengaturan Lokasi
+        if(result.pengaturan) {
+          document.getElementById('setLat').value = result.pengaturan.klinik_lat || '';
+          document.getElementById('setLng').value = result.pengaturan.klinik_lng || '';
+          document.getElementById('setRadius').value = result.pengaturan.radius || '50';
         }
-        document.getElementById('tabelKaryawan').innerHTML = htmlKaryawan || '<tr><td colspan="3" class="p-6 text-center text-gray-400">Belum ada karyawan</td></tr>';
-        document.getElementById('inputTargetKar').innerHTML = dropdownTarget;
 
-        // Render Jadwal
-        let htmlJadwal = "";
-        if(result.jadwal && result.jadwal.length > 0) {
-          result.jadwal.forEach(row => {
-            let badge = row[4] === 'Semua' ? `<span class="bg-teal-50 text-teal-700 border border-teal-200 text-xs px-2 py-1 rounded-md font-bold">Umum (Semua)</span>` : `<span class="bg-orange-50 text-orange-700 border border-orange-200 text-xs px-2 py-1 rounded-md font-bold">Khusus: ${row[4]}</span>`;
-            htmlJadwal += `
-              <tr class="hover:bg-white/50 transition-colors">
-                <td class="p-4 font-bold text-gray-800">${row[0]}</td>
-                <td class="p-4">${badge}</td>
-                <td class="p-4 text-gray-600"><span class="font-bold text-gray-800">${row[1]} - ${row[3]}</span> <br><span class="text-xs text-red-400">Telat > ${row[2]}m</span></td>
-                <td class="p-4 text-right space-x-2">
-                  <button onclick="bukaEditJad('${row[5]}', '${row[0]}', '${row[4]}', '${row[1]}', '${row[3]}', '${row[2]}')" class="text-blue-500 bg-blue-50 px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-sm">Edit</button>
-                  <button onclick="hapusJadwal('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-sm">Hapus</button>
-                </td>
-              </tr>`;
-          });
-        }
-        document.getElementById('tabelJadwal').innerHTML = htmlJadwal || '<tr><td colspan="4" class="p-6 text-center text-gray-400">Belum ada jadwal</td></tr>';
-      } catch (error) { alert("Gagal memuat data utama."); }
+        let htmlKar = ""; let dropdown = `<option value="Semua">Semua Karyawan (Umum)</option>`;
+        if(result.karyawan) result.karyawan.forEach(row => { htmlKar += `<tr class="hover:bg-white/50 transition-colors"><td class="p-4 flex items-center gap-3"><div class="h-9 w-9 rounded-full bg-gradient-to-br from-teal-400 to-teal-500 text-white shadow-sm flex items-center justify-center font-bold text-sm">${row[0].charAt(0)}</div><span class="font-bold">${row[0]}</span></td><td class="p-4 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded-md text-sm border border-gray-200">@${row[1]}</span></td><td class="p-4 text-right space-x-2"><button onclick="bukaEditKar('${row[5]}', '${row[0]}', '${row[1]}', '${row[2]}')" class="text-blue-500 bg-blue-50 px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-sm">Edit</button><button onclick="hapusKaryawan('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-sm">Hapus</button></td></tr>`; dropdown += `<option value="${row[0]}">Khusus: ${row[0]}</option>`; });
+        document.getElementById('tabelKaryawan').innerHTML = htmlKar || '<tr><td colspan="3" class="p-6 text-center text-gray-400">Belum ada data</td></tr>'; document.getElementById('inputTargetKar').innerHTML = dropdown;
+
+        let htmlJad = "";
+        if(result.jadwal) result.jadwal.forEach(row => { let badge = row[4] === 'Semua' ? `<span class="bg-teal-50 text-teal-700 border border-teal-200 text-xs px-2 py-1 rounded-md font-bold">Umum (Semua)</span>` : `<span class="bg-orange-50 text-orange-700 border border-orange-200 text-xs px-2 py-1 rounded-md font-bold">Khusus: ${row[4]}</span>`; htmlJad += `<tr class="hover:bg-white/50 transition-colors"><td class="p-4 font-bold text-gray-800">${row[0]}</td><td class="p-4">${badge}</td><td class="p-4 text-gray-600"><span class="font-bold text-gray-800">${row[1]} - ${row[3]}</span> <br><span class="text-xs text-red-400">Telat > ${row[2]}m</span></td><td class="p-4 text-right space-x-2"><button onclick="bukaEditJad('${row[5]}', '${row[0]}', '${row[4]}', '${row[1]}', '${row[3]}', '${row[2]}')" class="text-blue-500 bg-blue-50 px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-sm">Edit</button><button onclick="hapusJadwal('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-sm">Hapus</button></td></tr>`; });
+        document.getElementById('tabelJadwal').innerHTML = htmlJad || '<tr><td colspan="4" class="p-6 text-center text-gray-400">Belum ada jadwal</td></tr>';
+      } catch (error) { alert("Gagal memuat data."); }
     }
 
-    // --- FUNGSI API (POST/PATCH/DELETE) ---
     async function kirimDataPOST(payload) {
-      try {
-        let response = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
-        let result = await response.json();
-        if (result.status === "success") {
-          tampilNotif(); loadData(); // Reload senyap
-        } else alert("Error: " + result.pesan);
-      } catch (error) { alert("Gagal menyambung ke server."); }
+      try { let response = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); let result = JSON.parse(await response.text()); if (result.status === "success") { tampilNotif(); loadData(); } else alert("Error: " + result.pesan); } catch (error) { alert("Gagal server."); }
     }
+    function tampilNotif() { let n = document.getElementById('notifAksi'); n.classList.remove('hidden'); setTimeout(() => { n.classList.add('hidden'); }, 3000); }
 
-    function tampilNotif() {
-      let n = document.getElementById('notifAksi'); n.classList.remove('hidden');
-      setTimeout(() => { n.classList.add('hidden'); }, 3000);
-    }
-
-    // --- AKSI FORM TAMBAH & HAPUS ---
-    function tambahKaryawan(e) { e.preventDefault(); kirimDataPOST({ action: "tambah_karyawan", nama: document.getElementById('inputNama').value, username: document.getElementById('inputUser').value, password: document.getElementById('inputPass').value }); e.target.reset(); }
-    
-    function tambahJadwalBulk(e) {
+    function simpanPengaturan(e) {
       e.preventDefault();
-      let hariTerpilih = Array.from(document.querySelectorAll('.hari-chk:checked')).map(cb => cb.value);
-      let tglSpesifik = document.getElementById('inputTglSpesifik').value;
-      if (tglSpesifik) hariTerpilih.push(tglSpesifik);
-      if (hariTerpilih.length === 0) return alert("Pilih hari atau isi tanggal spesifik!");
-
-      let jmMasuk = document.getElementById('inputJamMasuk').value; if(jmMasuk.length > 5) jmMasuk = jmMasuk.substring(0, 5);
-      let jmPulang = document.getElementById('inputJamPulang').value; if(jmPulang.length > 5) jmPulang = jmPulang.substring(0, 5);
-
-      kirimDataPOST({ action: "tambah_jadwal_bulk", hariArray: hariTerpilih, jamMasuk: jmMasuk, toleransi: document.getElementById('inputToleransi').value, jamPulang: jmPulang, targetKaryawan: document.getElementById('inputTargetKar').value });
-      document.querySelectorAll('.hari-chk').forEach(cb => cb.checked = false); document.getElementById('inputTglSpesifik').value = "";
+      let btn = document.getElementById('btnSimpanPengaturan'); btn.innerText = "Menyimpan...";
+      kirimDataPOST({ action: "simpan_pengaturan", lat: document.getElementById('setLat').value, lng: document.getElementById('setLng').value, radius: document.getElementById('setRadius').value });
+      setTimeout(() => { btn.innerText = "Simpan Pengaturan"; }, 1500);
     }
 
-    // Hapus via ID Supabase
-    function hapusKaryawan(id, nama) { if(confirm(`Hapus Karyawan: ${nama}?`)) kirimDataPOST({ action: 'hapus_karyawan', id: id }); }
-    function hapusJadwal(id, hari) { if(confirm(`Hapus jadwal ${hari}?`)) kirimDataPOST({ action: 'hapus_jadwal', idJadwal: id }); }
+    function tambahKaryawan(e) { e.preventDefault(); kirimDataPOST({ action: "tambah_karyawan", nama: document.getElementById('inputNama').value, username: document.getElementById('inputUser').value, password: document.getElementById('inputPass').value }); e.target.reset(); }
+    function tambahJadwalBulk(e) { e.preventDefault(); let hr = Array.from(document.querySelectorAll('.hari-chk:checked')).map(cb => cb.value); let ts = document.getElementById('inputTglSpesifik').value; if(ts) hr.push(ts); if(hr.length===0) return alert("Pilih hari!"); let m=document.getElementById('inputJamMasuk').value; if(m.length>5) m=m.substring(0,5); let p=document.getElementById('inputJamPulang').value; if(p.length>5) p=p.substring(0,5); kirimDataPOST({ action: "tambah_jadwal_bulk", hariArray: hr, jamMasuk: m, toleransi: document.getElementById('inputToleransi').value, jamPulang: p, targetKaryawan: document.getElementById('inputTargetKar').value }); document.querySelectorAll('.hari-chk').forEach(cb=>cb.checked=false); document.getElementById('inputTglSpesifik').value=""; }
+    function hapusKaryawan(id, nm) { if(confirm(`Hapus ${nm}?`)) kirimDataPOST({ action: 'hapus_karyawan', id: id }); }
+    function hapusJadwal(id, hr) { if(confirm(`Hapus jadwal ${hr}?`)) kirimDataPOST({ action: 'hapus_jadwal', idJadwal: id }); }
 
-    // --- FUNGSI MODAL EDIT ---
-    function bukaEditKar(id, nama, user, pass) {
-      tipeEditAktif = "karyawan";
-      document.getElementById('judulModalEdit').innerText = "Update Data Karyawan";
-      document.getElementById('formEditKar').classList.remove('hidden'); document.getElementById('formEditJad').classList.add('hidden');
-      
-      document.getElementById('editIdKar').value = id; document.getElementById('editNamaKar').value = nama;
-      document.getElementById('editUserKar').value = user; document.getElementById('editPassKar').value = pass;
-      document.getElementById('modalEdit').classList.remove('hidden');
-    }
-
-    function bukaEditJad(id, hari, target, msk, plg, tol) {
-      tipeEditAktif = "jadwal";
-      document.getElementById('judulModalEdit').innerText = "Update Shift";
-      document.getElementById('formEditKar').classList.add('hidden'); document.getElementById('formEditJad').classList.remove('hidden');
-      
-      document.getElementById('infoEditJad').innerText = `${hari} (${target})`;
-      document.getElementById('editIdJad').value = id; document.getElementById('editJamMsk').value = msk;
-      document.getElementById('editJamPlg').value = plg; document.getElementById('editToleransi').value = tol;
-      document.getElementById('modalEdit').classList.remove('hidden');
-    }
-
+    function bukaEditKar(id, nm, us, ps) { tipeEditAktif = "karyawan"; document.getElementById('judulModalEdit').innerText = "Update Karyawan"; document.getElementById('formEditKar').classList.remove('hidden'); document.getElementById('formEditJad').classList.add('hidden'); document.getElementById('editIdKar').value = id; document.getElementById('editNamaKar').value = nm; document.getElementById('editUserKar').value = us; document.getElementById('editPassKar').value = ps; document.getElementById('modalEdit').classList.remove('hidden'); }
+    function bukaEditJad(id, hr, tg, ms, pl, to) { tipeEditAktif = "jadwal"; document.getElementById('judulModalEdit').innerText = "Update Shift"; document.getElementById('formEditKar').classList.add('hidden'); document.getElementById('formEditJad').classList.remove('hidden'); document.getElementById('infoEditJad').innerText = `${hr} (${tg})`; document.getElementById('editIdJad').value = id; document.getElementById('editJamMsk').value = ms; document.getElementById('editJamPlg').value = pl; document.getElementById('editToleransi').value = to; document.getElementById('modalEdit').classList.remove('hidden'); }
     function tutupModalEdit() { document.getElementById('modalEdit').classList.add('hidden'); }
+    function simpanEdit() { let btn = document.getElementById('btnSimpanEdit'); btn.innerText = "Memproses..."; btn.disabled = true; if (tipeEditAktif === "karyawan") kirimDataPOST({ action: "edit_karyawan", id: document.getElementById('editIdKar').value, nama: document.getElementById('editNamaKar').value, username: document.getElementById('editUserKar').value, password: document.getElementById('editPassKar').value }); else kirimDataPOST({ action: "edit_jadwal", id: document.getElementById('editIdJad').value, jamMasuk: document.getElementById('editJamMsk').value, jamPulang: document.getElementById('editJamPlg').value, toleransi: document.getElementById('editToleransi').value }); setTimeout(() => { tutupModalEdit(); btn.innerText = "Update"; btn.disabled = false; }, 1000); }
 
-    function simpanEdit() {
-      let btn = document.getElementById('btnSimpanEdit'); btn.innerText = "Memproses..."; btn.disabled = true;
-      if (tipeEditAktif === "karyawan") {
-        kirimDataPOST({ action: "edit_karyawan", id: document.getElementById('editIdKar').value, nama: document.getElementById('editNamaKar').value, username: document.getElementById('editUserKar').value, password: document.getElementById('editPassKar').value });
-      } else if (tipeEditAktif === "jadwal") {
-        kirimDataPOST({ action: "edit_jadwal", id: document.getElementById('editIdJad').value, jamMasuk: document.getElementById('editJamMsk').value, jamPulang: document.getElementById('editJamPlg').value, toleransi: document.getElementById('editToleransi').value });
-      }
-      setTimeout(() => { tutupModalEdit(); btn.innerText = "Update"; btn.disabled = false; }, 1000);
-    }
-
-    // --- REKAP ABSENSI ---
-    async function tarikRekap(e) {
-      e.preventDefault(); let btn = document.getElementById('btnTarik'); btn.innerText = "Memuat..."; btn.disabled = true;
-      let payload = { action: "get_rekap", tglAwal: document.getElementById('tglAwal').value, tglAkhir: document.getElementById('tglAkhir').value };
-      try {
-        let respon = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) }); let hasil = await respon.json();
-        let html = "";
-        if(hasil.data && hasil.data.length > 0) {
-          hasil.data.forEach(r => { html += `<tr class="hover:bg-white/50"><td class="p-4 font-bold text-gray-800">${r.nama}</td><td class="p-4 text-center"><span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-lg font-bold border border-teal-100">${r.hadir} Hari</span></td><td class="p-4 text-center"><span class="bg-red-50 text-red-500 px-3 py-1 rounded-lg font-bold border border-red-100">${r.telat} Kali</span></td><td class="p-4 text-right"><span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-lg font-bold border border-orange-100">${r.lembur}</span></td></tr>`; });
-        }
-        document.getElementById('tabelRekap').innerHTML = html || '<tr><td colspan="4" class="p-8 text-center text-gray-500">Tidak ada kehadiran di rentang tanggal tersebut.</td></tr>';
-      } catch(err) { alert("Gagal mengambil data rekap."); }
-      btn.innerText = "Generate Laporan"; btn.disabled = false;
-    }
+    async function tarikRekap(e) { e.preventDefault(); let btn = document.getElementById('btnTarik'); btn.innerText = "Memuat..."; btn.disabled = true; let payload = { action: "get_rekap", tglAwal: document.getElementById('tglAwal').value, tglAkhir: document.getElementById('tglAkhir').value }; try { let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); let hasil = JSON.parse(await respon.text()); let html = ""; if(hasil.data && hasil.data.length > 0) { hasil.data.forEach(r => { html += `<tr class="hover:bg-white/50"><td class="p-4 font-bold text-gray-800">${r.nama}</td><td class="p-4 text-center"><span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-lg font-bold border border-teal-100">${r.hadir} Hari</span></td><td class="p-4 text-center"><span class="bg-red-50 text-red-500 px-3 py-1 rounded-lg font-bold border border-red-100">${r.telat} Kali</span></td><td class="p-4 text-right"><span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-lg font-bold border border-orange-100">${r.lembur}</span></td></tr>`; }); } document.getElementById('tabelRekap').innerHTML = html || '<tr><td colspan="4" class="p-8 text-center text-gray-500">Tidak ada kehadiran di rentang tanggal tersebut.</td></tr>'; } catch(err) { alert("Gagal mengambil data rekap."); } btn.innerText = "Generate Laporan"; btn.disabled = false; }
   </script>
 </body>
 </html>
