@@ -1,0 +1,15 @@
+{
+  "name": "Ikra Orthodontic & Dental Care",
+  "short_name": "IODC Absensi",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d9488",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "https://scontent.fmdc6-1.fna.fbcdn.net/v/t39.30808-6/441952027_461876119691520_3877017122707639293_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=yshh9HaFbFkQ7kNvwHRAalg&_nc_oc=AdrEtxibXUwa61jkvYI6zMBMgL5cSPV-YfX4_VIHd_QmVdRv0O7p-TALdKsp0AZXA_E&_nc_zt=23&_nc_ht=scontent.fmdc6-1.fna&_nc_gid=E9P-SybLlooEfFvfu-DVvw&_nc_ss=7a389&oh=00_AfwyoduJC5zkAv65mBTRwsy1Pe-R3Q-aHZUkfOWoHkUtNw&oe=69CFFEB1",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
