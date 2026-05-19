@@ -93,6 +93,15 @@
       fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName))
         .then(res => res.json()).then(data => {
           if(data.status === "success") {
+            
+            // 🛡️ SECURITY CHECK: Tendang keluar jika akun di-reset Admin / login di HP lain
+            if (data.db_device_id !== deviceID) {
+              alert("Sesi berakhir! Akun Anda telah di-reset oleh Admin atau digunakan di perangkat lain. Silakan login kembali.");
+              localStorage.clear();
+              location.reload();
+              return; // Hentikan semua proses
+            }
+
             document.getElementById('statHadir').innerText = data.hadir; document.getElementById('statTelat').innerText = data.telat; document.getElementById('statLembur').innerText = data.lembur;
             if(data.pengaturan) { KLINIK_LAT = parseFloat(data.pengaturan.klinik_lat); KLINIK_LNG = parseFloat(data.pengaturan.klinik_lng); MAX_RADIUS = parseInt(data.pengaturan.radius); localStorage.setItem('ikra_lat', KLINIK_LAT); localStorage.setItem('ikra_lng', KLINIK_LNG); localStorage.setItem('ikra_radius', MAX_RADIUS); }
             if (!data.statusHariIni) { localStorage.removeItem('ikra_status_harian'); } else { localStorage.setItem('ikra_status_harian', data.statusHariIni); }
