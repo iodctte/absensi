@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HR Panel - Ikra Dental Care</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Glassmorphism Modern & Responsif */
+    body { 
+      font-family: 'Inter', sans-serif; 
+      /* Mesh Gradient Halus */
+      background: linear-gradient(135deg, #e0f2fe 0%, #ccfbf1 50%, #dbeafe 100%);
+      background-attachment: fixed;
+      color: #1e293b;
+    } 
+    .glass-panel { 
+      background: rgba(255, 255, 255, 0.7); 
+      backdrop-filter: blur(24px); 
+      -webkit-backdrop-filter: blur(24px); 
+      border: 1px solid rgba(255, 255, 255, 0.8); 
+      box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+    } 
+    .glass-input { 
+      background: rgba(255, 255, 255, 0.6); 
+      border: 1px solid rgba(255, 255, 255, 0.9); 
+      transition: all 0.3s ease;
+    } 
+    .glass-input:focus { 
+      background: rgba(255, 255, 255, 1); 
+      outline: none; 
+      box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15); 
+      border-color: #0d9488;
+    }
+    .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.02); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(13, 148, 136, 0.2); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(13, 148, 136, 0.4); }
+  </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+
+  <!-- LAYAR LOGIN ADMIN -->
+  <div id="layarLogin" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 to-teal-900 transition-opacity duration-500">
+    <div class="glass-panel p-8 md:p-10 rounded-[2rem] w-full max-w-sm text-center relative overflow-hidden">
+      <div class="absolute -top-20 -right-20 w-40 h-40 bg-teal-400 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
+      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-50"></div>
+      
+      <div class="relative z-10">
+        <div class="h-20 w-20 bg-gradient-to-tr from-teal-400 to-blue-500 text-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl rotate-3"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Workspace HR</h2>
+        <p class="text-sm text-gray-500 mb-8 font-medium">Ikra Dental Care Admin</p>
+        <input type="password" id="adminPin" placeholder="Masukkan PIN Admin" class="w-full p-4 mb-6 rounded-2xl glass-input text-center font-bold text-xl tracking-widest placeholder-gray-400">
+        <button id="btnLogin" onclick="prosesLoginAdmin()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold hover:bg-teal-700 active:scale-95 transition-all shadow-lg shadow-teal-600/30">Buka Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="layarDashboard" class="hidden flex flex-col h-screen overflow-hidden">
+    <!-- NAVBAR RESPONSIVE -->
+    <nav class="glass-panel mx-4 mt-4 px-4 py-3 md:px-6 md:py-4 rounded-3xl flex flex-col lg:flex-row justify-between items-center gap-4 z-10">
+      <div class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 bg-gradient-to-tr from-teal-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md">I</div>
+          <h1 class="text-xl font-bold text-gray-800 tracking-tight">HR Panel</h1>
+        </div>
+        <button class="lg:hidden p-2 text-gray-600 bg-white/50 rounded-xl" onclick="document.getElementById('menuTabs').classList.toggle('hidden')">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+      </div>
+      
+      <div id="menuTabs" class="hidden lg:flex flex-col lg:flex-row w-full lg:w-auto space-y-2 lg:space-y-0 lg:space-x-2 bg-white/40 p-1.5 rounded-2xl text-sm shadow-inner backdrop-blur-sm">
+        <button onclick="switchTab('karyawan')" id="btnTabKar" class="px-5 py-2.5 w-full lg:w-auto rounded-xl bg-white shadow-sm font-bold text-teal-700 transition-all">👥 Karyawan</button>
+        <button onclick="switchTab('jadwal')" id="btnTabJad" class="px-5 py-2.5 w-full lg:w-auto rounded-xl text-gray-600 hover:text-teal-700 hover:bg-white/50 font-bold transition-all">⏳ Shift</button>
+        <button onclick="switchTab('rekap')" id="btnTabRekap" class="px-5 py-2.5 w-full lg:w-auto rounded-xl text-gray-600 hover:text-teal-700 hover:bg-white/50 font-bold transition-all">📋 Laporan</button>
+        <button onclick="switchTab('pengaturan')" id="btnTabPeng" class="px-5 py-2.5 w-full lg:w-auto rounded-xl text-gray-600 hover:text-teal-700 hover:bg-white/50 font-bold transition-all">⚙️ Setup</button>
+      </div>
+    </nav>
+
+    <!-- KONTEN UTAMA -->
+    <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+      <div class="max-w-7xl mx-auto pb-10">
+        <div id="notifAksi" class="hidden fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-full font-bold shadow-2xl z-[100] transition-all">✔ Berhasil Disimpan!</div>
+
+        <!-- TAB KARYAWAN -->
+        <div id="tabKaryawan" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 glass-panel p-6 rounded-3xl h-fit">
+            <h2 class="text-lg font-bold text-gray-800 mb-5 flex items-center gap-2"><span class="p-1.5 bg-teal-100 text-teal-600 rounded-lg">➕</span> Akun Baru</h2>
+            <form onsubmit="tambahKaryawan(event)" class="space-y-4">
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-2 tracking-wider">Nama Lengkap</label><input type="text" id="inputNama" required class="w-full mt-1.5 p-3.5 rounded-2xl glass-input"></div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-2 tracking-wider">Username</label><input type="text" id="inputUser" required class="w-full mt-1.5 p-3.5 rounded-2xl glass-input"></div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-2 tracking-wider">Password</label><input type="text" id="inputPass" required class="w-full mt-1.5 p-3.5 rounded-2xl glass-input"></div>
+              <button type="submit" class="w-full bg-teal-600 text-white p-3.5 mt-2 rounded-2xl font-bold hover:bg-teal-700 shadow-lg shadow-teal-600/30 active:scale-95 transition-all">Simpan Akun</button>
+            </form>
+          </div>
+          <div class="lg:col-span-2 glass-panel p-0 rounded-3xl overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-white/40"><h2 class="text-lg font-bold text-gray-800">Daftar Karyawan</h2></div>
+            <div class="overflow-x-auto p-2 custom-scrollbar">
+              <table class="w-full text-left whitespace-nowrap"><thead class="text-gray-500 text-xs uppercase tracking-wider bg-white/30"><tr><th class="p-4 rounded-l-xl">Karyawan</th><th class="p-4">Akses Login</th><th class="p-4 text-right rounded-r-xl">Aksi</th></tr></thead><tbody id="tabelKaryawan" class="divide-y divide-white/40 font-medium"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB JADWAL -->
+        <div id="tabJadwal" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 glass-panel p-6 rounded-3xl h-fit">
+            <h2 class="text-lg font-bold text-gray-800 mb-5 flex items-center gap-2"><span class="p-1.5 bg-blue-100 text-blue-600 rounded-lg">⏳</span> Buat Shift</h2>
+            <form onsubmit="tambahJadwalBulk(event)" class="space-y-4">
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-2 tracking-wider">Untuk Siapa?</label><select id="inputTargetKar" class="w-full mt-1.5 p-3.5 rounded-2xl glass-input font-bold text-teal-800"><option value="Semua">Semua Karyawan</option></select></div>
+              <div>
+                <label class="text-xs text-gray-500 font-bold uppercase ml-2 tracking-wider">Hari Rutin</label>
+                <div class="grid grid-cols-2 gap-2 text-sm mt-1.5">
+                  <label class="flex items-center gap-2 glass-input p-2.5 rounded-xl cursor-pointer hover:bg-white/80 transition-colors"><input type="checkbox" value="Senin" class="hari-chk w-4 h-4 text-teal-600 rounded">Senin</label><label class="flex items-center gap-2 glass-input p-2.5 rounded-xl cursor-pointer hover:bg-white/80 transition-colors"><input type="checkbox" value="Selasa" class="hari-chk w-4 h-4 text-teal-600 rounded">Selasa</label><label class="flex items-center gap-2 glass-input p-2.5 rounded-xl cursor-pointer hover:bg-white/80 transition-colors"><input type="checkbox" value="Rabu" class="hari-chk w-4 h-4 text-teal-600 rounded">Rabu</label><label class="flex items-center gap-2 glass-input p-2.5 rounded-xl cursor-pointer hover:bg-white/80 transition-colors"><input type="checkbox" value="Kamis" class="hari-chk w-4 h-4 text-teal-600 rounded">Kamis</label><label class="flex items-center gap-2 glass-input p-2.5 rounded-xl cursor-pointer hover:bg-white/80 transition-colors"><input type="checkbox" value="Jumat" class="hari-chk w-4 h-4 text-teal-600 rounded">Jumat</label><label class="flex items-center gap-2 glass-input p-2.5 rounded-xl cursor-pointer hover:bg-white/80 transition-colors"><input type="checkbox" value="Sabtu" class="hari-chk w-4 h-4 text-teal-600 rounded">Sabtu</label><label class="flex items-center gap-2 glass-input p-2.5 rounded-xl cursor-pointer hover:bg-white/80 transition-colors col-span-2"><input type="checkbox" value="Minggu" class="hari-chk w-4 h-4 text-teal-600 rounded">Minggu</label>
+                </div>
+              </div>
+              <div class="relative flex py-2 items-center"><div class="flex-grow border-t border-gray-300/50"></div><span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold uppercase">ATAU</span><div class="flex-grow border-t border-gray-300/50"></div></div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-2 tracking-wider">Tgl Spesifik (Opsional)</label><input type="date" id="inputTglSpesifik" class="w-full mt-1.5 p-3.5 rounded-2xl glass-input font-bold text-teal-800"></div>
+              
+              <div class="grid grid-cols-2 gap-4 pt-2"><div><label class="text-xs text-gray-500 font-bold uppercase ml-2">Jam Masuk</label><input type="time" id="inputJamMasuk" required class="w-full mt-1.5 p-3 rounded-2xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold uppercase ml-2">Jam Pulang</label><input type="time" id="inputJamPulang" required class="w-full mt-1.5 p-3 rounded-2xl glass-input"></div></div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-2">Toleransi Telat (Menit)</label><input type="number" id="inputToleransi" value="15" required class="w-full mt-1.5 p-3 rounded-2xl glass-input"></div>
+              <button type="submit" class="w-full bg-blue-600 text-white p-3.5 mt-2 rounded-2xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-600/30 active:scale-95 transition-all">Terapkan Jadwal</button>
+            </form>
+          </div>
+          <div class="lg:col-span-2 glass-panel p-0 rounded-3xl overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-white/40"><h2 class="text-lg font-bold text-gray-800">Daftar Jadwal Aktif</h2></div>
+            <div class="overflow-x-auto p-2 custom-scrollbar"><table class="w-full text-left whitespace-nowrap"><thead class="text-gray-500 text-xs uppercase tracking-wider bg-white/30"><tr><th class="p-4 rounded-l-xl">Hari/Tgl</th><th class="p-4">Target Karyawan</th><th class="p-4">Shift & Toleransi</th><th class="p-4 text-right rounded-r-xl">Aksi</th></tr></thead><tbody id="tabelJadwal" class="divide-y divide-white/40 font-medium"></tbody></table></div>
+          </div>
+        </div>
+
+        <!-- TAB REKAP (SUPER LENGKAP + BULK VETO) -->
+        <div id="tabRekap" class="hidden flex flex-col gap-6">
+          <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+              <h2 class="text-xl font-bold text-gray-800 flex items-center justify-center md:justify-start gap-2"><span class="p-1.5 bg-orange-100 text-orange-600 rounded-lg">📋</span> Monitor Absensi</h2>
+              <p class="text-xs text-gray-500 mt-1 font-medium">Laporan performa harian & verifikasi foto.</p>
+            </div>
+            <form onsubmit="tarikRekap(event)" class="flex flex-col sm:flex-row gap-3 w-full md:w-auto bg-white/40 p-2 rounded-2xl shadow-inner">
+              <div class="flex-1"><label class="text-[10px] text-gray-500 font-bold uppercase ml-2">Dari</label><input type="date" id="tglAwal" required class="w-full p-2.5 rounded-xl glass-input text-sm font-bold text-teal-800"></div>
+              <div class="flex-1"><label class="text-[10px] text-gray-500 font-bold uppercase ml-2">Sampai</label><input type="date" id="tglAkhir" required class="w-full p-2.5 rounded-xl glass-input text-sm font-bold text-teal-800"></div>
+              <button type="submit" id="btnTarik" class="sm:self-end bg-gray-800 text-white p-2.5 px-6 rounded-xl font-bold hover:bg-gray-700 shadow-lg active:scale-95 transition-all">Filter</button>
+            </form>
+          </div>
+          
+          <div class="glass-panel p-0 rounded-3xl overflow-hidden">
+            <div class="p-5 border-b border-white/40 bg-white/30"><h3 class="font-bold text-gray-800 text-lg">📊 Rapor Total (Summary)</h3></div>
+            <div class="overflow-x-auto p-2 custom-scrollbar">
+              <table class="w-full text-left whitespace-nowrap">
+                <thead class="text-gray-500 text-xs uppercase tracking-wider bg-white/40"><tr><th class="p-4 rounded-l-xl">Nama Karyawan</th><th class="p-4 text-center">Total Hadir</th><th class="p-4 text-center">Total Telat</th><th class="p-4 text-right rounded-r-xl">Total Lembur</th></tr></thead>
+                <tbody id="tabelSummary" class="divide-y divide-white/40 font-medium text-sm"><tr><td colspan="4" class="p-8 text-center text-gray-500">Memuat data...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TABEL DETAIL & BULK ACTION -->
+          <div class="glass-panel p-0 rounded-3xl overflow-hidden relative">
+            <div class="p-5 border-b border-white/40 bg-white/30 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <h3 class="font-bold text-gray-800 text-lg">📅 Rincian Harian & Koreksi</h3>
+              <button onclick="tolakLemburBulk()" id="btnBulkLembur" class="w-full sm:w-auto bg-red-100 hover:bg-red-200 text-red-600 border border-red-200 px-4 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Tolak Lembur Terpilih
+              </button>
+            </div>
+            <div class="overflow-x-auto p-2 custom-scrollbar">
+              <table class="w-full text-left whitespace-nowrap">
+                <thead class="text-gray-500 text-xs uppercase tracking-wider bg-white/40">
+                  <tr>
+                    <th class="p-4 text-center rounded-l-xl w-10"><input type="checkbox" id="chkAllLembur" onclick="toggleAllLembur(this)" class="w-4 h-4 text-teal-600 rounded border-gray-300"></th>
+                    <th class="p-4">Tanggal</th>
+                    <th class="p-4">Nama</th>
+                    <th class="p-4 text-center">Jam Masuk</th>
+                    <th class="p-4 text-center">Jam Pulang</th>
+                    <th class="p-4 text-center">Status</th>
+                    <th class="p-4 text-right rounded-r-xl">Lembur</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelDetail" class="divide-y divide-white/40 font-medium text-sm"><tr><td colspan="7" class="p-8 text-center text-gray-500">Memuat data...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PENGATURAN -->
+        <div id="tabPengaturan" class="hidden">
+          <div class="glass-panel p-8 md:p-10 rounded-3xl max-w-2xl mx-auto text-center">
+            <div class="h-16 w-16 bg-gradient-to-br from-teal-100 to-blue-100 text-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>
+            <h2 class="text-xl font-bold text-gray-800 mb-2">Pusat Lokasi GPS</h2>
+            <p class="text-sm text-gray-500 mb-8">Kunci radius presisi untuk absensi karyawan.</p>
+            <form onsubmit="simpanPengaturan(event)" class="space-y-6 text-left">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label class="text-xs text-gray-500 font-bold uppercase ml-2 tracking-wider">Latitude (Lintang)</label><input type="text" id="setLat" required class="w-full mt-1.5 p-4 rounded-2xl glass-input font-mono text-teal-800 bg-white/50"></div><div><label class="text-xs text-gray-500 font-bold uppercase ml-2 tracking-wider">Longitude (Bujur)</label><input type="text" id="setLng" required class="w-full mt-1.5 p-4 rounded-2xl glass-input font-mono text-teal-800 bg-white/50"></div></div>
+              <div><label class="text-xs text-gray-500 font-bold uppercase ml-2 tracking-wider">Radius Toleransi Jarak (Meter)</label><input type="number" id="setRadius" required class="w-full mt-1.5 p-4 rounded-2xl glass-input font-bold text-teal-800 text-xl bg-white/50"></div>
+              <button type="submit" id="btnSimpanPengaturan" class="w-full bg-gray-800 text-white p-4 rounded-2xl font-bold text-lg hover:bg-gray-900 shadow-xl active:scale-95 transition-all mt-6">Simpan Kordinat</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SEMUA MODAL POP-UP DI BAWAH SINI -->
+
+  <!-- Modal Edit Karyawan/Jadwal -->
+  <div id="modalEdit" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity">
+    <div class="glass-panel p-6 rounded-3xl w-full max-w-sm">
+      <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2" id="judulModalEdit">✏️ Edit Data</h3>
+      
+      <div id="formEditKar" class="hidden space-y-4"><input type="hidden" id="editIdKar"><div><label class="text-xs text-gray-500 font-bold ml-1">Nama</label><input type="text" id="editNamaKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold ml-1">Username</label><input type="text" id="editUserKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold ml-1">Password</label><input type="text" id="editPassKar" class="w-full mt-1 p-3 rounded-xl glass-input"></div></div>
+      
+      <div id="formEditJad" class="hidden space-y-4"><input type="hidden" id="editIdJad"><p class="text-sm font-bold text-teal-700 mb-2 bg-teal-50 p-2 rounded-lg text-center border border-teal-100" id="infoEditJad"></p><div><label class="text-xs text-gray-500 font-bold ml-1">Target Karyawan</label><select id="editTargetKar" class="w-full mt-1 p-3 rounded-xl glass-input font-bold text-teal-800"></select></div><div class="grid grid-cols-2 gap-3 mt-2"><div><label class="text-xs text-gray-500 font-bold ml-1">Jam Masuk</label><input type="time" id="editJamMsk" class="w-full mt-1 p-2.5 rounded-xl glass-input"></div><div><label class="text-xs text-gray-500 font-bold ml-1">Jam Pulang</label><input type="time" id="editJamPlg" class="w-full mt-1 p-2.5 rounded-xl glass-input"></div></div><div><label class="text-xs text-gray-500 font-bold ml-1">Toleransi (Menit)</label><input type="number" id="editToleransi" class="w-full mt-1 p-3 rounded-xl glass-input"></div></div>
+      
+      <div class="flex gap-3 mt-6"><button onclick="tutupModalEdit()" class="w-1/2 bg-white/80 text-gray-600 p-3.5 rounded-xl font-bold border border-white hover:bg-white transition-colors">Batal</button><button onclick="simpanEdit()" id="btnSimpanEdit" class="w-1/2 bg-teal-600 text-white p-3.5 rounded-xl font-bold hover:bg-teal-700 shadow-lg">Update</button></div>
+    </div>
+  </div>
+
+  <!-- Modal Edit/Veto Log Absen Individual -->
+  <div id="modalEditLog" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity">
+    <div class="glass-panel p-6 rounded-3xl w-full max-w-sm">
+      <h3 class="text-xl font-bold text-gray-800 mb-2">Koreksi Absen Manual</h3>
+      <p id="teksInfoLog" class="text-sm font-bold text-teal-700 mb-5 bg-white/50 p-2 rounded-lg text-center border border-white"></p>
+      <input type="hidden" id="editLogTgl"><input type="hidden" id="editLogNama">
+      <div class="space-y-4">
+        <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Jam Pulang <span class="normal-case font-normal">(Isi jika lupa)</span></label><input type="time" id="editLogPlg" class="w-full mt-1.5 p-3 rounded-xl glass-input font-bold text-gray-800"></div>
+        <div><label class="text-xs text-gray-500 font-bold uppercase ml-1">Jam Lembur <span class="normal-case font-normal text-red-500">(Veto)</span></label><select id="editLogLbr" class="w-full mt-1.5 p-3 rounded-xl glass-input font-bold text-orange-600"><option value="-">Tidak Ada Lembur (-)</option><option value="1 Jam">1 Jam</option><option value="2 Jam">2 Jam</option><option value="3 Jam">3 Jam</option><option value="4 Jam">4 Jam</option><option value="5 Jam">5 Jam</option></select></div>
+      </div>
+      <div class="flex gap-3 mt-8"><button onclick="document.getElementById('modalEditLog').classList.add('hidden')" class="w-1/2 bg-white/80 text-gray-600 p-3 rounded-xl font-bold border border-white">Batal</button><button onclick="simpanEditLog()" id="btnSimpanEditLog" class="w-1/2 bg-teal-600 text-white p-3 rounded-xl font-bold hover:bg-teal-700 shadow-md">Simpan</button></div>
+    </div>
+  </div>
+
+  <!-- Modal Lihat Foto -->
+  <div id="modalFoto" class="hidden fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md transition-opacity">
+    <div class="relative w-full max-w-md flex flex-col items-center">
+      <button onclick="tutupFoto()" class="absolute -top-14 right-0 bg-white/10 hover:bg-white/30 text-white rounded-full p-2.5 backdrop-blur-sm transition-colors border border-white/20"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+      <div class="w-full bg-gray-900 rounded-3xl shadow-2xl overflow-hidden flex items-center justify-center min-h-[400px] md:min-h-[500px] relative border border-white/10">
+        <p id="teksLoadingFoto" class="absolute text-teal-400 font-bold animate-pulse z-0">Mengambil foto dari satelit...</p>
+        <iframe id="frameFotoView" src="" class="w-full h-[450px] md:h-[550px] border-0 relative z-10" onload="document.getElementById('teksLoadingFoto').style.display='none'"></iframe>
+      </div>
+      <a id="linkBukaLuar" href="" target="_blank" class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3.5 rounded-2xl font-bold shadow-xl active:scale-95 transition-all flex items-center gap-2 border border-blue-500/50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>Buka di Tab Layar Penuh</a>
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx9XwhDjYmI9FBU49p715VdzZ_RhNa5lMsxj3NKl3mjXc5WdeK6fQME2anA7XwmfMqN/exec"; // ⚠️ WAJIB DIISI!
+    const PIN_ADMIN = "123456";
+    let tipeEditAktif = "";
+
+    async function prosesLoginAdmin() { if (document.getElementById('adminPin').value !== PIN_ADMIN) return alert("PIN Salah!"); let btn = document.getElementById('btnLogin'); btn.innerHTML = `Membuka Enkripsi...`; btn.disabled = true; await loadData(); document.getElementById('layarLogin').style.opacity = '0'; setTimeout(() => { document.getElementById('layarLogin').classList.add('hidden'); document.getElementById('layarDashboard').classList.remove('hidden'); }, 500); }
+
+    function switchTab(tab) {
+      ['tabKaryawan', 'tabJadwal', 'tabRekap', 'tabPengaturan'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      ['btnTabKar', 'btnTabJad', 'btnTabRekap', 'btnTabPeng'].forEach(id => document.getElementById(id).className = "px-5 py-2.5 w-full lg:w-auto rounded-xl text-gray-600 hover:text-teal-700 hover:bg-white/50 font-bold transition-all");
+      
+      let tabMap = { 'karyawan': { t: 'tabKaryawan', b: 'btnTabKar' }, 'jadwal': { t: 'tabJadwal', b: 'btnTabJad' }, 'rekap': { t: 'tabRekap', b: 'btnTabRekap' }, 'pengaturan': { t: 'tabPengaturan', b: 'btnTabPeng' } };
+      document.getElementById(tabMap[tab].t).classList.remove('hidden');
+      document.getElementById(tabMap[tab].b).classList.add('bg-white', 'text-teal-700', 'shadow-sm');
+      
+      if(window.innerWidth < 1024) document.getElementById('menuTabs').classList.add('hidden'); // Tutup menu mobile otomatis
+    }
+
+    async function loadData() {
+      try {
+        let response = await fetch(GAS_URL + "?action=get_data"); let result = await response.json();
+        if(result.pengaturan) { document.getElementById('setLat').value = result.pengaturan.klinik_lat || ''; document.getElementById('setLng').value = result.pengaturan.klinik_lng || ''; document.getElementById('setRadius').value = result.pengaturan.radius || '50'; }
+        
+        let htmlKar = ""; let dropdown = `<option value="Semua">Semua Karyawan (Umum)</option>`;
+        if(result.karyawan) result.karyawan.forEach(row => { 
+          htmlKar += `<tr class="hover:bg-white/60 transition-colors border-b border-white/20 last:border-0"><td class="p-4 flex items-center gap-3"><div class="h-9 w-9 rounded-xl bg-gradient-to-br from-teal-400 to-blue-500 text-white shadow-sm flex items-center justify-center font-bold text-sm">${row[0].charAt(0)}</div><span class="font-bold text-gray-800">${row[0]}</span></td><td class="p-4"><span class="bg-white/60 px-2.5 py-1 rounded-lg text-xs font-bold border border-white/80 text-gray-600">@${row[1]}</span></td><td class="p-4 text-right space-x-1 sm:space-x-2"><button onclick="resetHP('${row[5]}', '${row[0]}')" class="text-orange-500 bg-orange-50/80 px-2 sm:px-3 py-1.5 rounded-lg font-bold hover:bg-orange-100 transition-colors text-xs sm:text-sm border border-orange-100" title="Buka Kunci HP">📱 Reset</button><button onclick="bukaEditKar('${row[5]}', '${row[0]}', '${row[1]}', '${row[2]}')" class="text-blue-500 bg-blue-50/80 px-2 sm:px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-xs sm:text-sm border border-blue-100">Edit</button><button onclick="hapusKaryawan('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50/80 px-2 sm:px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-xs sm:text-sm border border-red-100">Hapus</button></td></tr>`; 
+          dropdown += `<option value="${row[0]}">Khusus: ${row[0]}</option>`; 
+        });
+        document.getElementById('tabelKaryawan').innerHTML = htmlKar || '<tr><td colspan="3" class="p-6 text-center text-gray-400">Belum ada data</td></tr>'; 
+        document.getElementById('inputTargetKar').innerHTML = dropdown; document.getElementById('editTargetKar').innerHTML = dropdown;
+
+        let htmlJad = "";
+        if(result.jadwal) result.jadwal.forEach(row => { 
+          let badge = row[4] === 'Semua' ? `<span class="bg-teal-50 text-teal-700 border border-teal-200 text-[10px] sm:text-xs px-2 py-1 rounded-lg font-bold">Semua</span>` : `<span class="bg-purple-50 text-purple-700 border border-purple-200 text-[10px] sm:text-xs px-2 py-1 rounded-lg font-bold">👤 ${row[4]}</span>`; 
+          htmlJad += `<tr class="hover:bg-white/60 transition-colors border-b border-white/20 last:border-0"><td class="p-4 font-bold text-gray-800">${row[0]}</td><td class="p-4">${badge}</td><td class="p-4"><span class="font-bold text-gray-800 bg-white/50 px-2 py-1 rounded-md text-sm border border-white">${row[1]} - ${row[3]}</span> <div class="text-[10px] text-red-500 font-bold mt-1 ml-1">Telat > ${row[2]}m</div></td><td class="p-4 text-right space-x-1 sm:space-x-2"><button onclick="bukaEditJad('${row[5]}', '${row[0]}', '${row[4]}', '${row[1]}', '${row[3]}', '${row[2]}')" class="text-blue-500 bg-blue-50/80 px-2 sm:px-3 py-1.5 rounded-lg font-bold hover:bg-blue-100 transition-colors text-xs sm:text-sm border border-blue-100">Edit</button><button onclick="hapusJadwal('${row[5]}', '${row[0]}')" class="text-red-500 bg-red-50/80 px-2 sm:px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 transition-colors text-xs sm:text-sm border border-red-100">Hapus</button></td></tr>`; 
+        });
+        document.getElementById('tabelJadwal').innerHTML = htmlJad || '<tr><td colspan="4" class="p-6 text-center text-gray-400">Belum ada jadwal</td></tr>';
+        
+        let now = new Date(); let yyyy = now.getFullYear(); let mm = String(now.getMonth() + 1).padStart(2, '0'); let dd = String(now.getDate()).padStart(2, '0'); let todayStr = `${yyyy}-${mm}-${dd}`;
+        document.getElementById('tglAwal').value = todayStr; document.getElementById('tglAkhir').value = todayStr; tarikRekap();
+      } catch (error) { alert("Gagal memuat database."); }
+    }
+
+    async function kirimDataPOST(payload) { try { let response = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); let result = JSON.parse(await response.text()); if (result.status === "success") { tampilNotif(); loadData(); } else alert("Error: " + result.pesan); } catch (error) { alert("Koneksi gagal."); } }
+    function tampilNotif() { let n = document.getElementById('notifAksi'); n.classList.remove('hidden', '-translate-y-20'); n.classList.add('translate-y-0'); setTimeout(() => { n.classList.add('hidden'); }, 2500); }
+
+    function simpanPengaturan(e) { e.preventDefault(); let btn = document.getElementById('btnSimpanPengaturan'); btn.innerText = "Menyimpan..."; kirimDataPOST({ action: "simpan_pengaturan", lat: document.getElementById('setLat').value, lng: document.getElementById('setLng').value, radius: document.getElementById('setRadius').value }); setTimeout(() => { btn.innerText = "Simpan Kordinat"; }, 1500); }
+    function tambahKaryawan(e) { e.preventDefault(); kirimDataPOST({ action: "tambah_karyawan", nama: document.getElementById('inputNama').value, username: document.getElementById('inputUser').value, password: document.getElementById('inputPass').value }); e.target.reset(); }
+    function tambahJadwalBulk(e) { e.preventDefault(); let hr = Array.from(document.querySelectorAll('.hari-chk:checked')).map(cb => cb.value); let tsRaw = document.getElementById('inputTglSpesifik').value; if(tsRaw) { let p=tsRaw.split('-'); hr.push(p[2]+'/'+p[1]+'/'+p[0]); } if(hr.length===0) return alert("Pilih minimal 1 Hari atau isi Tanggal Spesifik!"); let m=document.getElementById('inputJamMasuk').value; if(m.length>5) m=m.substring(0,5); let p=document.getElementById('inputJamPulang').value; if(p.length>5) p=p.substring(0,5); kirimDataPOST({ action: "tambah_jadwal_bulk", hariArray: hr, jamMasuk: m, toleransi: document.getElementById('inputToleransi').value, jamPulang: p, targetKaryawan: document.getElementById('inputTargetKar').value }); document.querySelectorAll('.hari-chk').forEach(cb=>cb.checked=false); document.getElementById('inputTglSpesifik').value=""; }
+    
+    function resetHP(id, nm) { if(confirm(`Buka kunci HP untuk ${nm}?`)) kirimDataPOST({ action: 'reset_device', id: id }); }
+    function hapusKaryawan(id, nm) { if(confirm(`Hapus permanen akun ${nm}?`)) kirimDataPOST({ action: 'hapus_karyawan', id: id }); }
+    function hapusJadwal(id, hr) { if(confirm(`Hapus jadwal shift ${hr}?`)) kirimDataPOST({ action: 'hapus_jadwal', idJadwal: id }); }
+
+    function bukaEditKar(id, nm, us, ps) { tipeEditAktif = "karyawan"; document.getElementById('judulModalEdit').innerText = "✏️ Update Karyawan"; document.getElementById('formEditKar').classList.remove('hidden'); document.getElementById('formEditJad').classList.add('hidden'); document.getElementById('editIdKar').value = id; document.getElementById('editNamaKar').value = nm; document.getElementById('editUserKar').value = us; document.getElementById('editPassKar').value = ps; document.getElementById('modalEdit').classList.remove('hidden'); }
+    function bukaEditJad(id, hr, tg, ms, pl, to) { tipeEditAktif = "jadwal"; document.getElementById('judulModalEdit').innerText = "✏️ Update Shift"; document.getElementById('formEditKar').classList.add('hidden'); document.getElementById('formEditJad').classList.remove('hidden'); document.getElementById('infoEditJad').innerText = `Target Ubah: ${hr}`; document.getElementById('editIdJad').value = id; document.getElementById('editTargetKar').value = tg; document.getElementById('editJamMsk').value = ms; document.getElementById('editJamPlg').value = pl; document.getElementById('editToleransi').value = to; document.getElementById('modalEdit').classList.remove('hidden'); }
+    function tutupModalEdit() { document.getElementById('modalEdit').classList.add('hidden'); }
+    function simpanEdit() { let btn = document.getElementById('btnSimpanEdit'); btn.innerText = "Memproses..."; btn.disabled = true; if (tipeEditAktif === "karyawan") kirimDataPOST({ action: "edit_karyawan", id: document.getElementById('editIdKar').value, nama: document.getElementById('editNamaKar').value, username: document.getElementById('editUserKar').value, password: document.getElementById('editPassKar').value }); else kirimDataPOST({ action: "edit_jadwal", id: document.getElementById('editIdJad').value, targetKaryawan: document.getElementById('editTargetKar').value, jamMasuk: document.getElementById('editJamMsk').value, jamPulang: document.getElementById('editJamPlg').value, toleransi: document.getElementById('editToleransi').value }); setTimeout(() => { tutupModalEdit(); btn.innerText = "Update"; btn.disabled = false; }, 1000); }
+
+    // Edit Log Individual (Veto)
+    function bukaEditLog(tgl, nm, plg, lbr) { document.getElementById('teksInfoLog').innerText = `${nm}  (${tgl})`; document.getElementById('editLogTgl').value = tgl; document.getElementById('editLogNama').value = nm; document.getElementById('editLogPlg').value = (plg !== '-') ? plg : ''; let dropdownLbr = document.getElementById('editLogLbr'); let opsiDitemukan = false; for (let i = 0; i < dropdownLbr.options.length; i++) { if (dropdownLbr.options[i].value === lbr) { dropdownLbr.selectedIndex = i; opsiDitemukan = true; break; } } if (!opsiDitemukan) dropdownLbr.value = "-"; document.getElementById('modalEditLog').classList.remove('hidden'); }
+    function simpanEditLog() { let btn = document.getElementById('btnSimpanEditLog'); btn.innerText = "Memproses..."; btn.disabled = true; let jamPlg = document.getElementById('editLogPlg').value || "-"; let jamLbr = document.getElementById('editLogLbr').value; kirimDataPOST({ action: "edit_log", tanggal: document.getElementById('editLogTgl').value, nama: document.getElementById('editLogNama').value, jamPulang: jamPlg, jamLembur: jamLbr }); setTimeout(() => { document.getElementById('modalEditLog').classList.add('hidden'); btn.innerText = "Simpan"; btn.disabled = false; tarikRekap(); }, 1500); }
+
+    // Fitur Buka Foto
+    function lihatFoto(url) { if(!url) return; document.getElementById('teksLoadingFoto').style.display = 'block'; let frame = document.getElementById('frameFotoView'); let linkLuar = document.getElementById('linkBukaLuar'); linkLuar.href = url; let fileId = url.match(/[-\w]{25,}/); if (fileId && fileId[0]) { frame.src = "https://drive.google.com/file/d/" + fileId[0] + "/preview"; } else { frame.src = url; } document.getElementById('modalFoto').classList.remove('hidden'); }
+    function tutupFoto() { document.getElementById('modalFoto').classList.add('hidden'); document.getElementById('frameFotoView').src = ""; }
+
+    // 🚀 FITUR BARU: BULK VETO (Tolak Lembur Massal)
+    function toggleAllLembur(source) { let chks = document.querySelectorAll('.chk-lembur'); chks.forEach(chk => chk.checked = source.checked); }
+    
+    async function tolakLemburBulk() {
+      let chks = document.querySelectorAll('.chk-lembur:checked');
+      if(chks.length === 0) return alert("Pilih minimal 1 data absen dari tabel Rincian!");
+      if(!confirm(`Yakin ingin meng-nol-kan lembur untuk ${chks.length} data terpilih?`)) return;
+
+      let btn = document.getElementById('btnBulkLembur');
+      let oriText = btn.innerHTML;
+      btn.disabled = true;
+
+      let sukses = 0;
+      for (let i = 0; i < chks.length; i++) {
+        btn.innerHTML = `Memproses ${i+1} dari ${chks.length}...`;
+        let chk = chks[i];
+        let payload = { action: "edit_log", tanggal: chk.dataset.tgl, nama: chk.dataset.nm, jamPulang: chk.dataset.plg !== '-' ? chk.dataset.plg : "", jamLembur: "-" };
+        try { await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); sukses++; } catch(e) { console.log(e); }
+      }
+      
+      btn.innerHTML = oriText; btn.disabled = false;
+      document.getElementById('chkAllLembur').checked = false;
+      alert(`Berhasil! ${sukses} data lembur telah hangus.`);
+      tarikRekap(); // Refresh data
+    }
+
+    async function tarikRekap(e) { 
+      if(e) e.preventDefault(); 
+      let btn = document.getElementById('btnTarik'); 
+      btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`; 
+      btn.disabled = true; 
+      
+      let payload = { action: "get_rekap", tglAwal: document.getElementById('tglAwal').value, tglAkhir: document.getElementById('tglAkhir').value }; 
+      try { 
+        let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); 
+        let hasil = JSON.parse(await respon.text()); 
+        
+        let htmlSummary = "";
+        if(hasil.rekap && hasil.rekap.length > 0) {
+          hasil.rekap.forEach(r => { htmlSummary += `<tr class="hover:bg-white/60 transition-colors border-b border-white/20 last:border-0"><td class="p-4 font-bold text-gray-800">${r.nama}</td><td class="p-4 text-center"><span class="bg-teal-50 text-teal-700 px-3 py-1.5 rounded-lg font-bold border border-teal-100 shadow-sm">${r.hadir} Hari</span></td><td class="p-4 text-center"><span class="bg-red-50 text-red-500 px-3 py-1.5 rounded-lg font-bold border border-red-100 shadow-sm">${r.telat} Kali</span></td><td class="p-4 text-right"><span class="bg-orange-50 text-orange-600 px-3 py-1.5 rounded-lg font-bold border border-orange-100 shadow-sm">${r.lembur}</span></td></tr>`; });
+        }
+        document.getElementById('tabelSummary').innerHTML = htmlSummary || '<tr><td colspan="4" class="p-8 text-center text-gray-500 font-medium">Tidak ada aktivitas absensi.</td></tr>';
+
+        let htmlDetail = ""; 
+        if(hasil.detail && hasil.detail.length > 0) { 
+          hasil.detail.forEach(r => { 
+            let linkMsk = r.foto_masuk ? `<br><button onclick="lihatFoto('${r.foto_masuk}')" class="text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-500 px-2.5 py-1 mt-1.5 rounded-md text-[10px] font-bold border border-blue-200 hover:border-blue-500 transition-colors shadow-sm">📸 Cek Selfie</button>` : '';
+            let linkPlg = r.foto_pulang ? `<br><button onclick="lihatFoto('${r.foto_pulang}')" class="text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-500 px-2.5 py-1 mt-1.5 rounded-md text-[10px] font-bold border border-blue-200 hover:border-blue-500 transition-colors shadow-sm">📸 Cek Selfie</button>` : '';
+            let badgeStatus = r.status.includes("Terlambat") ? `<span class="bg-red-50 text-red-600 px-2.5 py-1 rounded-md text-[10px] font-bold border border-red-100">${r.status}</span>` : `<span class="bg-teal-50 text-teal-700 px-2.5 py-1 rounded-md text-[10px] font-bold border border-teal-100">${r.status}</span>`;
+            let txtLembur = r.lembur !== '-' ? `<span class="font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded border border-orange-100">${r.lembur}</span>` : '-';
+            
+            // Checkbox untuk fitur Bulk Action (disimpan data mentah di atribut dataset)
+            let chkBox = `<input type="checkbox" class="chk-lembur w-4 h-4 text-teal-600 rounded border-gray-300" data-tgl="${r.tanggal}" data-nm="${r.nama}" data-plg="${r.jam_pulang}">`;
+            let btnEdit = `<button onclick="bukaEditLog('${r.tanggal}', '${r.nama}', '${r.jam_pulang}', '${r.lembur}')" class="ml-2 text-[10px] bg-white/60 hover:bg-white px-2 py-1 rounded-md text-gray-600 border border-white shadow-sm transition-colors font-bold">✏️ Edit</button>`;
+
+            htmlDetail += `<tr class="hover:bg-white/60 transition-colors border-b border-white/20 last:border-0">
+              <td class="p-4 text-center">${chkBox}</td>
+              <td class="p-4 text-gray-500 font-bold">${r.tanggal}</td>
+              <td class="p-4 font-bold text-gray-800">${r.nama} ${btnEdit}</td>
+              <td class="p-4 text-center font-bold text-gray-700">${r.jam_masuk} ${linkMsk}</td>
+              <td class="p-4 text-center font-bold text-gray-700">${r.jam_pulang} ${linkPlg}</td>
+              <td class="p-4 text-center">${badgeStatus}</td>
+              <td class="p-4 text-right">${txtLembur}</td>
+            </tr>`; 
+          }); 
+        } 
+        document.getElementById('tabelDetail').innerHTML = htmlDetail || '<tr><td colspan="7" class="p-8 text-center text-gray-500 font-medium">Tidak ada rincian absensi.</td></tr>'; 
+
+      } catch(err) { alert("Gagal mengambil data laporan."); } 
+      btn.innerText = "Filter"; btn.disabled = false; 
+    }
+  </script>
+</body>
+</html>
