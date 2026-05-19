@@ -144,7 +144,55 @@
     function prosesAntrian() { if (!navigator.onLine) return; let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || []; if (antrian.length === 0) return; fetch(GAS_URL, { redirect:"follow", method:'POST', body: JSON.stringify(antrian[0]) }).then(res=>res.json()).then(res=>{ if(res.status==="success"||res.status==="error"){ antrian.shift(); localStorage.setItem('antrianIkra', JSON.stringify(antrian)); if(antrian.length>0) prosesAntrian(); else muatStatistik(); } }); }
     function bukaKamera(t) { tipeAbsenAktif = t; document.getElementById('judulKamera').innerText = "Clock " + t; document.getElementById('overlayKamera').classList.remove('hidden'); navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}, audio:false}).then(s=>{streamAktif=s;video.srcObject=s;}); }
     function tutupKamera() { if(streamAktif) streamAktif.getTracks().forEach(t=>t.stop()); document.getElementById('overlayKamera').classList.add('hidden'); }
-    function prosesLogin() { let u=document.getElementById('inUsername').value, p=document.getElementById('inPassword').value; if(!u||!p) return; fetch(GAS_URL, {redirect:"follow", method:'POST', body:JSON.stringify({action:"login", username:u, password:p, deviceID:deviceID})}).then(r=>r.json()).then(r=>{ if(r.status==="success"){ localStorage.setItem('ikra_name', r.nama); location.reload(); }else{ alert(r.pesan); } }); }
+    function prosesLogin() {
+  let btn = document.getElementById('btnLogin');
+  let u = document.getElementById('inUsername').value;
+  let p = document.getElementById('inPassword').value;
+
+  if (!u || !p) return alert("Username dan Password wajib diisi!");
+
+  // --- Mulai Animasi Loading ---
+  btn.disabled = true; // Matikan tombol agar tidak bisa diklik berulang kali
+  btn.innerHTML = `
+    <svg class="animate-spin h-5 w-5 text-white inline mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg> Memproses...
+  `;
+  btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+  // --- Kirim Data ke Server ---
+  fetch(GAS_URL, { 
+    redirect: "follow", 
+    method: 'POST', 
+    body: JSON.stringify({
+      action: "login", 
+      username: u, 
+      password: p, 
+      deviceID: deviceID
+    }) 
+  })
+  .then(r => r.json())
+  .then(r => {
+    // Kembalikan tombol ke normal jika gagal
+    if (r.status === "success") {
+      localStorage.setItem('ikra_name', r.nama);
+      location.reload();
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = "Masuk Aplikasi";
+      btn.classList.remove('opacity-70', 'cursor-not-allowed');
+      alert(r.pesan);
+    }
+  })
+  .catch(err => {
+    // Kembalikan tombol ke normal jika koneksi error
+    btn.disabled = false;
+    btn.innerHTML = "Masuk Aplikasi";
+    btn.classList.remove('opacity-70', 'cursor-not-allowed');
+    alert("Koneksi gagal. Periksa jaringan Anda.");
+  });
+}
     function prosesLogout() { if(confirm("Keluar dari akun?")) { localStorage.clear(); location.reload(); } }
     function bukaModal(j,p,s) { document.getElementById('judulModal').innerText=j; document.getElementById('pesanModal').innerText=p; document.getElementById('modalKu').classList.remove('hidden'); }
     function tutupModal() { document.getElementById('modalKu').classList.add('hidden'); }
