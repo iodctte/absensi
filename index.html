@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>IODC Absensi</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style> body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #e0f2fe 0%, #ccfbf1 50%, #dbeafe 100%); background-attachment: fixed; } .glass-card { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); } </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+  <div id="layarLogin" class="hidden glass-card p-8 rounded-[2.5rem] shadow-2xl w-full max-w-sm text-center">
+    <div class="mb-8">
+      <div class="h-24 w-24 mx-auto mb-4 flex justify-center items-center rounded-full border-4 border-white shadow-md overflow-hidden bg-white">
+        <img src="https://i.imgur.com/EEzJTyu.jpeg" alt="Ikra Dental Care" class="w-full h-full object-cover">
+      </div>
+      <h2 class="text-xl font-bold text-gray-800 leading-tight">Ikra Orthodontic & <br>Dental Care</h2>
+    </div>
+    <div class="space-y-4 mb-8">
+      <input type="text" id="inUsername" placeholder="Username" class="w-full p-4 border-0 rounded-2xl bg-white/80 shadow-inner focus:ring-2 focus:ring-teal-500 outline-none text-sm">
+      <input type="password" id="inPassword" placeholder="Password" class="w-full p-4 border-0 rounded-2xl bg-white/80 shadow-inner focus:ring-2 focus:ring-teal-500 outline-none text-sm">
+    </div>
+    <button id="btnLogin" onclick="prosesLogin()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-bold text-base active:scale-95 transition-all shadow-md">Masuk Aplikasi</button>
+  </div>
+
+  <div id="layarDashboard" class="hidden w-full max-w-sm flex flex-col gap-4">
+    <div class="glass-card p-6 rounded-3xl shadow-xl text-center">
+      <div class="h-14 w-14 mx-auto mb-3 flex justify-center items-center rounded-full border-2 border-white shadow-sm overflow-hidden bg-white">
+        <img src="https://i.imgur.com/EEzJTyu.jpeg" alt="Logo" class="w-full h-full object-cover">
+      </div>
+      <h1 class="text-xl font-bold text-gray-800" id="teksSapaan">Halo!</h1>
+      <div class="mt-4 p-4 bg-white/60 rounded-2xl border border-white">
+        <p id="teksTanggal" class="text-xs font-bold text-teal-700 uppercase tracking-wide">-</p>
+        <div id="teksJam" class="text-4xl font-bold text-gray-800 tracking-tighter mt-1">00:00</div>
+      </div>
+    </div>
+
+    <div class="glass-card p-6 rounded-3xl shadow-xl flex flex-col items-center">
+      <div id="badgeStatus" class="px-4 py-1 rounded-full text-xs font-bold bg-gray-200 text-gray-600 mb-6 border border-gray-300">Status: Memuat...</div>
+
+      <button id="btnClockIn" onclick="cekLokasi('Masuk')" class="w-full bg-gradient-to-r from-teal-600 to-teal-500 text-white p-4 rounded-2xl font-bold text-base active:scale-95 transition-all mb-3 shadow-sm">Clock In</button>
+      <button id="btnClockOut" onclick="cekLokasi('Pulang')" class="w-full hidden bg-gradient-to-r from-red-600 to-orange-500 text-white p-4 rounded-2xl font-bold text-base active:scale-95 transition-all mb-3 shadow-sm">Clock Out</button>
+      
+      <div id="loadingGps" class="hidden w-full p-3 bg-blue-50 text-blue-600 rounded-xl text-center text-xs font-bold mb-3 animate-pulse border border-blue-100">Memvalidasi Satelit Jaringan...</div>
+      <div id="pesanSelesai" class="hidden w-full p-4 bg-green-100 text-green-700 rounded-2xl font-bold text-center border border-green-200 text-sm">Shift kerja hari ini telah selesai.</div>
+
+      <div class="w-full mt-4 border-t border-gray-300/40 pt-4">
+        <p class="text-[10px] text-gray-400 font-semibold mb-2 uppercase tracking-widest text-center">Rangkuman Bulan Ini</p>
+        <div class="grid grid-cols-3 gap-2 text-center bg-white/60 rounded-xl p-3 text-sm">
+          <div><p class="text-xs text-gray-500 font-medium">Hadir</p><p id="statHadir" class="font-bold text-teal-600">-</p></div>
+          <div><p class="text-xs text-gray-500 font-medium">Telat</p><p id="statTelat" class="font-bold text-red-500">-</p></div>
+          <div><p class="text-xs text-gray-500 font-medium">Lembur</p><p id="statLembur" class="font-bold text-orange-500 text-[11px]">-</p></div>
+        </div>
+      </div>
+      
+      <div class="flex gap-4 mt-6">
+        <button onclick="bukaModalPass()" class="text-xs font-semibold text-gray-500 underline">Ganti Sandi</button>
+        <button onclick="prosesLogout()" class="text-xs font-semibold text-red-400 underline">Keluar Akun</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="overlayKamera" class="hidden fixed inset-0 bg-black z-40 flex flex-col">
+    <div class="p-4 flex justify-between items-center bg-black/50 absolute top-0 w-full z-50"><h3 class="text-white font-medium text-sm" id="judulKamera">Verifikasi Wajah</h3><button onclick="tutupKamera()" class="text-white bg-white/10 p-2 rounded-full text-xs">✕</button></div>
+    <video id="video" class="w-full h-full object-cover" autoplay playsinline muted></video><canvas id="canvas" class="hidden"></canvas>
+    <div class="bg-black pb-10 pt-6 flex justify-center"><button onclick="eksekusiAbsen()" class="w-20 h-20 bg-white rounded-full border-8 border-gray-600 active:scale-90 transition-all"></button></div>
+  </div>
+
+  <div id="modalKu" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-xs text-center shadow-xl"><h3 class="text-lg font-bold text-gray-900" id="judulModal">Status</h3><p class="mt-2 text-xs text-gray-600" id="pesanModal">-</p><button onclick="tutupModal()" class="mt-6 w-full rounded-xl bg-teal-600 p-3 text-white font-bold text-sm">Dimengerti</button></div>
+  </div>
+
+  <div id="modalPass" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-xs shadow-xl"><h3 class="font-bold mb-4 text-sm">Ganti Password</h3><input type="password" id="passLama" placeholder="Password Lama" class="w-full p-3 rounded-xl border mb-2 outline-none text-sm"><input type="password" id="passBaru" placeholder="Password Baru" class="w-full p-3 rounded-xl border mb-4 outline-none text-sm"><div class="flex gap-2"><button onclick="tutupModalPass()" class="w-1/2 p-3 text-gray-500 font-bold text-sm">Batal</button><button onclick="simpanPassword()" class="w-1/2 p-3 bg-teal-600 text-white rounded-xl font-bold text-sm">Simpan</button></div></div>
+  </div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx9XwhDjYmI9FBU49p715VdzZ_RhNa5lMsxj3NKl3mjXc5WdeK6fQME2anA7XwmfMqN/exec"; 
+    let myName = localStorage.getItem('ikra_name'), deviceID = localStorage.getItem('ikra_deviceID');
+    if (!deviceID) { deviceID = 'DEV-' + Math.random().toString(36).substr(2, 9); localStorage.setItem('ikra_deviceID', deviceID); }
+    
+    let KLINIK_LAT = parseFloat(localStorage.getItem('ikra_lat')) || 0, KLINIK_LNG = parseFloat(localStorage.getItem('ikra_lng')) || 0, MAX_RADIUS = parseInt(localStorage.getItem('ikra_radius')) || 50;
+    let tipeAbsenAktif = "", streamAktif = null, akurasiTerakhir = 0;
+    const video = document.getElementById('video'), canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
+
+    window.onload = () => { if (myName) { document.getElementById('layarDashboard').classList.remove('hidden'); document.getElementById('teksSapaan').innerText = `Halo, ${myName.split(' ')[0]}!`; jalankanJam(); muatStatistik(); prosesAntrian(); } else { document.getElementById('layarLogin').classList.remove('hidden'); } };
+
+    function muatStatistik() {
+      fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName))
+        .then(res => res.json()).then(data => {
+          if(data.status === "success") {
+            document.getElementById('statHadir').innerText = data.hadir; document.getElementById('statTelat').innerText = data.telat; document.getElementById('statLembur').innerText = data.lembur;
+            if(data.pengaturan) { KLINIK_LAT = parseFloat(data.pengaturan.klinik_lat); KLINIK_LNG = parseFloat(data.pengaturan.klinik_lng); MAX_RADIUS = parseInt(data.pengaturan.radius); localStorage.setItem('ikra_lat', KLINIK_LAT); localStorage.setItem('ikra_lng', KLINIK_LNG); localStorage.setItem('ikra_radius', MAX_RADIUS); }
+            if (!data.statusHariIni) { localStorage.removeItem('ikra_status_harian'); } else { localStorage.setItem('ikra_status_harian', data.statusHariIni); }
+            cekLogikaHarian();
+          }
+        }).catch(e => console.log("Offline mode"));
+    }
+
+    function cekLokasi(tipe) {
+      if (KLINIK_LAT === 0) return muatStatistik();
+      document.getElementById('loadingGps').classList.remove('hidden');
+      const options = { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 };
+      let watcher = navigator.geolocation.watchPosition(
+        (pos) => {
+          navigator.geolocation.clearWatch(watcher);
+          let userLat = pos.coords.latitude, userLng = pos.coords.longitude; akurasiTerakhir = pos.coords.accuracy;
+          if (akurasiTerakhir <= 1.1 && akurasiTerakhir >= 0.9) { document.getElementById('loadingGps').classList.add('hidden'); return bukaModal("Akurasi Palsu Terdeteksi", "Sinyal GPS dilarang dimanipulasi menggunakan Fake GPS.", false); }
+          let jarak = hitungJarak(userLat, userLng, KLINIK_LAT, KLINIK_LNG); document.getElementById('loadingGps').classList.add('hidden');
+          if (jarak <= MAX_RADIUS) { bukaKamera(tipe); } else { bukaModal("Di Luar Jangkauan", `Jarak Anda ${Math.round(jarak)} meter dari Klinik Ikra. Batas radius aman adalah ${MAX_RADIUS} meter.`, false); }
+        },
+        (err) => { document.getElementById('loadingGps').classList.add('hidden'); bukaModal("GPS Tidak Aktif", "Mohon nyalakan GPS perangkat Anda.", false); },
+        options
+      );
+    }
+
+    function eksekusiAbsen() {
+      canvas.width = 480; canvas.height = 640; ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.fillRect(0, 590, 480, 50); ctx.fillStyle = "white"; ctx.font = "14px Arial";
+      ctx.fillText(`${myName} | ${new Date().toLocaleString('id-ID')} | Acc: ${Math.round(akurasiTerakhir)}m`, 20, 620);
+      const foto = canvas.toDataURL('image/jpeg', 0.4);
+      const payload = { action: "absen", nama: myName, tipe: tipeAbsenAktif, foto: foto, deviceID: deviceID, akurasi: Math.round(akurasiTerakhir) };
+      let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || []; antrian.push(payload); localStorage.setItem('antrianIkra', JSON.stringify(antrian));
+      localStorage.setItem('ikra_status_harian', tipeAbsenAktif === 'Masuk' ? 'masuk' : 'pulang');
+      tutupKamera(); cekLogikaHarian(); bukaModal("Tercatat", "Log berhasil masuk antrian lokal. Mengunggah ke server...", true); prosesAntrian();
+    }
+
+    function hitungJarak(lat1, lon1, lat2, lon2) { let R = 6371e3; let f1 = lat1 * Math.PI/180, f2 = lat2 * Math.PI/180, df = (lat2-lat1) * Math.PI/180, dl = (lon2-lon1) * Math.PI/180; let a = Math.sin(df/2) * Math.sin(df/2) + Math.cos(f1) * Math.cos(f2) * Math.sin(dl/2) * Math.sin(dl/2); return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))); }
+    function jalankanJam() { setInterval(() => { let now = new Date(); document.getElementById('teksJam').innerText = now.toLocaleTimeString('id-ID', {timeZone:'Asia/Jayapura', hour12:false}).replace(/\./g,':'); document.getElementById('teksTanggal').innerText = now.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'}); }, 1000); }
+    function cekLogikaHarian() { let stat = localStorage.getItem('ikra_status_harian'); const btnIn = document.getElementById('btnClockIn'), btnOut = document.getElementById('btnClockOut'), msg = document.getElementById('pesanSelesai'), bdg = document.getElementById('badgeStatus'); btnIn.classList.add('hidden'); btnOut.classList.add('hidden'); msg.classList.add('hidden'); if (!stat) { btnIn.classList.remove('hidden'); bdg.innerText = "Status: Belum Absen"; bdg.className = "px-4 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-500 border border-gray-200 mb-6"; } else if (stat === "masuk") { btnOut.classList.remove('hidden'); bdg.innerText = "Status: Sedang Shift"; bdg.className = "px-4 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-700 border border-teal-200 mb-6"; } else { msg.classList.remove('hidden'); bdg.innerText = "Status: Selesai"; bdg.className = "px-4 py-1 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200 mb-6"; } }
+    function prosesAntrian() { if (!navigator.onLine) return; let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || []; if (antrian.length === 0) return; fetch(GAS_URL, { redirect:"follow", method:'POST', body: JSON.stringify(antrian[0]) }).then(res=>res.json()).then(res=>{ if(res.status==="success"||res.status==="error"){ antrian.shift(); localStorage.setItem('antrianIkra', JSON.stringify(antrian)); if(antrian.length>0) prosesAntrian(); else muatStatistik(); } }); }
+    function bukaKamera(t) { tipeAbsenAktif = t; document.getElementById('judulKamera').innerText = "Clock " + t; document.getElementById('overlayKamera').classList.remove('hidden'); navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}, audio:false}).then(s=>{streamAktif=s;video.srcObject=s;}); }
+    function tutupKamera() { if(streamAktif) streamAktif.getTracks().forEach(t=>t.stop()); document.getElementById('overlayKamera').classList.add('hidden'); }
+    function prosesLogin() { let u=document.getElementById('inUsername').value, p=document.getElementById('inPassword').value; if(!u||!p) return; fetch(GAS_URL, {redirect:"follow", method:'POST', body:JSON.stringify({action:"login", username:u, password:p, deviceID:deviceID})}).then(r=>r.json()).then(r=>{ if(r.status==="success"){ localStorage.setItem('ikra_name', r.nama); location.reload(); }else{ alert(r.pesan); } }); }
+    function prosesLogout() { if(confirm("Keluar dari akun?")) { localStorage.clear(); location.reload(); } }
+    function bukaModal(j,p,s) { document.getElementById('judulModal').innerText=j; document.getElementById('pesanModal').innerText=p; document.getElementById('modalKu').classList.remove('hidden'); }
+    function tutupModal() { document.getElementById('modalKu').classList.add('hidden'); }
+    function bukaModalPass() { document.getElementById('modalPass').classList.remove('hidden'); }
+    function tutupModalPass() { document.getElementById('modalPass').classList.add('hidden'); }
+    async function simpanPassword() { let l=document.getElementById('passLama').value, b=document.getElementById('passBaru').value; if(!l||!b) return; fetch(GAS_URL, {redirect:"follow", method:'POST', body:JSON.stringify({action:"ubah_password", nama:myName, passLama:l, passBaru:b})}).then(r=>r.json()).then(r=>{ alert(r.pesan); if(r.status==="success") tutupModalPass(); }); }
+  </script>
+</body>
+</html>
