@@ -323,25 +323,30 @@
       btn.innerHTML = oriText; btn.disabled = false; document.getElementById('chkAllLembur').checked = false; alert(`Sukses! ${sukses} data lembur dianulir.`); tarikRekap();
     }
 
-function lihatFoto(url) {
-  // Jika link kosong atau tidak valid
-  if(!url || url === 'undefined' || url === '-') return alert('Foto tidak ditemukan di database.');
-  
-  document.getElementById('teksLoadingFoto').style.display = 'flex';
-  let frame = document.getElementById('frameFotoView');
-  let linkLuar = document.getElementById('linkBukaLuar');
-  linkLuar.href = url;
-  
-  // Deteksi apakah link adalah Google Drive
-  if (url.includes('drive.google.com')) {
-    let fileId = url.match(/[-\w]{25,}/);
-    frame.src = fileId ? "https://drive.google.com/file/d/" + fileId[0] + "/preview" : url;
-  } else {
-    // Jika link gambar biasa (misal .jpg/.png)
-    frame.src = url;
-  }
-  document.getElementById('modalFoto').classList.remove('hidden');
-}
+       // 🚀 FUNGSI BUKA FOTO DI MODAL (VERSI GOOGLE DRIVE IFRAME)
+    function lihatFoto(url) {
+      if(!url) return;
+      document.getElementById('teksLoadingFoto').style.display = 'block';
+      let frame = document.getElementById('frameFotoView');
+      let linkLuar = document.getElementById('linkBukaLuar');
+      
+      linkLuar.href = url; 
+
+      let fileId = url.match(/[-\w]{25,}/);
+      if (fileId && fileId[0]) {
+        frame.src = "https://drive.google.com/file/d/" + fileId[0] + "/preview";
+      } else {
+        frame.src = url;
+      }
+      
+      document.getElementById('modalFoto').classList.remove('hidden');
+    }
+    
+    function tutupFoto() {
+      document.getElementById('modalFoto').classList.add('hidden');
+      document.getElementById('frameFotoView').src = "";
+    }
+
     
     function exportToCSV() {
       let csv = []; let rows = document.querySelectorAll("#tabelExport tr");
