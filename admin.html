@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>HR Panel - Ikra Dental Care</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Library untuk Print PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
@@ -16,7 +19,6 @@
       background-attachment: fixed;
       color: #1e293b;
     }
-    
     .glass-panel { 
       background: rgba(255, 255, 255, 0.45); 
       backdrop-filter: blur(20px); 
@@ -24,7 +26,6 @@
       border: 1px solid rgba(255, 255, 255, 0.6); 
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
     }
-    
     .glass-input { 
       background: rgba(255, 255, 255, 0.7); 
       border: 1px solid rgba(255, 255, 255, 0.9); 
@@ -32,37 +33,38 @@
       color: #1e293b;
     }
     .glass-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2); border-color: #0d9488; }
-    
     .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.4); border-radius: 4px; }
-    
     .svg-icon { width: 1.25rem; height: 1.25rem; display: inline-block; }
   </style>
 </head>
 <body class="min-h-screen relative overflow-x-hidden">
 
-  <!-- LAYAR LOGIN ADMIN -->
-  <div id="layarLogin" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md transition-opacity duration-500">
-    <div class="glass-panel p-8 md:p-10 rounded-[2rem] w-full max-w-sm text-center relative overflow-hidden bg-white/70">
-      <div class="h-20 w-full mb-6 flex justify-center items-center">
-        <img src="https://i.imgur.com/EEzJTyu.jpeg" alt="Ikra Dental Care" class="object-contain h-full rounded-lg shadow-sm bg-white p-2">
+  <div id="layarLogin" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/10 backdrop-blur-md transition-opacity duration-500">
+    <div class="glass-panel p-8 md:p-10 rounded-[2.5rem] w-full max-w-sm text-center relative overflow-hidden bg-white/75 border border-white/60 shadow-2xl">
+      <div class="h-28 w-28 mx-auto mb-6 flex justify-center items-center rounded-full border-4 border-white shadow-md overflow-hidden bg-white">
+        <img src="https://i.imgur.com/EEzJTyu.jpeg" alt="Ikra Dental Care" class="w-full h-full object-cover">
       </div>
-      <h2 class="text-2xl font-bold mb-1 text-slate-800">Workspace HR</h2>
-      <p class="text-sm text-slate-500 mb-8 font-medium">Administrator Access</p>
-      <input type="password" id="adminPin" placeholder="Masukkan PIN Admin" class="w-full p-4 mb-6 rounded-2xl glass-input text-center font-bold text-lg tracking-widest">
-      <button id="btnLogin" onclick="prosesLoginAdmin()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-semibold hover:bg-teal-700 active:scale-95 transition-all shadow-lg flex justify-center items-center gap-2">
-        <svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg> Buka Dashboard
+      <h2 class="text-xl font-bold mb-1 text-slate-800 tracking-tight">Workspace HR Admin</h2>
+      <p class="text-xs text-slate-500 mb-8 font-medium uppercase tracking-widest">Ikra Dental Care</p>
+      
+      <input type="password" id="adminPin" placeholder="PIN Akses" class="w-full p-4 mb-6 rounded-2xl glass-input text-center font-bold text-xl tracking-widest placeholder-slate-400 shadow-inner">
+      
+      <button id="btnLogin" onclick="prosesLoginAdmin()" class="w-full bg-teal-600 text-white p-4 rounded-2xl font-semibold hover:bg-teal-700 active:scale-95 transition-all shadow-lg shadow-teal-600/20 flex justify-center items-center gap-2 text-sm">
+        <svg class="svg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg> 
+        Otorisasi Masuk
       </button>
     </div>
   </div>
 
   <div id="layarDashboard" class="hidden flex flex-col h-screen overflow-hidden">
-    <!-- NAVBAR -->
     <nav class="glass-panel mx-4 mt-4 px-4 py-3 md:px-6 rounded-3xl flex flex-col lg:flex-row justify-between items-center gap-4 z-10 shadow-sm">
       <div class="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
         <div class="flex items-center gap-3">
-          <div class="h-10 bg-white rounded flex items-center p-1 shadow-sm"><img src="https://i.imgur.com/EEzJTyu.jpeg" alt="Logo" class="object-contain h-full"></div>
+          <div class="h-10 w-10 rounded-full border-2 border-white overflow-hidden bg-white shadow-sm flex items-center justify-center">
+            <img src="https://i.imgur.com/EEzJTyu.jpeg" alt="Logo" class="w-full h-full object-cover">
+          </div>
           <h1 class="text-xl font-bold tracking-tight text-slate-800">HR Panel</h1>
         </div>
         <button class="lg:hidden p-2 text-slate-500 bg-white/50 rounded-xl" onclick="document.getElementById('menuTabs').classList.toggle('hidden')">
@@ -92,7 +94,6 @@
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Berhasil Disimpan!
         </div>
 
-        <!-- TAB KARYAWAN -->
         <div id="tabKaryawan" class="grid grid-cols-1 xl:grid-cols-3 gap-6">
           <div class="xl:col-span-1 glass-panel p-6 rounded-3xl h-fit">
             <h2 class="text-base font-bold mb-5 border-b border-slate-200 pb-3 flex items-center gap-2 text-slate-800">
@@ -113,7 +114,6 @@
           </div>
         </div>
 
-        <!-- TAB JADWAL -->
         <div id="tabJadwal" class="hidden grid grid-cols-1 xl:grid-cols-3 gap-6">
           <div class="xl:col-span-1 glass-panel p-6 rounded-3xl h-fit">
             <h2 class="text-base font-bold mb-5 border-b border-slate-200 pb-3 flex items-center gap-2 text-slate-800">
@@ -141,7 +141,6 @@
           </div>
         </div>
 
-        <!-- TAB REKAP (LAPORAN) -->
         <div id="tabRekap" class="hidden flex flex-col gap-6">
           <div class="glass-panel p-5 rounded-3xl flex flex-col xl:flex-row justify-between items-center gap-4">
             <div class="text-center xl:text-left w-full xl:w-auto">
@@ -172,7 +171,6 @@
               </div>
             </div>
 
-            <!-- TABEL DETAIL & BULK ACTION -->
             <div class="glass-panel p-0 rounded-3xl overflow-hidden relative">
               <div class="p-4 border-b border-slate-200 bg-slate-100/30 flex flex-col sm:flex-row justify-between items-center gap-3">
                 <h3 class="font-semibold text-sm text-slate-800">Rincian Log Harian</h3>
@@ -200,7 +198,6 @@
           </div>
         </div>
 
-        <!-- TAB SETUP -->
         <div id="tabPengaturan" class="hidden">
           <div class="glass-panel p-8 md:p-10 rounded-3xl max-w-2xl mx-auto text-center">
             <div class="h-14 w-14 bg-white/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-200 text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>
@@ -221,22 +218,15 @@
     </div>
   </div>
 
-  <!-- SEMUA MODAL POP-UP -->
-
-  <!-- Modal Edit Karyawan/Jadwal -->
   <div id="modalEdit" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md transition-opacity">
     <div class="glass-panel p-6 w-full max-w-sm rounded-3xl bg-white/80">
       <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800" id="judulModalEdit"></h3>
-      
       <div id="formEditKar" class="hidden space-y-4"><input type="hidden" id="editIdKar"><div><label class="text-xs font-semibold opacity-70 text-slate-600">Nama Lengkap</label><input type="text" id="editNamaKar" class="w-full mt-1.5 p-3 rounded-xl glass-input text-sm"></div><div><label class="text-xs font-semibold opacity-70 text-slate-600">Username</label><input type="text" id="editUserKar" class="w-full mt-1.5 p-3 rounded-xl glass-input text-sm"></div><div><label class="text-xs font-semibold opacity-70 text-slate-600">Password</label><input type="text" id="editPassKar" class="w-full mt-1.5 p-3 rounded-xl glass-input text-sm"></div></div>
-      
       <div id="formEditJad" class="hidden space-y-4"><input type="hidden" id="editIdJad"><p class="text-xs font-medium text-teal-700 mb-2 bg-teal-50 p-2 rounded-xl text-center border border-teal-100" id="infoEditJad"></p><div><label class="text-xs font-semibold opacity-70 text-slate-600">Target Karyawan</label><select id="editTargetKar" class="w-full mt-1.5 p-3 rounded-xl glass-input text-sm"></select></div><div class="grid grid-cols-2 gap-3"><div><label class="text-xs font-semibold opacity-70 text-slate-600">Jam Masuk</label><input type="time" id="editJamMsk" class="w-full mt-1.5 p-2.5 rounded-xl glass-input text-sm"></div><div><label class="text-xs font-semibold opacity-70 text-slate-600">Jam Pulang</label><input type="time" id="editJamPlg" class="w-full mt-1.5 p-2.5 rounded-xl glass-input text-sm"></div></div><div><label class="text-xs font-semibold opacity-70 text-slate-600">Toleransi (Menit)</label><input type="number" id="editToleransi" class="w-full mt-1.5 p-3 rounded-xl glass-input text-sm"></div></div>
-      
       <div class="flex gap-3 mt-6"><button onclick="tutupModalEdit()" class="w-1/2 glass-input p-3 rounded-xl font-semibold transition-colors text-sm text-slate-600">Batal</button><button onclick="simpanEdit()" id="btnSimpanEdit" class="w-1/2 bg-teal-600 text-white p-3 rounded-xl font-semibold hover:bg-teal-700 text-sm">Simpan</button></div>
     </div>
   </div>
 
-  <!-- Modal Edit/Veto Log Absen -->
   <div id="modalEditLog" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md transition-opacity">
     <div class="glass-panel p-6 w-full max-w-sm rounded-3xl bg-white/80">
       <h3 class="text-lg font-bold mb-1 flex items-center gap-2 text-slate-800"><svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Koreksi Absen</h3>
@@ -250,7 +240,6 @@
     </div>
   </div>
 
-  <!-- Modal Lihat Foto -->
   <div id="modalFoto" class="hidden fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md transition-opacity">
     <div class="relative w-full max-w-md flex flex-col items-center">
       <button onclick="tutupFoto()" class="absolute -top-12 right-0 bg-white/10 hover:bg-white/20 text-white rounded-lg p-2 transition-colors border border-white/20"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -266,11 +255,9 @@
     const GAS_URL = "https://script.google.com/macros/s/AKfycbx9XwhDjYmI9FBU49p715VdzZ_RhNa5lMsxj3NKl3mjXc5WdeK6fQME2anA7XwmfMqN/exec"; // ⚠️ WAJIB DIISI!
     const PIN_ADMIN = "123456";
     let tipeEditAktif = "";
-
-    // Variabel Global untuk menyimpan data bersih laporan (khusus export PDF)
     window.dataLaporanPdf = { rekap: [], detail: [] };
 
-    async function prosesLoginAdmin() { if (document.getElementById('adminPin').value !== PIN_ADMIN) return alert("PIN Salah!"); let btn = document.getElementById('btnLogin'); btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memuat...`; btn.disabled = true; await loadData(); document.getElementById('layarLogin').style.opacity = '0'; setTimeout(() => { document.getElementById('layarLogin').classList.add('hidden'); document.getElementById('layarDashboard').classList.remove('hidden'); }, 500); }
+    async function prosesLoginAdmin() { if (document.getElementById('adminPin').value !== PIN_ADMIN) return alert("PIN Salah!"); let btn = document.getElementById('btnLogin'); btn.innerHTML = `Validasi Hak Akses...`; btn.disabled = true; await loadData(); document.getElementById('layarLogin').style.opacity = '0'; setTimeout(() => { document.getElementById('layarLogin').classList.add('hidden'); document.getElementById('layarDashboard').classList.remove('hidden'); }, 500); }
 
     function switchTab(tab) {
       ['tabKaryawan', 'tabJadwal', 'tabRekap', 'tabPengaturan'].forEach(id => document.getElementById(id).classList.add('hidden'));
@@ -280,7 +267,6 @@
       let tabMap = { 'karyawan': { t: 'tabKaryawan', b: 'btnTabKar' }, 'jadwal': { t: 'tabJadwal', b: 'btnTabJad' }, 'rekap': { t: 'tabRekap', b: 'btnTabRekap' }, 'pengaturan': { t: 'tabPengaturan', b: 'btnTabPeng' } };
       document.getElementById(tabMap[tab].t).classList.remove('hidden');
       document.getElementById(tabMap[tab].b).className = "px-5 py-2.5 rounded-xl flex items-center gap-2 bg-white text-teal-700 shadow-sm transition-colors";
-      
       if(window.innerWidth < 1024) document.getElementById('menuTabs').classList.add('hidden');
     }
 
@@ -325,38 +311,24 @@
     function tutupModalEdit() { document.getElementById('modalEdit').classList.add('hidden'); }
     function simpanEdit() { let btn = document.getElementById('btnSimpanEdit'); btn.innerText = "Memproses..."; btn.disabled = true; if (tipeEditAktif === "karyawan") kirimDataPOST({ action: "edit_karyawan", id: document.getElementById('editIdKar').value, nama: document.getElementById('editNamaKar').value, username: document.getElementById('editUserKar').value, password: document.getElementById('editPassKar').value }); else kirimDataPOST({ action: "edit_jadwal", id: document.getElementById('editIdJad').value, targetKaryawan: document.getElementById('editTargetKar').value, jamMasuk: document.getElementById('editJamMsk').value, jamPulang: document.getElementById('editJamPlg').value, toleransi: document.getElementById('editToleransi').value }); setTimeout(() => { tutupModalEdit(); btn.innerText = "Simpan"; btn.disabled = false; }, 1000); }
 
-    function bukaEditLog(tgl, nm, plg, lbr) { document.getElementById('teksInfoLog').innerText = `${nm} — ${tgl}`; document.getElementById('editLogTgl').value = tgl; document.getElementById('editLogNama').value = nm; document.getElementById('editLogPlg').value = (plg !== '-') ? plg : ''; let dropdownLbr = document.getElementById('editLogLbr'); let opsiDitemukan = false; for (let i = 0; i < dropdownLbr.options.length; i++) { if (dropdownLbr.options[i].value === lbr) { dropdownLbr.selectedIndex = i; opsiDitemukan = true; break; } } if (!opsiDitemukan) dropdownLbr.value = "-"; document.getElementById('modalEditLog').classList.remove('hidden'); }
-    function simpanEditLog() { let btn = document.getElementById('btnSimpanEditLog'); btn.innerText = "Menyimpan..."; btn.disabled = true; let jamPlg = document.getElementById('editLogPlg').value || "-"; let jamLbr = document.getElementById('editLogLbr').value; kirimDataPOST({ action: "edit_log", tanggal: document.getElementById('editLogTgl').value, nama: document.getElementById('editLogNama').value, jamPulang: jamPlg, jamLembur: jamLbr }); setTimeout(() => { document.getElementById('modalEditLog').classList.add('hidden'); btn.innerText = "Simpan Data"; btn.disabled = false; tarikRekap(); }, 1500); }
-
-    function lihatFoto(url) { if(!url) return; document.getElementById('teksLoadingFoto').style.display = 'flex'; let frame = document.getElementById('frameFotoView'); let linkLuar = document.getElementById('linkBukaLuar'); linkLuar.href = url; let fileId = url.match(/[-\w]{25,}/); if (fileId && fileId[0]) { frame.src = "https://drive.google.com/file/d/" + fileId[0] + "/preview"; } else { frame.src = url; } document.getElementById('modalFoto').classList.remove('hidden'); }
-    function tutupFoto() { document.getElementById('modalFoto').classList.add('hidden'); document.getElementById('frameFotoView').src = ""; }
-
     function toggleAllLembur(source) { let chks = document.querySelectorAll('.chk-lembur'); chks.forEach(chk => { if(!chk.parentElement.parentElement.classList.contains('hidden')) chk.checked = source.checked; }); }
-    
     async function tolakLemburBulk() {
-      let chks = document.querySelectorAll('.chk-lembur:checked');
-      if(chks.length === 0) return alert("Pilih kotak centang (checkbox) pada baris data absen terlebih dahulu.");
-      if(!confirm(`Anulir/Nol-kan status lembur untuk ${chks.length} data terpilih?`)) return;
-      let btn = document.getElementById('btnBulkLembur'); let oriText = btn.innerHTML; btn.disabled = true;
-      let sukses = 0;
+      let chks = document.querySelectorAll('.chk-lembur:checked'); if(chks.length === 0) return alert("Pilih data absen pada tabel terlebih dahulu.");
+      if(!confirm(`Anulir status lembur untuk ${chks.length} data terpilih?`)) return;
+      let btn = document.getElementById('btnBulkLembur'); let oriText = btn.innerHTML; btn.disabled = true; let sukses = 0;
       for (let i = 0; i < chks.length; i++) {
-        btn.innerHTML = `<svg class="animate-spin h-3.5 w-3.5 inline text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memproses...`;
         let chk = chks[i]; let payload = { action: "edit_log", tanggal: chk.dataset.tgl, nama: chk.dataset.nm, jamPulang: chk.dataset.plg !== '-' ? chk.dataset.plg : "", jamLembur: "-" };
-        try { await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); sukses++; } catch(e) { console.log(e); }
+        try { await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); sukses++; } catch(e) {}
       }
       btn.innerHTML = oriText; btn.disabled = false; document.getElementById('chkAllLembur').checked = false; alert(`Sukses! ${sukses} data lembur dianulir.`); tarikRekap();
     }
 
-    // Export CSV
     function exportToCSV() {
       let csv = []; let rows = document.querySelectorAll("#tabelExport tr");
       for (let i = 0; i < rows.length; i++) {
         if(rows[i].classList.contains('hidden') || rows[i].innerText.includes("Memuat data")) continue;
         let row = [], cols = rows[i].querySelectorAll("td, th");
-        for (let j = 1; j < cols.length; j++) { 
-          let text = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/Cek Foto/g, "").replace(/Edit/g, "").trim();
-          row.push('"' + text.replace(/"/g, '""') + '"');
-        }
+        for (let j = 1; j < cols.length; j++) { let text = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/Cek Foto/g, "").replace(/Edit/g, "").trim(); row.push('"' + text.replace(/"/g, '""') + '"'); }
         csv.push(row.join(","));
       }
       let csvFile = new Blob([csv.join("\n")], {type: "text/csv"}); let dlLink = document.createElement("a");
@@ -364,146 +336,58 @@
       dlLink.href = window.URL.createObjectURL(csvFile); dlLink.style.display = "none"; document.body.appendChild(dlLink); dlLink.click(); document.body.removeChild(dlLink);
     }
 
-    // 🚀 FITUR BARU: PDF GENERATOR RESMI
     function exportToPDF() {
-      let tglAwal = document.getElementById('tglAwal').value;
-      let tglAkhir = document.getElementById('tglAkhir').value;
-      let fKar = document.getElementById('filterKaryawan').value;
-
-      // Membuat template dokumen PDF rahasia di memori
-      let pdfDiv = document.createElement('div');
-      pdfDiv.style.padding = '30px';
-      pdfDiv.style.fontFamily = "'Helvetica Neue', Helvetica, Arial, sans-serif";
-      pdfDiv.style.color = '#1e293b';
-      pdfDiv.style.backgroundColor = '#ffffff';
-
+      let tglAwal = document.getElementById('tglAwal').value; let tglAkhir = document.getElementById('tglAkhir').value; let fKar = document.getElementById('filterKaryawan').value;
+      let pdfDiv = document.createElement('div'); pdfDiv.style.padding = '30px'; pdfDiv.style.fontFamily = "Arial, sans-serif"; pdfDiv.style.color = '#1e293b'; pdfDiv.style.backgroundColor = '#ffffff';
+      
       let htmlPdf = `
         <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #0d9488; padding-bottom: 20px;">
-          <img src="https://i.imgur.com/EEzJTyu.jpeg" style="height: 70px; margin-bottom: 15px; object-fit: contain;">
-          <h2 style="font-size: 22px; font-weight: bold; margin: 0; color: #0f172a; letter-spacing: 1px;">LAPORAN ABSENSI KARYAWAN</h2>
-          <p style="font-size: 13px; color: #64748b; margin: 8px 0 0 0;">Periode: ${tglAwal} s/d ${tglAkhir} &nbsp;|&nbsp; Karyawan: ${fKar}</p>
+          <img src="https://i.imgur.com/EEzJTyu.jpeg" style="height: 70px; margin-bottom: 12px; object-fit: contain;">
+          <h2 style="font-size: 20px; font-weight: bold; margin: 0; color: #0f172a;">LAPORAN ABSENSI KARYAWAN</h2>
+          <p style="font-size: 12px; color: #64748b; margin: 6px 0 0 0;">Periode: ${tglAwal} s/d ${tglAkhir} &nbsp;|&nbsp; Filter: ${fKar}</p>
         </div>
-      `;
-
-      // Bangun Tabel Rekap Total
-      htmlPdf += `<h3 style="font-size: 15px; font-weight: bold; color: #0d9488; margin-bottom: 12px;">A. Rekapitulasi Total</h3>`;
-      htmlPdf += `<table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 25px;">
-                    <thead><tr style="background-color: #f1f5f9; text-align: left; color: #475569;">
-                      <th style="padding: 10px; border: 1px solid #cbd5e1;">Nama Karyawan</th>
-                      <th style="padding: 10px; text-align: center; border: 1px solid #cbd5e1;">Total Hadir</th>
-                      <th style="padding: 10px; text-align: center; border: 1px solid #cbd5e1;">Total Telat</th>
-                      <th style="padding: 10px; text-align: right; border: 1px solid #cbd5e1;">Total Lembur</th>
-                    </tr></thead><tbody>`;
+        <h3 style="font-size: 14px; font-weight: bold; color: #0d9488; margin-bottom: 10px;">1. Rekapitulasi Total (Summary)</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 25px;">
+          <thead><tr style="background-color: #f1f5f9; text-align: left; color: #475569;"><th style="padding: 8px; border: 1px solid #cbd5e1;">Nama Karyawan</th><th style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">Total Hadir</th><th style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">Total Telat</th><th style="padding: 8px; text-align: right; border: 1px solid #cbd5e1;">Total Lembur</th></tr></thead><tbody>`;
       
-      if(window.dataLaporanPdf.rekap && window.dataLaporanPdf.rekap.length > 0) {
-        window.dataLaporanPdf.rekap.forEach(r => {
-          if(fKar === "Semua" || fKar === r.nama) {
-            htmlPdf += `<tr>
-              <td style="padding: 10px; border: 1px solid #cbd5e1; font-weight: bold;">${r.nama}</td>
-              <td style="padding: 10px; text-align: center; border: 1px solid #cbd5e1;">${r.hadir} Hari</td>
-              <td style="padding: 10px; text-align: center; border: 1px solid #cbd5e1; color: #dc2626;">${r.telat} Kali</td>
-              <td style="padding: 10px; text-align: right; border: 1px solid #cbd5e1; color: #d97706;">${r.lembur}</td>
-            </tr>`;
-          }
-        });
-      } else { htmlPdf += `<tr><td colspan="4" style="padding: 10px; text-align: center; border: 1px solid #cbd5e1;">Tidak ada data</td></tr>`; }
-      htmlPdf += `</tbody></table>`;
-
-      // Bangun Tabel Rincian Harian
-      htmlPdf += `<h3 style="font-size: 15px; font-weight: bold; color: #0d9488; margin-bottom: 12px;">B. Rincian Log Harian</h3>`;
-      htmlPdf += `<table style="width: 100%; border-collapse: collapse; font-size: 11px;">
-                    <thead><tr style="background-color: #f1f5f9; text-align: left; color: #475569;">
-                      <th style="padding: 8px; border: 1px solid #cbd5e1;">Tanggal</th>
-                      <th style="padding: 8px; border: 1px solid #cbd5e1;">Nama</th>
-                      <th style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">Jam Masuk</th>
-                      <th style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">Jam Pulang</th>
-                      <th style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">Status</th>
-                      <th style="padding: 8px; text-align: right; border: 1px solid #cbd5e1;">Lembur</th>
-                    </tr></thead><tbody>`;
-
-      if(window.dataLaporanPdf.detail && window.dataLaporanPdf.detail.length > 0) {
-        window.dataLaporanPdf.detail.forEach(r => {
-          if(fKar === "Semua" || fKar === r.nama) {
-            htmlPdf += `<tr>
-              <td style="padding: 8px; border: 1px solid #cbd5e1;">${r.tanggal}</td>
-              <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;">${r.nama}</td>
-              <td style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">${r.jam_masuk}</td>
-              <td style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">${r.jam_pulang}</td>
-              <td style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">${r.status}</td>
-              <td style="padding: 8px; text-align: right; border: 1px solid #cbd5e1; color: #d97706;">${r.lembur !== '-' ? r.lembur : '-'}</td>
-            </tr>`;
-          }
-        });
-      } else { htmlPdf += `<tr><td colspan="6" style="padding: 10px; text-align: center; border: 1px solid #cbd5e1;">Tidak ada rincian data</td></tr>`; }
-      htmlPdf += `</tbody></table>`;
+      window.dataLaporanPdf.rekap.forEach(r => { if(fKar === "Semua" || fKar === r.nama) { htmlPdf += `<tr><td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;">${r.nama}</td><td style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">${r.hadir} Hari</td><td style="padding: 8px; text-align: center; border: 1px solid #cbd5e1; color: #dc2626;">${r.telat} Kali</td><td style="padding: 8px; text-align: right; border: 1px solid #cbd5e1;">${r.lembur}</td></tr>`; } });
+      htmlPdf += `</tbody></table><h3 style="font-size: 14px; font-weight: bold; color: #0d9488; margin-bottom: 10px;">2. Rincian Log Harian (Detail)</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
+          <thead><tr style="background-color: #f1f5f9; text-align: left; color: #475569;"><th style="padding: 8px; border: 1px solid #cbd5e1;">Tanggal</th><th style="padding: 8px; border: 1px solid #cbd5e1;">Nama</th><th style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">Jam Masuk</th><th style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">Jam Pulang</th><th style="padding: 8px; text-align: center; border: 1px solid #cbd5e1;">Status</th><th style="padding: 8px; text-align: right; border: 1px solid #cbd5e1;">Lembur</th></tr></thead><tbody>`;
       
-      pdfDiv.innerHTML = htmlPdf;
-
-      let opt = {
-        margin:       0.5,
-        filename:     `Laporan_Absen_Ikra_${tglAwal}_sd_${tglAkhir}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-      
-      html2pdf().set(opt).from(pdfDiv).save();
+      window.dataLaporanPdf.detail.forEach(r => { if(fKar === "Semua" || fKar === r.nama) { htmlPdf += `<tr><td style="padding: 7px; border: 1px solid #cbd5e1;">${r.tanggal}</td><td style="padding: 7px; border: 1px solid #cbd5e1; font-weight: bold;">${r.nama}</td><td style="padding: 7px; text-align: center; border: 1px solid #cbd5e1;">${r.jam_masuk}</td><td style="padding: 7px; text-align: center; border: 1px solid #cbd5e1;">${r.jam_pulang}</td><td style="padding: 7px; text-align: center; border: 1px solid #cbd5e1;">${r.status}</td><td style="padding: 7px; text-align: right; border: 1px solid #cbd5e1;">${r.lembur !== '-' ? r.lembur : '-'}</td></tr>`; } });
+      htmlPdf += `</tbody></table>`; pdfDiv.innerHTML = htmlPdf;
+      html2pdf().set({ margin: 0.5, filename: `Laporan_Absen_Ikra_${tglAwal}_${tglAkhir}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(pdfDiv).save();
     }
 
     async function tarikRekap(e) { 
       if(e) e.preventDefault(); 
       let btn = document.getElementById('btnTarik'); let oriHtml = btn.innerHTML;
-      btn.innerHTML = `<svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memuat...`; btn.disabled = true; 
-      
+      btn.innerHTML = `<svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`; btn.disabled = true; 
       let payload = { action: "get_rekap", tglAwal: document.getElementById('tglAwal').value, tglAkhir: document.getElementById('tglAkhir').value }; 
       let fKar = document.getElementById('filterKaryawan').value;
-
       try { 
-        let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); 
-        let hasil = JSON.parse(await respon.text()); 
-        
-        // Simpan ke variabel global untuk keperluan Export PDF agar tabelnya bersih
-        window.dataLaporanPdf.rekap = hasil.rekap || [];
-        window.dataLaporanPdf.detail = hasil.detail || [];
-
+        let respon = await fetch(GAS_URL, { redirect: "follow", method: 'POST', headers: {"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) }); let hasil = JSON.parse(await respon.text()); 
+        window.dataLaporanPdf.rekap = hasil.rekap || []; window.dataLaporanPdf.detail = hasil.detail || [];
         let htmlSummary = "";
-        if(hasil.rekap && hasil.rekap.length > 0) {
-          hasil.rekap.forEach(r => { 
-            if(fKar === "Semua" || fKar === r.nama) {
-              htmlSummary += `<tr class="border-b border-slate-200/50 last:border-0"><td class="p-4 font-semibold text-slate-800">${r.nama}</td><td class="p-4 text-center"><span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-md text-xs font-bold border border-teal-100">${r.hadir} Hari</span></td><td class="p-4 text-center"><span class="bg-red-50 text-red-600 px-3 py-1 rounded-md text-xs font-bold border border-red-100">${r.telat} Kali</span></td><td class="p-4 text-right"><span class="text-orange-600 font-semibold text-sm">${r.lembur}</span></td></tr>`; 
-            }
-          });
-        }
-        document.getElementById('tabelSummary').innerHTML = htmlSummary || '<tr><td colspan="4" class="p-8 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini.</td></tr>';
-
+        if(hasil.rekap) { hasil.rekap.forEach(r => { if(fKar === "Semua" || fKar === r.nama) { htmlSummary += `<tr class="border-b border-slate-200/50 last:border-0"><td class="p-4 font-semibold text-slate-800">${r.nama}</td><td class="p-4 text-center"><span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-md text-xs font-bold border border-teal-100">${r.hadir} Hari</span></td><td class="p-4 text-center"><span class="bg-red-50 text-red-600 px-3 py-1 rounded-md text-xs font-bold border border-red-100">${r.telat} Kali</span></td><td class="p-4 text-right"><span class="text-orange-600 font-semibold text-sm">${r.lembur}</span></td></tr>`; } }); }
+        document.getElementById('tabelSummary').innerHTML = htmlSummary || '<tr><td colspan="4" class="p-8 text-center text-slate-400">Tidak ada data</td></tr>';
         let htmlDetail = ""; 
-        if(hasil.detail && hasil.detail.length > 0) { 
+        if(hasil.detail) { 
           hasil.detail.forEach(r => { 
             if(fKar === "Semua" || fKar === r.nama) {
               let linkMsk = r.foto_masuk ? `<br><button onclick="lihatFoto('${r.foto_masuk}')" class="text-teal-600 bg-white hover:bg-slate-50 px-2 py-1 mt-1.5 rounded text-[10px] font-semibold border border-slate-200 transition-colors flex items-center justify-center gap-1 mx-auto shadow-sm"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Cek Foto</button>` : '';
               let linkPlg = r.foto_pulang ? `<br><button onclick="lihatFoto('${r.foto_pulang}')" class="text-teal-600 bg-white hover:bg-slate-50 px-2 py-1 mt-1.5 rounded text-[10px] font-semibold border border-slate-200 transition-colors flex items-center justify-center gap-1 mx-auto shadow-sm"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Cek Foto</button>` : '';
               let badgeStatus = r.status.includes("Terlambat") ? `<span class="bg-red-50 text-red-600 px-2 py-1 rounded text-[10px] font-semibold border border-red-100">${r.status}</span>` : `<span class="bg-teal-50 text-teal-700 px-2 py-1 rounded text-[10px] font-semibold border border-teal-100">${r.status}</span>`;
               let txtLembur = r.lembur !== '-' ? `<span class="font-bold text-orange-600">${r.lembur}</span>` : '-';
-              
               let chkBox = `<input type="checkbox" class="chk-lembur w-4 h-4 text-teal-600 rounded glass-input" data-tgl="${r.tanggal}" data-nm="${r.nama}" data-plg="${r.jam_pulang}">`;
-              let btnEdit = `<button onclick="bukaEditLog('${r.tanggal}', '${r.nama}', '${r.jam_pulang}', '${r.lembur}')" class="ml-2 text-[10px] bg-white/60 hover:bg-white px-2 py-1.5 rounded text-slate-600 transition-colors font-semibold flex items-center gap-1 inline-flex border border-slate-300"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>`;
-
-              htmlDetail += `<tr class="border-b border-slate-200/50 last:border-0">
-                <td class="p-4 text-center border-r border-slate-200/50">${chkBox}</td>
-                <td class="p-4 font-mono text-xs text-slate-500">${r.tanggal}</td>
-                <td class="p-4 font-semibold text-slate-800">${r.nama} ${btnEdit}</td>
-                <td class="p-4 text-center font-mono text-slate-700">${r.jam_masuk} ${linkMsk}</td>
-                <td class="p-4 text-center font-mono text-slate-700">${r.jam_pulang} ${linkPlg}</td>
-                <td class="p-4 text-center">${badgeStatus}</td>
-                <td class="p-4 text-right">${txtLembur}</td>
-              </tr>`; 
+              let btnEdit = `<button onclick="bukaEditLog('${r.tanggal}', '${r.nama}', '${r.jam_pulang}', '${r.lembur}')" class="ml-2 text-[10px] bg-slate-100 hover:bg-slate-200 px-2 py-1.5 rounded text-slate-600 transition-colors font-semibold flex items-center gap-1 inline-flex border border-slate-300"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Edit</button>`;
+              htmlDetail += `<tr class="border-b border-slate-200/50 last:border-0"><td class="p-4 text-center border-r border-slate-200/50">${chkBox}</td><td class="p-4 font-mono text-xs text-slate-500">${r.tanggal}</td><td class="p-4 font-semibold text-slate-800">${r.nama} ${btnEdit}</td><td class="p-4 text-center font-mono text-slate-700">${r.jam_masuk} ${linkMsk}</td><td class="p-4 text-center font-mono text-slate-700">${r.jam_pulang} ${linkPlg}</td><td class="p-4 text-center">${badgeStatus}</td><td class="p-4 text-right">${txtLembur}</td></tr>`; 
             }
           }); 
         } 
-        document.getElementById('tabelDetail').innerHTML = htmlDetail || '<tr><td colspan="7" class="p-8 text-center text-slate-400 font-medium">Tidak ada rincian untuk filter ini.</td></tr>'; 
-
-      } catch(err) { alert("Gagal mengambil data laporan."); } 
-      btn.innerHTML = oriHtml; btn.disabled = false; 
+        document.getElementById('tabelDetail').innerHTML = htmlDetail || '<tr><td colspan="7" class="p-8 text-center text-slate-400 font-medium">Tidak ada rincian data.</td></tr>'; 
+      } catch(err) { alert("Gagal menyinkronkan data."); } btn.innerHTML = oriHtml; btn.disabled = false; 
     }
   </script>
 </body>
