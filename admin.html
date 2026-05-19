@@ -323,6 +323,26 @@
       btn.innerHTML = oriText; btn.disabled = false; document.getElementById('chkAllLembur').checked = false; alert(`Sukses! ${sukses} data lembur dianulir.`); tarikRekap();
     }
 
+function lihatFoto(url) {
+  // Jika link kosong atau tidak valid
+  if(!url || url === 'undefined' || url === '-') return alert('Foto tidak ditemukan di database.');
+  
+  document.getElementById('teksLoadingFoto').style.display = 'flex';
+  let frame = document.getElementById('frameFotoView');
+  let linkLuar = document.getElementById('linkBukaLuar');
+  linkLuar.href = url;
+  
+  // Deteksi apakah link adalah Google Drive
+  if (url.includes('drive.google.com')) {
+    let fileId = url.match(/[-\w]{25,}/);
+    frame.src = fileId ? "https://drive.google.com/file/d/" + fileId[0] + "/preview" : url;
+  } else {
+    // Jika link gambar biasa (misal .jpg/.png)
+    frame.src = url;
+  }
+  document.getElementById('modalFoto').classList.remove('hidden');
+}
+    
     function exportToCSV() {
       let csv = []; let rows = document.querySelectorAll("#tabelExport tr");
       for (let i = 0; i < rows.length; i++) {
