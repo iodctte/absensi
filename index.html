@@ -200,5 +200,17 @@
     function tutupModalPass() { document.getElementById('modalPass').classList.add('hidden'); }
     async function simpanPassword() { let l=document.getElementById('passLama').value, b=document.getElementById('passBaru').value; if(!l||!b) return; fetch(GAS_URL, {redirect:"follow", method:'POST', body:JSON.stringify({action:"ubah_password", nama:myName, passLama:l, passBaru:b})}).then(r=>r.json()).then(r=>{ alert(r.pesan); if(r.status==="success") tutupModalPass(); }); }
   </script>
+
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then((reg) => {
+        console.log('ServiceWorker tersambung!', reg.scope);
+      }).catch((err) => {
+        console.log('ServiceWorker gagal:', err);
+      });
+    });
+  }
+</script>
 </body>
 </html>
