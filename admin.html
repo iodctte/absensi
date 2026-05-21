@@ -415,5 +415,16 @@
       } catch(err) { alert("Gagal menyinkronkan data."); } btn.innerHTML = oriHtml; btn.disabled = false; 
     }
   </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then((reg) => {
+        console.log('ServiceWorker tersambung!', reg.scope);
+      }).catch((err) => {
+        console.log('ServiceWorker gagal:', err);
+      });
+    });
+  }
+</script>
 </body>
 </html>
