@@ -213,7 +213,17 @@
     alert("Koneksi gagal. Periksa jaringan Anda.");
   });
 }
-    function prosesLogout() { if(confirm("Keluar dari akun?")) { localStorage.clear(); location.reload(); } }
+        function prosesLogout() {
+      if(confirm("Keluar dari akun?")) {
+        // 🛡️ PERBAIKAN: Jangan pakai localStorage.clear() karena akan menghapus Kunci HP!
+        // Kita hanya hapus nama dan status harian saja
+        localStorage.removeItem('ikra_name');
+        localStorage.removeItem('ikra_status_harian');
+        
+        // Refresh halaman untuk kembali ke layar login awal
+        location.reload();
+      }
+    }
     function bukaModal(j,p,s) { document.getElementById('judulModal').innerText=j; document.getElementById('pesanModal').innerText=p; document.getElementById('modalKu').classList.remove('hidden'); }
     function tutupModal() { document.getElementById('modalKu').classList.add('hidden'); }
     function bukaModalPass() { document.getElementById('modalPass').classList.remove('hidden'); }
