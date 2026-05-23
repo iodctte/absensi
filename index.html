@@ -89,25 +89,45 @@
 
     window.onload = () => { if (myName) { document.getElementById('layarDashboard').classList.remove('hidden'); document.getElementById('teksSapaan').innerText = `Halo, ${myName.split(' ')[0]}!`; jalankanJam(); muatStatistik(); prosesAntrian(); } else { document.getElementById('layarLogin').classList.remove('hidden'); } };
 
-    function muatStatistik() {
-      fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName))
+        function muatStatistik() {
+      // Tambahkan ?v=... agar selalu mendapat data paling segar dari server
+      fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName) + "&v=" + new Date().getTime())
         .then(res => res.json()).then(data => {
           if(data.status === "success") {
             
-            // 🛡️ SECURITY CHECK: Tendang keluar jika akun di-reset Admin / login di HP lain
-            if (data.db_device_id !== deviceID) {
-              alert("Sesi berakhir! Akun Anda telah di-reset oleh Admin atau digunakan di perangkat lain. Silakan login kembali.");
+            // SECURITY CHECK: PERBAIKAN BUG AUTO-LOGOUT
+            // Hanya tendang jika db_device_id benar-benar berwujud teks (string) DAN tidak sama dengan deviceID HP ini.
+            // Jika koneksi error/null, sistem akan memakluminya dan tidak akan menendang karyawan.
+            if (typeof data.db_device_id === 'string' && data.db_device_id !== deviceID) {
+              alert("Sesi berakhir! Akun Anda telah di-reset oleh Admin atau digunakan di perangkat lain.");
               localStorage.clear();
               location.reload();
-              return; // Hentikan semua proses
+              return; 
             }
 
-            document.getElementById('statHadir').innerText = data.hadir; document.getElementById('statTelat').innerText = data.telat; document.getElementById('statLembur').innerText = data.lembur;
-            if(data.pengaturan) { KLINIK_LAT = parseFloat(data.pengaturan.klinik_lat); KLINIK_LNG = parseFloat(data.pengaturan.klinik_lng); MAX_RADIUS = parseInt(data.pengaturan.radius); localStorage.setItem('ikra_lat', KLINIK_LAT); localStorage.setItem('ikra_lng', KLINIK_LNG); localStorage.setItem('ikra_radius', MAX_RADIUS); }
-            if (!data.statusHariIni) { localStorage.removeItem('ikra_status_harian'); } else { localStorage.setItem('ikra_status_harian', data.statusHariIni); }
+            document.getElementById('statHadir').innerText = data.hadir; 
+            document.getElementById('statTelat').innerText = data.telat; 
+            document.getElementById('statLembur').innerText = data.lembur;
+            
+            if(data.pengaturan) { 
+              KLINIK_LAT = parseFloat(data.pengaturan.klinik_lat); 
+              KLINIK_LNG = parseFloat(data.pengaturan.klinik_lng); 
+              MAX_RADIUS = parseInt(data.pengaturan.radius); 
+              localStorage.setItem('ikra_lat', KLINIK_LAT); 
+              localStorage.setItem('ikra_lng', KLINIK_LNG); 
+              localStorage.setItem('ikra_radius', MAX_RADIUS); 
+            }
+            
+            if (!data.statusHariIni) { 
+              localStorage.removeItem('ikra_status_harian'); 
+            } else { 
+              localStorage.setItem('ikra_status_harian', data.statusHariIni); 
+            }
             cekLogikaHarian();
           }
-        }).catch(e => console.log("Offline mode"));
+        }).catch(e => {
+          console.log("Mode Offline / Gagal Sinkronisasi");
+        });
     }
 
     function cekLokasi(tipe) {
