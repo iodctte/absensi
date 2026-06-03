@@ -89,15 +89,11 @@
 
     window.onload = () => { if (myName) { document.getElementById('layarDashboard').classList.remove('hidden'); document.getElementById('teksSapaan').innerText = `Halo, ${myName.split(' ')[0]}!`; jalankanJam(); muatStatistik(); prosesAntrian(); } else { document.getElementById('layarLogin').classList.remove('hidden'); } };
 
-        function muatStatistik() {
-      // Tambahkan ?v=... agar selalu mendapat data paling segar dari server
+    function muatStatistik() {
       fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName) + "&v=" + new Date().getTime())
         .then(res => res.json()).then(data => {
           if(data.status === "success") {
             
-            // SECURITY CHECK: PERBAIKAN BUG AUTO-LOGOUT
-            // Hanya tendang jika db_device_id benar-benar berwujud teks (string) DAN tidak sama dengan deviceID HP ini.
-            // Jika koneksi error/null, sistem akan memakluminya dan tidak akan menendang karyawan.
             if (typeof data.db_device_id === 'string' && data.db_device_id !== deviceID) {
               alert("Sesi berakhir! Akun Anda telah di-reset oleh Admin atau digunakan di perangkat lain.");
               localStorage.clear();
@@ -118,18 +114,64 @@
               localStorage.setItem('ikra_radius', MAX_RADIUS); 
             }
             
+            // 🛡️ PERBAIKAN UTAMA: Ambil tanggal hari ini untuk validasi status
+            let hariIniStr = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'numeric', year: 'numeric' });
+            
             if (!data.statusHariIni) { 
               localStorage.removeItem('ikra_status_harian'); 
+              localStorage.removeItem('ikra_tanggal_status');
             } else { 
+              // Simpan status berserta tanggal aktifnya dari server
               localStorage.setItem('ikra_status_harian', data.statusHariIni); 
+              localStorage.setItem('ikra_tanggal_status', hariIniStr);
             }
             cekLogikaHarian();
           }
         }).catch(e => {
           console.log("Mode Offline / Gagal Sinkronisasi");
+          cekLogikaHarian(); // Tetap jalankan logika lokal walaupun offline
         });
     }
 
+    function cekLogikaHarian() {
+      let stat = localStorage.getItem('ikra_status_harian');
+      let tglStat = localStorage.getItem('ikra_tanggal_status');
+      let hariIniStr = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'numeric', year: 'numeric' });
+      
+      const btnIn = document.getElementById('btnClockIn');
+      const btnOut = document.getElementById('btnClockOut');
+      const msg = document.getElementById('pesanSelesai');
+      const bdg = document.getElementById('badgeStatus');
+      
+      btnIn.classList.add('hidden'); 
+      btnOut.classList.add('hidden'); 
+      msg.classList.add('hidden');
+
+      // 🛡️ PROTEKSI ANTI-TERBALIK: Jika status di HP ternyata berasal dari tanggal kemarin/lalu
+      // Paksa reset status menjadi kosong agar tombol kembali menjadi Clock In
+      if (tglStat && tglStat !== hariIniStr) {
+        localStorage.removeItem('ikra_status_harian');
+        localStorage.removeItem('ikra_tanggal_status');
+        stat = null;
+      }
+
+      // Evaluasi ulang tombol yang benar-benar berhak muncul hari ini
+      if (!stat) { 
+        btnIn.classList.remove('hidden'); 
+        bdg.innerText = "Status: Belum Absen Masuk"; 
+        bdg.className = "px-4 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-500 border border-gray-200 mb-6"; 
+      } else if (stat === "masuk") { 
+        btnOut.classList.remove('hidden'); 
+        bdg.innerText = "Status: Sedang Shift Kerja"; 
+        bdg.className = "px-4 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-700 border border-teal-200 mb-6"; 
+      } else { 
+        msg.classList.remove('hidden'); 
+        bdg.innerText = "Status: Selesai Shift Hari Ini"; 
+        bdg.className = "px-4 py-1 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200 mb-6"; 
+      } 
+    }
+
+    
     function cekLokasi(tipe) {
       if (KLINIK_LAT === 0) return muatStatistik();
       document.getElementById('loadingGps').classList.remove('hidden');
@@ -197,7 +239,7 @@
 
     function hitungJarak(lat1, lon1, lat2, lon2) { let R = 6371e3; let f1 = lat1 * Math.PI/180, f2 = lat2 * Math.PI/180, df = (lat2-lat1) * Math.PI/180, dl = (lon2-lon1) * Math.PI/180; let a = Math.sin(df/2) * Math.sin(df/2) + Math.cos(f1) * Math.cos(f2) * Math.sin(dl/2) * Math.sin(dl/2); return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))); }
     function jalankanJam() { setInterval(() => { let now = new Date(); document.getElementById('teksJam').innerText = now.toLocaleTimeString('id-ID', {timeZone:'Asia/Jayapura', hour12:false}).replace(/\./g,':'); document.getElementById('teksTanggal').innerText = now.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'}); }, 1000); }
-    function cekLogikaHarian() { let stat = localStorage.getItem('ikra_status_harian'); const btnIn = document.getElementById('btnClockIn'), btnOut = document.getElementById('btnClockOut'), msg = document.getElementById('pesanSelesai'), bdg = document.getElementById('badgeStatus'); btnIn.classList.add('hidden'); btnOut.classList.add('hidden'); msg.classList.add('hidden'); if (!stat) { btnIn.classList.remove('hidden'); bdg.innerText = "Status: Belum Absen"; bdg.className = "px-4 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-500 border border-gray-200 mb-6"; } else if (stat === "masuk") { btnOut.classList.remove('hidden'); bdg.innerText = "Status: Sedang Shift"; bdg.className = "px-4 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-700 border border-teal-200 mb-6"; } else { msg.classList.remove('hidden'); bdg.innerText = "Status: Selesai"; bdg.className = "px-4 py-1 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200 mb-6"; } }
+    
     function prosesAntrian() { if (!navigator.onLine) return; let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || []; if (antrian.length === 0) return; fetch(GAS_URL, { redirect:"follow", method:'POST', body: JSON.stringify(antrian[0]) }).then(res=>res.json()).then(res=>{ if(res.status==="success"||res.status==="error"){ antrian.shift(); localStorage.setItem('antrianIkra', JSON.stringify(antrian)); if(antrian.length>0) prosesAntrian(); else muatStatistik(); } }); }
     function bukaKamera(t) { tipeAbsenAktif = t; document.getElementById('judulKamera').innerText = "Clock " + t; document.getElementById('overlayKamera').classList.remove('hidden'); navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}, audio:false}).then(s=>{streamAktif=s;video.srcObject=s;}); }
     function tutupKamera() { if(streamAktif) streamAktif.getTracks().forEach(t=>t.stop()); document.getElementById('overlayKamera').classList.add('hidden'); }
