@@ -147,16 +147,53 @@
       );
     }
 
+        // Tambahkan variabel pengaman ini di luar fungsi (di bagian atas script bersama variabel global lainnya)
+    let sedangProsesAbsen = false;
+
     function eksekusiAbsen() {
+      // 🛡️ SECURITY CHECK: Jika sistem sedang memproses absen sebelumnya, batalkan ketukan kedua!
+      if (sedangProsesAbsen) return;
+      
+      // Kunci gerbang utama
+      sedangProsesAbsen = true;
+
       canvas.width = 480; canvas.height = 640; ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.fillRect(0, 590, 480, 50); ctx.fillStyle = "white"; ctx.font = "14px Arial";
       ctx.fillText(`${myName} | ${new Date().toLocaleString('id-ID')} | Acc: ${Math.round(akurasiTerakhir)}m`, 20, 620);
       const foto = canvas.toDataURL('image/jpeg', 0.4);
+      
       const payload = { action: "absen", nama: myName, tipe: tipeAbsenAktif, foto: foto, deviceID: deviceID, akurasi: Math.round(akurasiTerakhir) };
-      let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || []; antrian.push(payload); localStorage.setItem('antrianIkra', JSON.stringify(antrian));
+      
+      // Ambil antrian lama
+      let antrian = JSON.parse(localStorage.getItem('antrianIkra')) || [];
+      
+      // 🛡️ ANTI-DUPLIKAT: Cek apakah data terakhir di antrian memiliki tipe yang sama persis
+      // Ini untuk menahan jika ada bug perulangan data yang sama di memori lokal
+      if (antrian.length > 0 && antrian[antrian.length - 1].tipe === tipeAbsenAktif) {
+        console.log("Data duplikat diblokir oleh sistem antrian lokal.");
+        tutupKamera();
+        sedangProsesAbsen = false; // Buka kembali gerbang
+        return;
+      }
+
+      // Masukkan ke antrian lokal jika lolos sensor
+      antrian.push(payload); 
+      localStorage.setItem('antrianIkra', JSON.stringify(antrian));
       localStorage.setItem('ikra_status_harian', tipeAbsenAktif === 'Masuk' ? 'masuk' : 'pulang');
-      tutupKamera(); cekLogikaHarian(); bukaModal("Tercatat", "Log berhasil masuk antrian lokal. Mengunggah ke server...", true); prosesAntrian();
+      
+      tutupKamera(); 
+      cekLogikaHarian(); 
+      bukaModal("Tercatat", "Log berhasil masuk antrian lokal. Mengunggah ke server...", true); 
+      
+      // Jalankan pengiriman data ke Google Sheets/Supabase
+      prosesAntrian();
+      
+      // Berikan jeda 3 detik sebelum memperbolehkan tombol absen mendeteksi ketukan baru lagi (jika ada)
+      setTimeout(() => {
+        sedangProsesAbsen = false;
+      }, 3000);
     }
+
 
     function hitungJarak(lat1, lon1, lat2, lon2) { let R = 6371e3; let f1 = lat1 * Math.PI/180, f2 = lat2 * Math.PI/180, df = (lat2-lat1) * Math.PI/180, dl = (lon2-lon1) * Math.PI/180; let a = Math.sin(df/2) * Math.sin(df/2) + Math.cos(f1) * Math.cos(f2) * Math.sin(dl/2) * Math.sin(dl/2); return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))); }
     function jalankanJam() { setInterval(() => { let now = new Date(); document.getElementById('teksJam').innerText = now.toLocaleTimeString('id-ID', {timeZone:'Asia/Jayapura', hour12:false}).replace(/\./g,':'); document.getElementById('teksTanggal').innerText = now.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'}); }, 1000); }
