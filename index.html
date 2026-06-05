@@ -89,7 +89,7 @@
 
     window.onload = () => { if (myName) { document.getElementById('layarDashboard').classList.remove('hidden'); document.getElementById('teksSapaan').innerText = `Halo, ${myName.split(' ')[0]}!`; jalankanJam(); muatStatistik(); prosesAntrian(); } else { document.getElementById('layarLogin').classList.remove('hidden'); } };
 
-    function muatStatistik() {
+       function muatStatistik() {
       fetch(GAS_URL + "?action=get_stats&nama=" + encodeURIComponent(myName) + "&v=" + new Date().getTime())
         .then(res => res.json()).then(data => {
           if(data.status === "success") {
@@ -114,14 +114,22 @@
               localStorage.setItem('ikra_radius', MAX_RADIUS); 
             }
             
-            // 🛡️ PERBAIKAN UTAMA: Ambil tanggal hari ini untuk validasi status
             let hariIniStr = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'numeric', year: 'numeric' });
             
+            // 🛡️ PERBAIKAN: Ambil data antrean lokal saat ini
+            let antrianLokal = JSON.parse(localStorage.getItem('antrianIkra')) || [];
+
             if (!data.statusHariIni) { 
-              localStorage.removeItem('ikra_status_harian'); 
-              localStorage.removeItem('ikra_tanggal_status');
+              // Jika server bilang belum absen, TAPI di HP masih ada antrean yang belum kekirim,
+              // JANGAN HAPUS status lokalnya agar tombol tidak berubah kembali jadi "Clock In"
+              if (antrianLokal.length === 0) {
+                localStorage.removeItem('ikra_status_harian'); 
+                localStorage.removeItem('ikra_tanggal_status');
+              } else {
+                console.log("Menahan reset status karena ada antrean yang belum terunggah.");
+              }
             } else { 
-              // Simpan status berserta tanggal aktifnya dari server
+              // Jika server sudah mencatat, sinkronkan statusnya dengan aman
               localStorage.setItem('ikra_status_harian', data.statusHariIni); 
               localStorage.setItem('ikra_tanggal_status', hariIniStr);
             }
@@ -129,9 +137,10 @@
           }
         }).catch(e => {
           console.log("Mode Offline / Gagal Sinkronisasi");
-          cekLogikaHarian(); // Tetap jalankan logika lokal walaupun offline
+          cekLogikaHarian();
         });
     }
+
 
     function cekLogikaHarian() {
       let stat = localStorage.getItem('ikra_status_harian');
